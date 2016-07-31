@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MerchantApp</string>
+    <string name="drawable">buynow</string>
+    <string name="emailField">Email</string>
+    <string name="card">Card</string>
+    <string name="cvv">CVV</string>
+    <string name="exp">Exp:</string>
+    <string name="remember_me">Remember me</string>
+    <string name="credit_debit_card">Credit/Debit Card</string>
+    <string name="express_checkout">Express Checkout</string>
+    <string name="select_your_express_checkout_method">Select your express checkout method</string>
+    <string name="name">Name</string>
+    <string name="please_enter_your_name">Please enter first and last name</string>
+    <string name="address">Address</string>
+    <string name="invalid_address_line">Invalid Address Line</string>
+    <string name="invalid_email_address">Invalid Email Address</string>
+    <string name="zip">Zip</string>
+    <string name="country">Country</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="continueShopping">Continue</string>
+    <string name="shipping_information">Shipping information</string>
+    <string name="invalid_card_number">Invalid Card Number</string>
+    <string name="coupon_questionmark">Coupon?</string>
+    <string name="shipping">Shipping</string>
+    <string name="shipping_Info">Shipping Info</string>
+    <string name="pay">Pay</string>
+    <string name="total">Total</string>
+
+    <string name="search">Search</string>
+    <string name="language">Language -</string>
+    <string name="select_language">Select Language</string>
+    <string name="title_activity_language">LanguageActivity</string>
+
+    <string name="currency">Currency -</string>
+    <string name="select_currency">Select Currency</string>
+    <string name="title_activity_currency">CurrencyActivity</string>
+
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="refund_policy">Refund Policy</string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="privacy_policy_url">https://home.bluesnap.com/ecommerce/legal/privacy-policy/</string>
+    <string name="refund_policy_url">http://home.bluesnap.com/ecommerce/legal/refund-policy/</string>
+    <string name="terms_conditions_url">http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/</string>
+    <!-- Language -->
+    <string name="LOCALE_LANGUAGE">localelanguage</string>
+    <string name="LOCALE_LANGUAGE_FULL">localelanguagefull</string>
+    <string name="DEFAULT_LANGUAGE">en</string>
+    <string name="DEFAULT_LANGUAGE_FULL">English</string>
+    <!-- Currency -->
+    <string name="CURRENCY_STRING">CURRENCY_STRING</string>
+    <string name="LOCALE_CURRENCY">localeCurrency</string>
+    <string name="LOCALE_CURRENCY_FULL">localeCurrencyfull</string>
+    <string name="DEFAULT_CURRENCY">USD</string>
+    <string name="DEFAULT_CURRENCY_FULL">USD - United States Dollars</string>
+    <!-- Country -->
+    <string name="COUNTRY_STRING">COUNTRY_STRING</string>
+    <string name="title_activity_country">CountryActivity</string>
+    <string name="select_country">Select Country</string>
+    <!-- WebView Activity -->
+    <string name="WEBVIEW_STRING">WEBVIEW_STRING</string>
+    <string name="WEBVIEW_URL">WEBVIEW_URL</string>
+    <string name="SET_JAVA_SCRIPT_ENABLED">SET_JAVA_SCRIPT_ENABLED</string>
+    <string name="subtotal_label">Subtotal:</string>
+    <string name="tax_label">Tax:</string>
+
+    <!-- Alert Dialog-->
+    <string name="CURRENCY_NOT_SUPPORTED_PART_TITLE">PayPal unsupported Currency</string>
+    <string name="CURRENCY_NOT_SUPPORTED_PART_1">The given currency</string>
+    <string name="CURRENCY_NOT_SUPPORTED_PART_2">is not supported with PayPal.</string>
+    <string name="CURRENCY_NOT_SUPPORTED_PART_3">change to a PayPal supported Currency</string>
+    <string name="OK">ok</string>
+    <string name="CANCEL">cancel</string>
+
+    <string name="SUPPORT">contact Support for additional assistance</string>
+    <string name="SUPPORT_OR">or</string>
+    <string name="SUPPORT_PLEASE">Please</string>
+    <string name="ERROR">Error</string>
+    <string name="TRANSACTION_FAILED">Transaction Failed</string>
+    <string name="nameField">Name</string>
+
+
+</resources>

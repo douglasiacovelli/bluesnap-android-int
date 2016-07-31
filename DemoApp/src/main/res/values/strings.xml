@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Merchant</string>
+    <string-array name="rates">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>CAD</item>
+        <item>ILS</item>
+
+    </string-array>
+    <string name="title_activity_post_payment">PostPayment</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+</resources>
