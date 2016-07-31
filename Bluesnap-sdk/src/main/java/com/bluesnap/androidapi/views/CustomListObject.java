@@ -1,0 +1,36 @@
+package com.bluesnap.androidapi.views;
+
+import java.util.ArrayList;
+
+/**
+ * Created by roy.biber on 15/06/2016.
+ */
+class CustomListObject {
+
+    private String name;
+    private int img;
+
+    public CustomListObject(String name) {
+
+        this.name = name;
+    }
+
+    protected static ArrayList<CustomListObject> getCustomListObject(String[] listValue) {
+        ArrayList<CustomListObject> customListObjects = new ArrayList<>();
+        CustomListObject customListObject;
+        for (int i = 0; i < listValue.length; i++) {
+            customListObject = new CustomListObject(listValue[i]);
+            customListObjects.add(customListObject);
+        }
+        return customListObjects;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+

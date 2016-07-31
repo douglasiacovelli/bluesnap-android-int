@@ -1,0 +1,91 @@
+plugins {
+    id 'com.gladed.androidgitversion' version '0.2.13'
+    id "com.jfrog.bintray" version "1.6"
+
+}
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName androidGitVersion.name()
+        versionCode androidGitVersion.code()
+    }
+    buildTypes {
+        release {
+            //runProguard false
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+        }
+    }
+
+}
+String versionName = "v-" + System.getenv('TRAVIS_BRANCH') + "-" + System.getenv('TRAVIS_TAG') + "-" + System.getenv('TRAVIS_JOB_NUMBER')
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_APIKEY')
+    // override = true // only for plugin version 1.7 which require java8 and still has bugs
+    publish = true
+    pkg {
+        repo = 'AndroidSDKDemoApp'
+        name = 'DemoAPK'
+        userOrg = 'bluesnap'
+        desc = 'BlueSnap Android SDK Demo App'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/bluesnap/bluesnap-android-int'
+        publicDownloadNumbers = false
+        version {
+            name = versionName
+            released = new Date()
+            vcsTag = androidGitVersion.name()
+            attributes = [
+                    'test'     : System.getenv('TRAVIS_TEST_RESULT'),
+                    'commit'   : System.getenv('TRAVIS_COMMIT'),
+                    'jobnumber': System.getenv('TRAVIS_JOB_NUMBER')
+            ]
+        }
+    }
+    filesSpec {
+        from('build/outputs/apk') {
+            include '*.apk'
+            exclude('*-debug.apk')
+            exclude('*.asc')
+            exclude('*-debug-unaligned.apk')
+            exclude('*-release-unsigned.apk')
+
+        }
+        into 'travis/' + System.getenv('TRAVIS_BRANCH') + '/'
+    }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile project(":Bluesnap-sdk")
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'junit:junit:4.12'
+    compile 'com.android.support:support-v4:23.4.0'
+    androidTestCompile 'com.android.support:support-annotations:23.4.0'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+
+}
