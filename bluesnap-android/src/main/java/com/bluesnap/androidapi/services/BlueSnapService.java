@@ -54,6 +54,7 @@ public class BlueSnapService {
     private String merchantToken;
     private PaymentResult paymentResult;
     private PaymentRequest paymentRequest;
+
     public static BlueSnapService getInstance() {
         return INSTANCE;
     }
@@ -97,7 +98,8 @@ public class BlueSnapService {
 
     /**
      * Update the Credit {@link Card} details on the BlueSnap Server
-     * @param card {@link Card}
+     *
+     * @param card            {@link Card}
      * @param responseHandler {@link AsyncHttpResponseHandler}
      * @throws JSONException
      * @throws UnsupportedEncodingException
@@ -116,7 +118,8 @@ public class BlueSnapService {
     /**
      * Update the Conversion rates map from the server.
      * The rates are merchant specific, the merchantToken is used to identify the merchant.
-     * @param callback  A {@link BluesnapServiceCallback}
+     *
+     * @param callback A {@link BluesnapServiceCallback}
      */
     public void updateRates(final BluesnapServiceCallback callback) {
         httpClient.addHeader(TOKEN_AUTHENTICATION, merchantToken);
@@ -228,6 +231,7 @@ public class BlueSnapService {
 
     /**
      * Get a set of strings of the supported conversion rates
+     *
      * @return {@link Set<String>}
      */
     public Set<String> getSupportedRates() {
@@ -236,7 +240,8 @@ public class BlueSnapService {
 
     /**
      * Convert a price in USD to a price in another currency  in ISO 4217 Code.
-     * @param usdPrice A String representation of a USD price which will be converted to a double value.
+     *
+     * @param usdPrice  A String representation of a USD price which will be converted to a double value.
      * @param convertTo ISO 4217 compatible  3 letter currency representation
      * @return String representation of converted price.
      */
@@ -251,9 +256,10 @@ public class BlueSnapService {
 
     /**
      * Convert a price in currentCurrencyNameCode to newCurrencyNameCode
-     * @param basePrice the requested price
-     * @param currentCurrencyNameCode   The currency of basePrice
-     * @param newCurrencyNameCode The ISO 4217 currency name
+     *
+     * @param basePrice               the requested price
+     * @param currentCurrencyNameCode The currency of basePrice
+     * @param newCurrencyNameCode     The ISO 4217 currency name
      * @return
      */
     public Double convertPrice(Double basePrice, String currentCurrencyNameCode, String newCurrencyNameCode) {
@@ -301,14 +307,14 @@ public class BlueSnapService {
                     paymentRequest.getBaseTaxAmount(),
                     paymentRequest.getBaseSubtotalAmount()));
         } else {
-        Double newPrice = convertPrice(paymentRequest.getBaseAmount(), baseCurrency, currencySelectionEvent.newCurrencyNameCode);
+            Double newPrice = convertPrice(paymentRequest.getBaseAmount(), baseCurrency, currencySelectionEvent.newCurrencyNameCode);
 
-        paymentRequest.setAmount(newPrice);
-        paymentRequest.setCurrencyNameCode(currencySelectionEvent.newCurrencyNameCode);
-        getPaymentResult().amount = newPrice;
-        getPaymentResult().currencyNameCode = currencySelectionEvent.newCurrencyNameCode;
+            paymentRequest.setAmount(newPrice);
+            paymentRequest.setCurrencyNameCode(currencySelectionEvent.newCurrencyNameCode);
+            getPaymentResult().amount = newPrice;
+            getPaymentResult().currencyNameCode = currencySelectionEvent.newCurrencyNameCode;
 
-        Double newTaxValue = convertPrice(paymentRequest.getBaseTaxAmount(), baseCurrency, currencySelectionEvent.newCurrencyNameCode);
+            Double newTaxValue = convertPrice(paymentRequest.getBaseTaxAmount(), baseCurrency, currencySelectionEvent.newCurrencyNameCode);
             Double newSubtotal = convertPrice(paymentRequest.getBaseSubtotalAmount(), baseCurrency, currencySelectionEvent.newCurrencyNameCode);
             if (paymentRequest.isSubtotalTaxSet()) {
                 paymentRequest.setSubtotalAmount(newSubtotal);

@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- *  Returns the result of the payment process to the Caller.
- *  This will be passed as an activityResult back to the calling activity.
+ * Returns the result of the payment process to the Caller.
+ * This will be passed as an activityResult back to the calling activity.
  */
 public class PaymentResult implements Parcelable {
 

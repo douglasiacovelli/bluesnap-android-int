@@ -27,7 +27,6 @@ public class ShippingInfo implements Parcelable {
     private String email;
 
 
-
     protected ShippingInfo(Parcel parcel) {
         name = parcel.readString();
         addressLine = parcel.readString();

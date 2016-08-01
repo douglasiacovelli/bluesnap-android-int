@@ -236,7 +236,6 @@ public class CardTest extends TestCase {
     }
 
 
-
     @Test
     public void testFuturePastExpiryDates() throws Exception {
         Card card = new Card();

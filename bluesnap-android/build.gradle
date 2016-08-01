@@ -1,0 +1,144 @@
+plugins {
+    id 'com.gladed.androidgitversion' version '0.2.13'
+    id "com.jfrog.bintray" version "1.6"
+    id "com.github.dcendents.android-maven" version "1.4.1"
+}
+
+apply plugin: 'com.android.library'
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionName androidGitVersion.name()
+        versionCode androidGitVersion.code()
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings false
+    }
+}
+configurations {
+
+}
+
+dependencies {
+    compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.google.code.gson:gson:2.6.2'
+    testCompile 'org.robolectric:robolectric:3.1'
+    testCompile 'org.robolectric:shadows-httpclient:3.1'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.9.5'
+    testCompile 'com.android.support.test:runner:0.5'
+    testCompile 'com.android.support:support-annotations:23.4.0'
+}
+tasks.withType(Test) {
+    systemProperty "robolectric.logging", "stdout"
+}
+task javadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocsJar(type: Jar, dependsOn: javadocs) {
+    classifier = 'javadoc'
+    from javadocs.destinationDir
+}
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives javadocsJar
+    archives sourcesJar
+//    archives releaseJar
+}
+String versionName = "v-" + System.getenv('TRAVIS_BRANCH') + "-" + System.getenv('TRAVIS_TAG') + "-" + System.getenv('TRAVIS_JOB_NUMBER')
+def siteUrl = 'https://github.com/bluesnap/bluesnap-android-int'
+def gitUrl = 'https://github.com/bluesnap/bluesnap-android-int.git'
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_APIKEY')
+    // override = true // only for plugin version 1.7 which require java8 and still has bugs
+    publish = true
+    pkg {
+        repo = 'com.bluesnap.android'
+        name = 'bluesnap-android'
+        userOrg = 'bluesnap'
+        desc = 'BlueSnap Android SDK Demo App'
+        licenses = ['MIT']
+        vcsUrl = gitUrl
+        publicDownloadNumbers = false
+        labels = ['aar', 'android']
+        version {
+            name = versionName
+            released = new Date()
+            vcsTag = androidGitVersion.name()
+            attributes = [
+                    'test'     : System.getenv('TRAVIS_TEST_RESULT'),
+                    'commit'   : System.getenv('TRAVIS_COMMIT'),
+                    'jobnumber': System.getenv('TRAVIS_JOB_NUMBER')
+            ]
+        }
+    }
+    filesSpec {
+        from('build/outputs/arr') {
+            include '*.arr'
+            include('*.asc')
+            exclude('*-debug.aarr')
+        }
+        into 'travis/' + System.getenv('TRAVIS_BRANCH') + '/'
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'Bluesnap Android SDK'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'MIT'
+                        url 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'snpori'
+                        name 'snpori'
+                        email 'oribsnap@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+
+

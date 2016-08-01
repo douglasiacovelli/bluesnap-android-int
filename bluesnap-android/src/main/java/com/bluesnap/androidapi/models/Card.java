@@ -300,6 +300,7 @@ public class Card {
         }
         return expMonth + "/" + m;
     }
+
     public String getType() {
         return type;
     }

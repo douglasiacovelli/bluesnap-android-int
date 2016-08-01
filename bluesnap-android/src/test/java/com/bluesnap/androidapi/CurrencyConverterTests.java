@@ -78,7 +78,6 @@ public class CurrencyConverterTests {
         ShadowApplication.runBackgroundTasks();
 
 
-
     }
 
     //@Test(timeout = 12000)

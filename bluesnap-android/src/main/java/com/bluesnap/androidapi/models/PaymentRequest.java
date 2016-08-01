@@ -186,6 +186,7 @@ public class PaymentRequest implements Parcelable {
 
         this.taxAmount = taxAmount;
     }
+
     public void setAmountWithTax(Double subtotalAmount, Double taxAmount) {
         this.taxAmount = taxAmount;
         setSubtotalAmount(subtotalAmount);

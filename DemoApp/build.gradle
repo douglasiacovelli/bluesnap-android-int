@@ -78,7 +78,7 @@ repositories {
 }
 
 dependencies {
-    compile project(":Bluesnap-sdk")
+    compile project(':bluesnap-android')
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
