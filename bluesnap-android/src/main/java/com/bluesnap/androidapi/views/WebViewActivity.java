@@ -1,6 +1,7 @@
 package com.bluesnap.androidapi.views;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -67,11 +68,14 @@ public class WebViewActivity extends Activity {
 
             @Override
             public void onSuccess() {
-                String transactionStatus = BlueSnapService.getTransactionStatus().toUpperCase();
+                final String transactionStatus = BlueSnapService.getInstance().getTransactionStatus().toUpperCase();
 
                 if (transactionStatus.equals("SUCCESS")) {
                     // Todo implement transaction transfer
                     //example: https://sandbox.bluesnap.com/jsp/dev_scripts/iframeCheck/pay_pal_proceed.html?ERROR=0&INVOICE_ID=1017059422&PAYPAL_TRANSACTION_ID=8VC67186CA344511P&SELLER_ORDER_ID=null
+                    message = webView.getUrl();
+                    title = Uri.parse(message).getQueryParameter("INVOICE_ID");
+                    finishWithAlertDialog(message, title);
 
                 } else if (transactionStatus.equals("PENDING")) {
                     transactionPendingCounter++;
@@ -158,5 +162,7 @@ public class WebViewActivity extends Activity {
 
             progressBar.setVisibility(View.GONE);
         }
+
+
     }
 }
