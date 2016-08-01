@@ -63,7 +63,7 @@ public class BlueSnapService {
         return paypalURL;
     }
 
-    public static void clearPayPalToken() {
+    public void clearPayPalToken() {
         paypalURL = "";
     }
 
@@ -71,7 +71,7 @@ public class BlueSnapService {
         return errorDescription;
     }
 
-    public static String getTransactionStatus() {
+    public String getTransactionStatus() {
         return transactionStatus;
     }
 
