@@ -69,19 +69,22 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives javadocsJar
     archives sourcesJar
-//    archives releaseJar
 }
+
 String versionName = "v-" + System.getenv('TRAVIS_BRANCH') + "-" + System.getenv('TRAVIS_TAG') + "-" + System.getenv('TRAVIS_JOB_NUMBER')
 def siteUrl = 'https://github.com/bluesnap/bluesnap-android-int'
 def gitUrl = 'https://github.com/bluesnap/bluesnap-android-int.git'
+version = androidGitVersion.name()
 
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_APIKEY')
     // override = true // only for plugin version 1.7 which require java8 and still has bugs
-    publish = true
+    //  publish = true
+    configurations = ['archives'] //When uploading configuration files
     pkg {
-        repo = 'com.bluesnap.android'
+        repo = 'com.bluesnap'
+        group = 'com.bluesnap'
         name = 'bluesnap-android'
         userOrg = 'bluesnap'
         desc = 'BlueSnap Android SDK Demo App'
@@ -90,23 +93,18 @@ bintray {
         publicDownloadNumbers = false
         labels = ['aar', 'android']
         version {
-            name = versionName
+            name = androidGitVersion.name()
             released = new Date()
-            vcsTag = androidGitVersion.name()
+            vcsTag = version
             attributes = [
-                    'test'     : System.getenv('TRAVIS_TEST_RESULT'),
-                    'commit'   : System.getenv('TRAVIS_COMMIT'),
-                    'jobnumber': System.getenv('TRAVIS_JOB_NUMBER')
+                    'test'       : String.valueOf(System.getenv('TRAVIS_TEST_RESULT')),
+                    'commit'     : String.valueOf(System.getenv('TRAVIS_COMMIT')),
+                    'jobnumber'  : String.valueOf(System.getenv('TRAVIS_JOB_NUMBER')),
+                    'branch'     : String.valueOf(System.getenv('TRAVIS_BRANCH')),
+                    'versioncode': String.valueOf(androidGitVersion.code())
             ]
         }
-    }
-    filesSpec {
-        from('build/outputs/arr') {
-            include '*.arr'
-            include('*.asc')
-            exclude('*-debug.aarr')
-        }
-        into 'travis/' + System.getenv('TRAVIS_BRANCH') + '/'
+
     }
 }
 
@@ -116,6 +114,7 @@ install {
             project {
                 packaging 'aar'
                 name 'Bluesnap Android SDK'
+                groupId 'com.bluesnap'
                 url siteUrl
                 licenses {
                     license {
