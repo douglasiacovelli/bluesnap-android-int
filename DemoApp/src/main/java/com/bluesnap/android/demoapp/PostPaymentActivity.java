@@ -86,38 +86,31 @@ public class PostPaymentActivity extends Activity {
     }
 
     private void createCreditCardTransaction(String firstName, String lastName, String token, String currency, Double amount, boolean isReturningShopper, int shopperId, int last4Digits, String cardType) {
-        String body= "";
-        if(!isReturningShopper) {
-            body = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
-                    "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
-                    "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
-                    "<soft-descriptor>MobileSDK</soft-descriptor>" +
-                    "<amount>" + amount + "</amount>" +
-                    "<currency>" + currency + "</currency>" +
-                    "<card-holder-info>" +
-                    "<first-name>" + firstName + "</first-name>" +
-                    "<last-name>" + lastName + "</last-name>" +
-                    "</card-holder-info>" +
-                    "<pf-token>" + token + "</pf-token>" +
-                    "</card-transaction>";
+        String bodyStart = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
+                "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
+                "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
+                "<soft-descriptor>MobileSDK</soft-descriptor>" +
+                "<amount>" + amount + "</amount>" +
+                "<currency>" + currency + "</currency>";
+        String bodyMiddle = "<card-holder-info>" +
+                "<first-name>" + firstName + "</first-name>" +
+                "<last-name>" + lastName + "</last-name>" +
+                "</card-holder-info>";
+        String bodyEnd = "</card-transaction>";
+        String body = bodyStart;
 
-        } else {
-            body = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
-                    "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
-                    "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
-                    "<soft-descriptor>MobileSDK</soft-descriptor>" +
-                    "<amount>" + amount + "</amount>" +
-                    "<currency>" + currency + "</currency>" +
-                    "<vaulted-shopper-id>" + shopperId + "</vaulted-shopper-id>" +
-                    "<card-holder-info>" +
-                    "<first-name>" + firstName + "</first-name>" +
-                    "<last-name>" + lastName + "</last-name>" +
-                    "</card-holder-info>" +
-                    " <credit-card>" + "<card-last-four-digits>" + last4Digits +
-                    "</card-last-four-digits>" +
+        if (!isReturningShopper) {
+            body += bodyMiddle +
+                    "<pf-token>" + token + "</pf-token>" +
+                    bodyEnd;
+        } else if (shopperId != -99) {
+            body += "<vaulted-shopper-id>" + shopperId + "</vaulted-shopper-id>" +
+                    bodyMiddle +
+                    " <credit-card>" +
+                    "<card-last-four-digits>" + last4Digits + "</card-last-four-digits>" +
                     "<card-type>" + cardType + "</card-type>" +
                     "</credit-card>" +
-                    "</card-transaction>";
+                    bodyEnd;
         }
 
         StringEntity entity = new StringEntity(body, "UTF-8");
