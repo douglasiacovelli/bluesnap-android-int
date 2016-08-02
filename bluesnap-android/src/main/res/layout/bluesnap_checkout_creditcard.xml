@@ -63,7 +63,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:background="@android:color/white"
-                            android:hint="First Last"
+                            android:hint="@string/name_hint"
                             android:inputType="textEmailAddress"
                             android:padding="6sp" />
                     </LinearLayout>
@@ -119,6 +119,7 @@
                             android:digits="0123456789 "
                             android:maxLength="19"
                             android:nextFocusDown="@+id/expDateEditText"
+                            android:hint="@string/cc_hint"
                             android:padding="6sp" />
 
                     </LinearLayout>
@@ -233,6 +234,7 @@
                         android:layout_weight="0.95"
                         android:background="@android:color/white"
                         android:inputType="numberPassword"
+                        android:hint="@string/cvv_hint"
                         android:maxLength="4"
                         android:paddingBottom="5sp"
                         android:paddingLeft="1sp"
@@ -279,7 +281,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:background="@android:color/white"
-                            android:hint="Postal Code"
+                            android:hint="@string/postal_code_hint"
                             android:inputType="textEmailAddress"
                             android:maxLength="10"
                             android:padding="6sp" />

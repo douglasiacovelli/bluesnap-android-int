@@ -31,7 +31,6 @@ public class PaymentResult implements Parcelable {
     public String shopperLastName;
     public String cardZipCode;
     public boolean rememberUser;
-    public int invoiceId4PayPal;
 
     public PaymentResult() {
     }
@@ -47,7 +46,6 @@ public class PaymentResult implements Parcelable {
         shopperLastName = in.readString();
         cardZipCode = in.readString();
         rememberUser = in.readInt() != 0;
-        invoiceId4PayPal = in.readInt();
 
     }
 
@@ -63,7 +61,6 @@ public class PaymentResult implements Parcelable {
         dest.writeString(shopperLastName);
         dest.writeString(cardZipCode);
         dest.writeInt(rememberUser ? 1 : 0);
-        dest.writeInt(invoiceId4PayPal);
     }
 
     @Override
@@ -117,7 +114,6 @@ public class PaymentResult implements Parcelable {
                 ", shopperLastName='" + shopperLastName + '\'' +
                 ", cardZipCode='" + cardZipCode + '\'' +
                 ", rememberUser=" + rememberUser +
-                ", invoiceId4PayPal=" + invoiceId4PayPal +
                 '}';
     }
 }

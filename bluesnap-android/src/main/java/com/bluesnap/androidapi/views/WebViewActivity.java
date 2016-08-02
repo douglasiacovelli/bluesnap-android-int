@@ -1,7 +1,6 @@
 package com.bluesnap.androidapi.views;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.net.UrlQuerySanitizer;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.bluesnap.androidapi.Constants;
 import com.bluesnap.androidapi.R;
-import com.bluesnap.androidapi.models.PaymentResult;
 import com.bluesnap.androidapi.services.BlueSnapService;
 import com.bluesnap.androidapi.services.BluesnapAlertDialog;
 import com.bluesnap.androidapi.services.BluesnapServiceCallback;
@@ -76,13 +74,14 @@ public class WebViewActivity extends Activity {
 
                 if ("SUCCESS".equals(transactionStatus)) {
 
-                    PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
                     UrlQuerySanitizer sanitizer = new UrlQuerySanitizer();
                     sanitizer.setAllowUnregisteredParamaters(true);
                     sanitizer.parseUrl(procceedURL);
-                    paymentResult.invoiceId4PayPal = Integer.getInteger(sanitizer.getValue("INVOICE_ID"));
+                    // ToDo
+                    // PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
+                    // paymentResult.invoiceId4PayPal = Integer.getInteger(sanitizer.getValue("INVOICE_ID"));
 
-                    finishWithAlertDialog(procceedURL, String.valueOf(paymentResult.invoiceId4PayPal));
+                    finishWithAlertDialog(procceedURL, sanitizer.getValue("INVOICE_ID"));
 
 
                 } else if ("PENDING".equals(transactionStatus)) {
@@ -153,7 +152,14 @@ public class WebViewActivity extends Activity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            progressBar.setVisibility(View.VISIBLE);
+            if (!url.startsWith(Constants.getPaypalProdUrl())
+                    && !url.startsWith(Constants.getPaypalSandUrl())
+                    && !url.startsWith(Constants.getPaypalProceedUrl())
+                    && !url.startsWith(Constants.getPaypalCancelUrl())) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
             view.loadUrl(url);
             return true;
         }
