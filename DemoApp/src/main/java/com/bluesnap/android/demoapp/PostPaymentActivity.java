@@ -42,6 +42,7 @@ public class PostPaymentActivity extends Activity {
         if (extras != null) {
             String merchantToken = extras.getString("MERCHANT_TOKEN");
             Log.d(TAG, "Payment Result:\n " + paymentResult.toString());
+            //ToDo how do we know if returning shopper if so do we have last4digits, cardType and shopperId?
             createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount);
         }
     }
@@ -80,21 +81,44 @@ public class PostPaymentActivity extends Activity {
         onBackPressed();
     }
 
-
     private void createCreditCardTransaction(String firstName, String lastName, String token, String currency, Double amount) {
+        createCreditCardTransaction(firstName, lastName, token, currency, amount, false, -99, -99, "");
+    }
 
-        String body = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
-                "<card-transaction-type>AUTH_ONLY</card-transaction-type>" +
-                "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
-                "<soft-descriptor>MobileSDK</soft-descriptor>" +
-                "<amount>" + amount + "</amount>" +
-                "<currency>" + currency + "</currency>" +
-                "<card-holder-info>" +
-                "<first-name>" + firstName + "</first-name>" +
-                "<last-name>" + lastName + "</last-name>" +
-                "</card-holder-info>" +
-                "<pf-token>" + token + "</pf-token>" +
-                "</card-transaction>";
+    private void createCreditCardTransaction(String firstName, String lastName, String token, String currency, Double amount, boolean isReturningShopper, int shopperId, int last4Digits, String cardType) {
+        String body= "";
+        if(!isReturningShopper) {
+            body = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
+                    "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
+                    "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
+                    "<soft-descriptor>MobileSDK</soft-descriptor>" +
+                    "<amount>" + amount + "</amount>" +
+                    "<currency>" + currency + "</currency>" +
+                    "<card-holder-info>" +
+                    "<first-name>" + firstName + "</first-name>" +
+                    "<last-name>" + lastName + "</last-name>" +
+                    "</card-holder-info>" +
+                    "<pf-token>" + token + "</pf-token>" +
+                    "</card-transaction>";
+
+        } else {
+            body = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
+                    "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
+                    "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
+                    "<soft-descriptor>MobileSDK</soft-descriptor>" +
+                    "<amount>" + amount + "</amount>" +
+                    "<currency>" + currency + "</currency>" +
+                    "<vaulted-shopper-id>" + shopperId + "</vaulted-shopper-id>" +
+                    "<card-holder-info>" +
+                    "<first-name>" + firstName + "</first-name>" +
+                    "<last-name>" + lastName + "</last-name>" +
+                    "</card-holder-info>" +
+                    " <credit-card>" + "<card-last-four-digits>" + last4Digits +
+                    "</card-last-four-digits>" +
+                    "<card-type>" + cardType + "</card-type>" +
+                    "</credit-card>" +
+                    "</card-transaction>";
+        }
 
         StringEntity entity = new StringEntity(body, "UTF-8");
         AsyncHttpClient httpClient = new AsyncHttpClient();
@@ -112,6 +136,8 @@ public class PostPaymentActivity extends Activity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                String shopperId = responseString.substring(responseString.indexOf("<vaulted-shopper-id>"), responseString.indexOf("</vaulted-shopper-id>"));
                 Log.d(TAG, responseString);
                 setDialog("Transaction Success", "Merchant Server");
                 setContinueButton();
