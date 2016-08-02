@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bluesnap.androidapi.BluesnapCheckoutActivity;
 import com.bluesnap.androidapi.models.PaymentResult;
 import com.bluesnap.androidapi.services.AndroidUtil;
+import com.bluesnap.androidapi.services.PrefsStorage;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -26,6 +27,8 @@ public class PostPaymentActivity extends Activity {
 
     private static final String TAG = PostPaymentActivity.class.getSimpleName();
     private TextView continueShippingView;
+    private PrefsStorage prefsStorage;
+    private String SHOPPER_ID = "SHOPPER_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +45,13 @@ public class PostPaymentActivity extends Activity {
         if (extras != null) {
             String merchantToken = extras.getString("MERCHANT_TOKEN");
             Log.d(TAG, "Payment Result:\n " + paymentResult.toString());
-            //ToDo how do we know if returning shopper if so do we have last4digits, cardType and shopperId?
-            createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount);
+            if (!paymentResult.rememberUser) {
+                createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount);
+            } else {
+                createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount, true, paymentResult.last4Digits, paymentResult.cardType);
+            }
         }
+        prefsStorage = new PrefsStorage(this);
     }
 
 
@@ -82,10 +89,10 @@ public class PostPaymentActivity extends Activity {
     }
 
     private void createCreditCardTransaction(String firstName, String lastName, String token, String currency, Double amount) {
-        createCreditCardTransaction(firstName, lastName, token, currency, amount, false, -99, -99, "");
+        createCreditCardTransaction(firstName, lastName, token, currency, amount, false, "", "");
     }
 
-    private void createCreditCardTransaction(String firstName, String lastName, String token, String currency, Double amount, boolean isReturningShopper, int shopperId, int last4Digits, String cardType) {
+    private void createCreditCardTransaction(String firstName, String lastName, String token, String currency, Double amount, boolean isReturningShopper, String last4Digits, String cardType) {
         String bodyStart = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
                 "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +
                 "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
@@ -98,12 +105,13 @@ public class PostPaymentActivity extends Activity {
                 "</card-holder-info>";
         String bodyEnd = "</card-transaction>";
         String body = bodyStart;
+        String shopperId = prefsStorage.getString(SHOPPER_ID,"");
 
         if (!isReturningShopper) {
             body += bodyMiddle +
                     "<pf-token>" + token + "</pf-token>" +
                     bodyEnd;
-        } else if (shopperId != -99) {
+        } else if (!"".equals(shopperId)) {
             body += "<vaulted-shopper-id>" + shopperId + "</vaulted-shopper-id>" +
                     bodyMiddle +
                     " <credit-card>" +
@@ -122,7 +130,8 @@ public class PostPaymentActivity extends Activity {
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.e(TAG, responseString, throwable);
                 //Disabled until server will return a reasonable error
-                // setDialog("Create Transaction Failed", "Merchant Server");
+                setDialog(responseString.substring(responseString.indexOf("<error-name>") +
+                        "<error-name>".length(), responseString.indexOf("</error-name>")), "Merchant Server");
 
                 setContinueButton();
             }
@@ -130,7 +139,8 @@ public class PostPaymentActivity extends Activity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
-                String shopperId = responseString.substring(responseString.indexOf("<vaulted-shopper-id>"), responseString.indexOf("</vaulted-shopper-id>"));
+                prefsStorage.putString(SHOPPER_ID, responseString.substring(responseString.indexOf("<vaulted-shopper-id>") +
+                        "<vaulted-shopper-id>".length(), responseString.indexOf("</vaulted-shopper-id>")));
                 Log.d(TAG, responseString);
                 setDialog("Transaction Success", "Merchant Server");
                 setContinueButton();

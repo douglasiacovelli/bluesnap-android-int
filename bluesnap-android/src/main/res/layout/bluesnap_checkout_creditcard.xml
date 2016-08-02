@@ -116,6 +116,7 @@
                             android:layout_gravity="center_vertical"
                             android:background="@android:color/white"
                             android:inputType="numberDecimal"
+                            android:imeOptions="actionNext"
                             android:digits="0123456789 "
                             android:maxLength="19"
                             android:nextFocusDown="@+id/expDateEditText"
