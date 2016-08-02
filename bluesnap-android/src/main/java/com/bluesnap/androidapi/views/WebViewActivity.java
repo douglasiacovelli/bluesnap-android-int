@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bluesnap.androidapi.Constants;
 import com.bluesnap.androidapi.R;
+import com.bluesnap.androidapi.models.PaymentResult;
 import com.bluesnap.androidapi.services.BlueSnapService;
 import com.bluesnap.androidapi.services.BluesnapAlertDialog;
 import com.bluesnap.androidapi.services.BluesnapServiceCallback;
@@ -75,12 +76,14 @@ public class WebViewActivity extends Activity {
 
                 if ("SUCCESS".equals(transactionStatus)) {
 
+                    PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
                     UrlQuerySanitizer sanitizer = new UrlQuerySanitizer();
                     sanitizer.setAllowUnregisteredParamaters(true);
                     sanitizer.parseUrl(procceedURL);
-                    String invoiceId = sanitizer.getValue("INVOICE_ID");
+                    paymentResult.invoiceId4PayPal = Integer.getInteger(sanitizer.getValue("INVOICE_ID"));
 
-                    finishWithAlertDialog(procceedURL, invoiceId);
+                    finishWithAlertDialog(procceedURL, String.valueOf(paymentResult.invoiceId4PayPal));
+
 
                 } else if ("PENDING".equals(transactionStatus)) {
                     transactionPendingCounter++;
