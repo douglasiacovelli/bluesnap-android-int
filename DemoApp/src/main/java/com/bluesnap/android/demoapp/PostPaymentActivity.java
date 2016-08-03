@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bluesnap.androidapi.BluesnapCheckoutActivity;
-import com.bluesnap.androidapi.Constants;
 import com.bluesnap.androidapi.models.PaymentResult;
 import com.bluesnap.androidapi.services.AndroidUtil;
 import com.bluesnap.androidapi.services.PrefsStorage;
@@ -47,11 +46,11 @@ public class PostPaymentActivity extends Activity {
         if (extras != null) {
             String merchantToken = extras.getString("MERCHANT_TOKEN");
             Log.d(TAG, "Payment Result:\n " + paymentResult.toString());
-            if ((paymentResult.rememberUser && prefsStorage.getBoolean(Constants.REMEMBER_SHOPPER_4_NEXT_TIME)) || !paymentResult.rememberUser) {
-                createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount);
-            } else {
+            if (paymentResult.isReturningTransaction())
                 createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount, true, paymentResult.last4Digits, paymentResult.cardType);
-            }
+            else
+                createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount);
+
         }
     }
 
