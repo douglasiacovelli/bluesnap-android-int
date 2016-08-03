@@ -131,8 +131,14 @@ public class PostPaymentActivity extends Activity {
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.e(TAG, responseString, throwable);
                 //Disabled until server will return a reasonable error
-                setDialog(responseString.substring(responseString.indexOf("<error-name>") +
-                        "<error-name>".length(), responseString.indexOf("</error-name>")), "Merchant Server");
+                String errorName = "Error Server";
+                try {
+                    if (responseString != null)
+                        errorName = responseString.substring(responseString.indexOf("<error-name>") + "<error-name>".length(), responseString.indexOf("</error-name>"));
+                } catch (Exception e) {
+                    Log.w(TAG, "failed to get error name from response string");
+                }
+                setDialog(errorName, "Merchant Server");
 
                 setContinueButton();
             }
@@ -177,6 +183,7 @@ public class PostPaymentActivity extends Activity {
         try {
             dialog.show();
         } catch (Exception e) {
+            Log.w(TAG, "failed to show dialog");
         }
 
     }
