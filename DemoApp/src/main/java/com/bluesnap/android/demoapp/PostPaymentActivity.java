@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bluesnap.androidapi.BluesnapCheckoutActivity;
+import com.bluesnap.androidapi.Constants;
 import com.bluesnap.androidapi.models.PaymentResult;
 import com.bluesnap.androidapi.services.AndroidUtil;
 import com.bluesnap.androidapi.services.PrefsStorage;
@@ -34,6 +35,7 @@ public class PostPaymentActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_payment);
+        prefsStorage = new PrefsStorage(this);
         PaymentResult paymentResult = getIntent().getParcelableExtra(BluesnapCheckoutActivity.EXTRA_PAYMENT_RESULT);
         TextView paymentResultTextView2
                 = (TextView) findViewById(R.id.paymentResultTextView2);
@@ -45,13 +47,12 @@ public class PostPaymentActivity extends Activity {
         if (extras != null) {
             String merchantToken = extras.getString("MERCHANT_TOKEN");
             Log.d(TAG, "Payment Result:\n " + paymentResult.toString());
-            if (!paymentResult.rememberUser) {
+            if ((paymentResult.rememberUser && prefsStorage.getBoolean(Constants.REMEMBER_SHOPPER_4_NEXT_TIME)) || !paymentResult.rememberUser) {
                 createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount);
             } else {
                 createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount, true, paymentResult.last4Digits, paymentResult.cardType);
             }
         }
-        prefsStorage = new PrefsStorage(this);
     }
 
 
@@ -105,7 +106,7 @@ public class PostPaymentActivity extends Activity {
                 "</card-holder-info>";
         String bodyEnd = "</card-transaction>";
         String body = bodyStart;
-        String shopperId = prefsStorage.getString(SHOPPER_ID,"");
+        String shopperId = prefsStorage.getString(SHOPPER_ID, "");
 
         if (!isReturningShopper) {
             body += bodyMiddle +
@@ -116,7 +117,7 @@ public class PostPaymentActivity extends Activity {
                     bodyMiddle +
                     " <credit-card>" +
                     "<card-last-four-digits>" + last4Digits + "</card-last-four-digits>" +
-                    "<card-type>" + cardType + "</card-type>" +
+                    "<card-type>" + cardType.toUpperCase() + "</card-type>" +
                     "</credit-card>" +
                     bodyEnd;
         }
@@ -138,11 +139,11 @@ public class PostPaymentActivity extends Activity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                prefsStorage.putString(SHOPPER_ID, responseString.substring(responseString.indexOf("<vaulted-shopper-id>") +
-                        "<vaulted-shopper-id>".length(), responseString.indexOf("</vaulted-shopper-id>")));
+                String shopperId = responseString.substring(responseString.indexOf("<vaulted-shopper-id>") +
+                        "<vaulted-shopper-id>".length(), responseString.indexOf("</vaulted-shopper-id>"));
+                prefsStorage.putString(SHOPPER_ID, shopperId);
                 Log.d(TAG, responseString);
-                setDialog("Transaction Success", "Merchant Server");
+                setDialog("Transaction Success " + shopperId, "Merchant Server");
                 setContinueButton();
             }
         });

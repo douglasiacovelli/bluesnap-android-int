@@ -240,6 +240,18 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         taxValueTextView = (TextView) inflate.findViewById(R.id.taxValueTextview);
         //couponButton.setOnClickListener(new couponBtnClickListener()); //TODO: coupon
         //rememberMeSwitch.setOnCheckedChangeListener(new RememberMeSwitchListener());
+
+        prefsStorage.putBoolean(Constants.REMEMBER_SHOPPER_4_NEXT_TIME, false);
+        rememberMeSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rememberMeSwitch.isChecked())
+                    prefsStorage.putBoolean(Constants.REMEMBER_SHOPPER_4_NEXT_TIME, true);
+                else
+                    prefsStorage.putBoolean(Constants.REMEMBER_SHOPPER_4_NEXT_TIME, false);
+            }
+        });
+
         return inflate;
     }
 
