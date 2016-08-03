@@ -31,6 +31,7 @@ public class PaymentResult implements Parcelable {
     public String shopperLastName;
     public String cardZipCode;
     public boolean rememberUser;
+    private transient boolean returningTransaction;
 
     public PaymentResult() {
     }
@@ -61,6 +62,14 @@ public class PaymentResult implements Parcelable {
         dest.writeString(shopperLastName);
         dest.writeString(cardZipCode);
         dest.writeInt(rememberUser ? 1 : 0);
+    }
+
+    public boolean isReturningTransaction() {
+        return returningTransaction;
+    }
+
+    public void setReturningTransaction(boolean returningTransaction) {
+        this.returningTransaction = returningTransaction;
     }
 
     @Override
