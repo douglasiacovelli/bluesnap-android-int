@@ -37,7 +37,10 @@ import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BufferedHeader;
 import cz.msebera.android.httpclient.util.TextUtils;
 
+import static com.bluesnap.android.demoapp.DemoToken.*;
+
 public class Main extends Activity {
+
     private static final String TAG = "DemoMainActivity";
     protected BlueSnapService bluesnapService;
     int bsnapActivityRequestCode = 200;
@@ -256,8 +259,8 @@ public class Main extends Activity {
         progressBar.setVisibility(View.VISIBLE);
 
         final AsyncHttpClient httpClient = new AsyncHttpClient();
-        httpClient.setBasicAuth("GCpapi", "Plimus4321");
-        httpClient.post("https://us-qa-fct03.bluesnap.com/services/2/payment-fields-tokens", new TextHttpResponseHandler() {
+        httpClient.setBasicAuth(SANDBOX_USER, SANDBOX_PASS);
+        httpClient.post(SANDBOX_URL+ SANDBOX_TOKEN_CREATION, new TextHttpResponseHandler() {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

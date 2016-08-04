@@ -28,7 +28,7 @@ public class BluesnapToken {
 
         String lastChar = token.substring(token.length() - 1);
         if ("_".equals(lastChar))
-            url = QA3_URL; // SANDBOX_URL;
+            url = SANDBOX_URL;
         else if ("1".equals(lastChar) || "2".equals(lastChar))
             url = PROD_PART_1_URL + lastChar + PROD_PART_2_URL;
         else

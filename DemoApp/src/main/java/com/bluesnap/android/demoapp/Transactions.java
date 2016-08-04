@@ -11,6 +11,10 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
+import static com.bluesnap.android.demoapp.DemoToken.*;
+import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_PASS;
+import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_USER;
+
 /**
  * Created by roy.biber on 04/08/2016.
  */
@@ -62,9 +66,9 @@ public class Transactions {
 
         StringEntity entity = new StringEntity(body, "UTF-8");
         AsyncHttpClient httpClient = new AsyncHttpClient();
-        httpClient.setBasicAuth("GCpapi", "Plimus4321");
+        httpClient.setBasicAuth(SANDBOX_USER, SANDBOX_PASS);
         Log.d(TAG, "Create transaction body:\n" + body);
-        httpClient.post(getContext(), "https://us-qa-fct03.bluesnap.com/services/2/transactions", entity, "application/xml", new TextHttpResponseHandler() {
+        httpClient.post(getContext(), SANDBOX_URL+ SANDBOX_CREATE_TRANSACTION, entity, "application/xml", new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.e(TAG, responseString, throwable);
