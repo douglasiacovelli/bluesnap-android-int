@@ -189,8 +189,8 @@ public class BluesnapCheckoutActivity extends Activity {
             prefsStorage.remove(Constants.SHIPPING_INFO);
             prefsStorage.remove(Constants.RETURNING_SHOPPER);
         }
-
-        if (rememberShopper && !card.isModified()) {
+        Log.d(TAG, "Testing if card requires server tokenization:" + card.toString());
+        if (!card.isModified()) {
             PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
             paymentResult.last4Digits = card.getLast4();
             paymentResult.cardType = card.getType();
@@ -234,6 +234,7 @@ public class BluesnapCheckoutActivity extends Activity {
                     setResult(RESULT_OK, resultIntent);
                     //Only set the remember shopper here since failure can lead to missing tokenization on the server
                     card.setTokenizationSucess();
+                    Log.d(TAG, "tokenization finished");
                     if (rememberShopper)
                         prefsStorage.putObject(Constants.RETURNING_SHOPPER, card);
 
