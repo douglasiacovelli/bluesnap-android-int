@@ -35,7 +35,6 @@ import cz.msebera.android.httpclient.protocol.HTTP;
  * Core BlueSnap Service class that handles network and maintains {@link PaymentRequest}
  */
 public class BlueSnapService {
-    public static final String BASE_URL = "https://us-qa-fct03.bluesnap.com/services/2/"; //TODO: production URLS on first release
     public static final String TOKEN_AUTHENTICATION = "Token-Authentication";
     private static final String TAG = BlueSnapService.class.getSimpleName();
     private static final String CARD_TOKENIZE = "payment-fields-tokens/";
@@ -51,9 +50,9 @@ public class BlueSnapService {
     @VisibleForTesting
     HashMap<String, ExchangeRate> ratesMap;
     private ArrayList<ExchangeRate> ratesArray;
-    private String merchantToken;
     private PaymentResult paymentResult;
     private PaymentRequest paymentRequest;
+    private BluesnapToken bluesnapToken;
 
     public static BlueSnapService getInstance() {
         return INSTANCE;
@@ -86,7 +85,8 @@ public class BlueSnapService {
      * @param merchantToken A Merchant SDK token, obtained from the merchant.
      */
     public void setup(String merchantToken) {
-        this.merchantToken = merchantToken;
+        bluesnapToken = new BluesnapToken(merchantToken);
+        bluesnapToken.setToken(merchantToken);
         clearPayPalToken();
         httpClient.setMaxRetriesAndTimeout(2, 2000);
         httpClient.setConnectTimeout(5000);
@@ -112,7 +112,7 @@ public class BlueSnapService {
         postData.put("expDate", card.getExpDate());
         ByteArrayEntity entity = new ByteArrayEntity(postData.toString().getBytes("UTF-8"));
         entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-        httpClient.put(null, BASE_URL + CARD_TOKENIZE + merchantToken, entity, "application/json", responseHandler);
+        httpClient.put(null, bluesnapToken.getUrl() + CARD_TOKENIZE + bluesnapToken.getMerchantToken(), entity, "application/json", responseHandler);
     }
 
     /**
@@ -122,8 +122,8 @@ public class BlueSnapService {
      * @param callback A {@link BluesnapServiceCallback}
      */
     public void updateRates(final BluesnapServiceCallback callback) {
-        httpClient.addHeader(TOKEN_AUTHENTICATION, merchantToken);
-        httpClient.get(BASE_URL + RATES_SERVICE, new JsonHttpResponseHandler() {
+        httpClient.addHeader(TOKEN_AUTHENTICATION, bluesnapToken.getMerchantToken());
+        httpClient.get(bluesnapToken.getUrl() + RATES_SERVICE, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
@@ -160,9 +160,9 @@ public class BlueSnapService {
     }
 
     public void createPayPalToken(Double amount, String currency, final BluesnapServiceCallback callback) {
-        httpClient.addHeader(TOKEN_AUTHENTICATION, merchantToken);
+        httpClient.addHeader(TOKEN_AUTHENTICATION, bluesnapToken.getMerchantToken());
         httpClient.addHeader("Accept", "application/json");
-        httpClient.get(BASE_URL + PAYPAL_SERVICE + amount + "&currency=" + currency, new JsonHttpResponseHandler() {
+        httpClient.get(bluesnapToken.getUrl() + PAYPAL_SERVICE + amount + "&currency=" + currency, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -207,8 +207,8 @@ public class BlueSnapService {
     public void retrieveTransactionStatus(final BluesnapServiceCallback callback) {
         // ToDo check whay transaction does not work
         httpClient.addHeader("Accept", "application/json");
-        httpClient.addHeader(TOKEN_AUTHENTICATION, merchantToken);
-        httpClient.get(BASE_URL + RETRIEVE_TRANSACTION_SERVICE, new JsonHttpResponseHandler() {
+        httpClient.addHeader(TOKEN_AUTHENTICATION, bluesnapToken.getMerchantToken());
+        httpClient.get(bluesnapToken.getUrl() + RETRIEVE_TRANSACTION_SERVICE, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
