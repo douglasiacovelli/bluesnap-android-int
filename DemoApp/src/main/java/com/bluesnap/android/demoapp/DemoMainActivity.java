@@ -37,9 +37,12 @@ import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BufferedHeader;
 import cz.msebera.android.httpclient.util.TextUtils;
 
-import static com.bluesnap.android.demoapp.DemoToken.*;
+import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_PASS;
+import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_TOKEN_CREATION;
+import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_URL;
+import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_USER;
 
-public class Main extends Activity {
+public class DemoMainActivity extends Activity {
 
     private static final String TAG = "DemoMainActivity";
     protected BlueSnapService bluesnapService;
@@ -266,7 +269,7 @@ public class Main extends Activity {
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d(TAG, responseString, throwable);
                 //showDialog("Cannot obtain token from merchant server");
-                BluesnapAlertDialog.setDialog(Main.this, "Cannot obtain token from merchant server", "Service error", new BluesnapAlertDialog.BluesnapDialogCallback() {
+                BluesnapAlertDialog.setDialog(DemoMainActivity.this, "Cannot obtain token from merchant server", "Service error", new BluesnapAlertDialog.BluesnapDialogCallback() {
                     @Override
                     public void setPositiveDialog() {
                         finish();

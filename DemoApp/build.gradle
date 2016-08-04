@@ -73,6 +73,7 @@ bintray {
 
 repositories {
     maven { url "https://jitpack.io" }
+    maven { url "https://dl.bintray.com/buddybuild/maven" }
 }
 
 dependencies {
