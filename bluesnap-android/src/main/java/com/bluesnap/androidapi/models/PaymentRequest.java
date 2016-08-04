@@ -83,8 +83,9 @@ public class PaymentRequest implements Parcelable {
         parcel.writeInt(rememberUser ? 1 : 0);
         parcel.writeInt(shippingRequired ? 1 : 0);
         parcel.writeString(shopperID);
-        //parcel.writeDouble(subtotalAmount != null ? subtotalAmount : 0D);
-        //parcel.writeDouble(taxAmount != null ? taxAmount : 0D);
+        parcel.writeDouble(subtotalAmount != null ? subtotalAmount : 0D);
+        parcel.writeDouble(taxAmount != null ? taxAmount : 0D);
+
         //parcel.writeString(baseCurrency);
         //parcel.writeDouble(baseAmount);
         //parcel.writeDouble(baseTaxAmount != null ? baseTaxAmount :0D);

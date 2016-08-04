@@ -77,10 +77,6 @@ public class BluesnapCheckoutActivity extends Activity {
         fragmentManager = getFragmentManager();
         bluesnapFragment = (BluesnapFragment) fragmentManager.findFragmentById(R.id.fraglyout);
         expressCheckoutFragment = ExpressCheckoutFragment.newInstance(BluesnapCheckoutActivity.this, new Bundle());
-        //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        //fragmentTransaction.replace(R.id.fraglyout, bluesnapFragment, BluesnapFragment.TAG);
-        //bluesnapFragment.setUserVisibleHint(true);
-        //fragmentTransaction.commit();
         prefsStorage = new PrefsStorage(this);
         final ImageButton hamburgerMenuButton = (ImageButton) findViewById(R.id.hamburger_button);
         sharedCurrency = paymentRequest.getCurrencyNameCode();
@@ -127,17 +123,7 @@ public class BluesnapCheckoutActivity extends Activity {
             @Override
             public void onClick(View view) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                //if (bluesnapFragment == null)
-                //    bluesnapFragment = BluesnapFragment.newInstance(BluesnapCheckoutActivity.this, fragmentBundle);
-                //Fragment fragmentById = fragmentManager.findFragmentById(R.id.fraglyout);
-                //bluesnapFragment = (BluesnapFragment) fragmentManager.findFragmentByTag("BluesnapFragment");
-
-//                if (!fragmentById.getTag().equals(BluesnapFragment.TAG)) {
-//
-//                }
                 fragmentTransaction.replace(R.id.fraglyout, bluesnapFragment, "BluesnapFragment");
-                //bluesnapFragment.setUserVisibleHint(true);
-                //expressCheckoutFragment.setUserVisibleHint(true);
                 fragmentTransaction.commit();
                 expressCheckoutButton.setBackgroundResource(R.drawable.bg_tab_expresscheckout);
                 creditCardButton.setBackgroundResource(R.drawable.bg_tab_creditcard_sel);
