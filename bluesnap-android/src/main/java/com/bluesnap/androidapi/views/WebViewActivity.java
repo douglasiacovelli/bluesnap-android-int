@@ -1,6 +1,7 @@
 package com.bluesnap.androidapi.views;
 
 import android.app.Activity;
+import android.net.UrlQuerySanitizer;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -27,6 +28,8 @@ public class WebViewActivity extends Activity {
     private int transactionPendingCounter;
     private String message;
     private String title;
+    private BlueSnapService blueSnapService;
+    private String procceedURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,21 +62,29 @@ public class WebViewActivity extends Activity {
                 finish();
             }
         });
-
+        blueSnapService = BlueSnapService.getInstance();
     }
 
     public void onPayPalProceedUrl() {
-        BlueSnapService.getInstance().retrieveTransactionStatus(new BluesnapServiceCallback() {
+        blueSnapService.retrieveTransactionStatus(new BluesnapServiceCallback() {
 
             @Override
             public void onSuccess() {
-                String transactionStatus = BlueSnapService.getTransactionStatus().toUpperCase();
+                String transactionStatus = blueSnapService.getTransactionStatus().toUpperCase();
 
-                if (transactionStatus.equals("SUCCESS")) {
-                    // Todo implement transaction transfer
-                    //example: https://sandbox.bluesnap.com/jsp/dev_scripts/iframeCheck/pay_pal_proceed.html?ERROR=0&INVOICE_ID=1017059422&PAYPAL_TRANSACTION_ID=8VC67186CA344511P&SELLER_ORDER_ID=null
+                if ("SUCCESS".equals(transactionStatus)) {
 
-                } else if (transactionStatus.equals("PENDING")) {
+                    UrlQuerySanitizer sanitizer = new UrlQuerySanitizer();
+                    sanitizer.setAllowUnregisteredParamaters(true);
+                    sanitizer.parseUrl(procceedURL);
+                    // ToDo
+                    // PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
+                    // paymentResult.invoiceId4PayPal = Integer.getInteger(sanitizer.getValue("INVOICE_ID"));
+
+                    finishWithAlertDialog(procceedURL, sanitizer.getValue("INVOICE_ID"));
+
+
+                } else if ("PENDING".equals(transactionStatus)) {
                     transactionPendingCounter++;
                     if (transactionPendingCounter < 3) {
                         new android.os.Handler().postDelayed(
@@ -92,7 +103,7 @@ public class WebViewActivity extends Activity {
                     }
 
 
-                } else if (transactionStatus.equals("FAIL")) {
+                } else if ("FAIL".equals(transactionStatus)) {
                     message = getString(R.string.SUPPORT_PLEASE)
                             + " "
                             + getString(R.string.SUPPORT);
@@ -141,16 +152,24 @@ public class WebViewActivity extends Activity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            progressBar.setVisibility(View.VISIBLE);
+            if (!url.startsWith(Constants.getPaypalProdUrl())
+                    && !url.startsWith(Constants.getPaypalSandUrl())
+                    && !url.startsWith(Constants.getPaypalProceedUrl())
+                    && !url.startsWith(Constants.getPaypalCancelUrl())) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
             view.loadUrl(url);
             return true;
         }
 
         @Override
         public void onPageFinished(final WebView view, final String url) {
-            super.onPageFinished(view, url);
+            //super.onPageFinished(view, url);
             if (url.startsWith(Constants.getPaypalProceedUrl())) {
-                BlueSnapService.clearPayPalToken();
+                procceedURL = url;
+                blueSnapService.clearPayPalToken();
                 onPayPalProceedUrl();
             } else if (url.startsWith(Constants.getPaypalCancelUrl())) {
                 onPayPalCancelUrl();
@@ -158,5 +177,7 @@ public class WebViewActivity extends Activity {
 
             progressBar.setVisibility(View.GONE);
         }
+
+
     }
 }

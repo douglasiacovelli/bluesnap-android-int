@@ -203,12 +203,19 @@ public class Main extends Activity {
 
     public void onPaySubmit(View view) {
         Intent intent = new Intent(getApplicationContext(), BluesnapCheckoutActivity.class);
+
         String productPriceStr = AndroidUtil.stringify(productPriceEditText.getText());
+        if (TextUtils.isEmpty(productPriceStr)) {
+            Toast.makeText(getApplicationContext(), "null payment", Toast.LENGTH_LONG).show(); //TODO: handle this nicely from SDK and remove toast.
+            return;
+        }
+
         Double productPrice = Double.valueOf(productPriceStr);
-        if (TextUtils.isEmpty(productPriceStr) || productPrice <= 0D) {
+        if (productPrice <= 0D) {
             Toast.makeText(getApplicationContext(), "0 payment", Toast.LENGTH_LONG).show(); //TODO: handle this nicely from SDK and remove toast.
             return;
         }
+
         readCurencyFromSpinner(ratesSpinner.getSelectedItem().toString());
         String taxString = taxAmountEditText.getText().toString().trim();
         Double taxAmountPrecentage = 0D;

@@ -42,6 +42,7 @@ public class BlueSnapService {
     private static final String RATES_SERVICE = "tokenized-services/rates";
     private static final BlueSnapService INSTANCE = new BlueSnapService();
     private static final String PAYPAL_SERVICE = "tokenized-services/paypal-token?amount=";
+    private static final String PAYPAL_SHIPPING = "&req-confirm-shipping=0&no-shipping=2";
     private static final String RETRIEVE_TRANSACTION_SERVICE = "tokenized-services/transaction-status";
     private static final EventBus busInstance = new EventBus();
     private static String paypalURL;
@@ -63,7 +64,7 @@ public class BlueSnapService {
         return paypalURL;
     }
 
-    public static void clearPayPalToken() {
+    public void clearPayPalToken() {
         paypalURL = "";
     }
 
@@ -71,7 +72,7 @@ public class BlueSnapService {
         return errorDescription;
     }
 
-    public static String getTransactionStatus() {
+    public String getTransactionStatus() {
         return transactionStatus;
     }
 
@@ -162,7 +163,11 @@ public class BlueSnapService {
     public void createPayPalToken(Double amount, String currency, final BluesnapServiceCallback callback) {
         httpClient.addHeader(TOKEN_AUTHENTICATION, merchantToken);
         httpClient.addHeader("Accept", "application/json");
-        httpClient.get(BASE_URL + PAYPAL_SERVICE + amount + "&currency=" + currency, new JsonHttpResponseHandler() {
+        String url = BASE_URL + PAYPAL_SERVICE + amount + "&currency=" + currency;
+        if (paymentRequest.isShippingRequired())
+            url += PAYPAL_SHIPPING;
+
+        httpClient.get(url, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

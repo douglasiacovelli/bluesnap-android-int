@@ -27,6 +27,7 @@
     <string name="shipping_Info">Shipping Info</string>
     <string name="pay">Pay</string>
     <string name="total">Total</string>
+    <string name="buynowbutton">BuyNowbutton</string>
 
     <string name="search">Search</string>
     <string name="language">Language -</string>
@@ -81,5 +82,12 @@
     <string name="TRANSACTION_FAILED">Transaction Failed</string>
     <string name="nameField">Name</string>
 
+    <!-- Hints-->
+    <string name="name_hint">John Doe</string>
+    <string name="cc_hint">1234 5678 9012 3456</string>
+    <string name="cvv_hint">123</string>
+    <string name="email_hint">JohnDoe@email.com</string>
+    <string name="street_hint">Street</string>
+    <string name="postal_code_hint">Postal Code</string>
 
 </resources>
