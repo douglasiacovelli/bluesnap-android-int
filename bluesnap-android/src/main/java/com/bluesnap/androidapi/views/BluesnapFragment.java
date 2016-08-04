@@ -584,8 +584,6 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-//            card.setModified();
-
 
             boolean dateMinimumChars = true;
             String datePart[] = expDateEditText.getText().toString().split("/");
@@ -603,16 +601,8 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
                     expDateEditText.setText(expDateEditText.getText() + "/");
                     expDateEditText.setSelection(expDateEditText.getText().length());
                 }
-//                    String[] strings = Card.extractMonthAndYear(ass);
-//                    if (!Card.validateExpiryDate(strings[0],strings[1])) {
-//                        expDateLabelTextView.setTextColor(Color.RED);
-//                    } else {
-//                        expDateLabelTextView.setTextColor(Color.BLACK);
-//                    }
             }
             newDateStr = expDateEditText.getText().toString();
-
-
         }
 
         @Override
@@ -637,9 +627,6 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            if (s.length() <= 2)
-//                return;
-//            processUserNameField(s.toString());
         }
 
         @Override

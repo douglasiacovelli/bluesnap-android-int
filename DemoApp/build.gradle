@@ -18,10 +18,10 @@ android {
         //setProperty("archivesBaseName", "DemoApp-$versionName")
     }
     buildTypes {
-        release {
-            //runProguard false
-            proguardFile getDefaultProguardFile('proguard-android.txt')
-        }
+//        release {
+//            //runProguard false
+//            proguardFile getDefaultProguardFile('proguard-android.txt')
+//        }
     }
     lintOptions {
         abortOnError false
@@ -49,22 +49,25 @@ bintray {
             released = new Date()
             vcsTag = androidGitVersion.name()
             attributes = [
-                    'test'     : System.getenv('TRAVIS_TEST_RESULT'),
-                    'commit'   : System.getenv('TRAVIS_COMMIT'),
-                    'jobnumber': System.getenv('TRAVIS_JOB_NUMBER')
+                    'test'       : String.valueOf(System.getenv('TRAVIS_TEST_RESULT')),
+                    'commit'     : String.valueOf(System.getenv('TRAVIS_COMMIT')),
+                    'jobnumber'  : String.valueOf(System.getenv('TRAVIS_JOB_NUMBER')),
+                    'branch'     : String.valueOf(System.getenv('TRAVIS_BRANCH')),
+                    'versioncode': String.valueOf(androidGitVersion.code())
             ]
         }
     }
     filesSpec {
         from('build/outputs/apk') {
             include '*.apk'
-            exclude('*-debug.apk')
             exclude('*.asc')
             exclude('*-debug-unaligned.apk')
             exclude('*-release-unsigned.apk')
 
         }
-        into 'travis/' + System.getenv('TRAVIS_BRANCH') + '/'
+        into 'travis/' + System.getenv('TRAVIS_BRANCH') + "/"
+        rename { String fileName -> new String('/DemoApp-' + versionName + ".apk")
+        }
     }
 }
 
@@ -83,16 +86,4 @@ dependencies {
     androidTestCompile 'com.android.support:support-annotations:23.4.0'
     androidTestCompile 'com.android.support.test:runner:0.5'
 
-}
-task updateVersion(type: Task) {
-
-    android {
-        applicationVariants.all { variant ->
-            variant.outputs.each { output ->
-                output.outputFile = new File(
-                        output.outputFile.parent,
-                        output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
-            }
-        }
-    }
 }
