@@ -172,7 +172,7 @@ public class AndroidUtil {
 
     private static void textValidChanges(TextView textView, TextView optionalInvalidStatement) {
         textView.setTextColor(Color.BLACK);
-        optionalInvalidStatement.setVisibility(View.GONE);
+        optionalInvalidStatement.setVisibility(View.INVISIBLE);
     }
 
     private static void textInValidChanges(TextView textView) {

@@ -119,7 +119,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
             return false;
         } else {
             emailIconLabelTextView.setTextColor(Color.BLACK);
-            invalidShopperName.setVisibility(View.GONE);
+            invalidShopperName.setVisibility(View.INVISIBLE);
             shopperFullNameEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             return true;
         }
@@ -339,7 +339,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
 
     private boolean zipFieldValidation() {
 
-        if (zipFieldLayout.getVisibility() == View.GONE)
+        if (zipFieldLayout.getVisibility() == View.INVISIBLE)
             return true;
         return AndroidUtil.validateEditTextString(zipEditText, zipTextView, AndroidUtil.ZIP_FIELD);
     }
@@ -393,7 +393,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
                 valid = false;
             } else {
                 creditCardLabelTextView.setTextColor(Color.BLACK);
-                invaildCreditCardMessageTextView.setVisibility(View.GONE);
+                invaildCreditCardMessageTextView.setVisibility(View.INVISIBLE);
                 creditCardNumberEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
             }
@@ -459,8 +459,8 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
 
             creditCardLabelTextView.setTextColor(Color.BLACK);
             emailIconLabelTextView.setTextColor(Color.BLACK);
-            invaildCreditCardMessageTextView.setVisibility(View.GONE);
-            invalidShopperName.setVisibility(View.GONE);
+            invaildCreditCardMessageTextView.setVisibility(View.INVISIBLE);
+            invalidShopperName.setVisibility(View.INVISIBLE);
             handleRememberMe();
             BluesnapCheckoutActivity bluesnapCheckoutActivity = (BluesnapCheckoutActivity) getActivity();
             bluesnapCheckoutActivity.setCard(card);
@@ -508,7 +508,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
             final String ccNum = s.toString();
             changeCardEditTextDrawable(CardType.getType(ccNum));
             creditCardLabelTextView.setTextColor(Color.BLACK);
-            invaildCreditCardMessageTextView.setVisibility(View.GONE);
+            invaildCreditCardMessageTextView.setVisibility(View.INVISIBLE);
         }
 
 
@@ -521,7 +521,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
 
             } else {
                 creditCardLabelTextView.setTextColor(Color.BLACK);
-                invaildCreditCardMessageTextView.setVisibility(View.GONE);
+                invaildCreditCardMessageTextView.setVisibility(View.INVISIBLE);
                 invalidNumberInputFlag = 0;
             }
         }
@@ -532,9 +532,9 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
 
             String ccNum = creditCardNumberEditText.getText().toString().trim();
             if (AndroidUtil.isBlank(ccNum)) { // User cleared the text
-                zipFieldLayout.setVisibility(View.GONE);
-                zipFieldBorderVanish.setVisibility(View.GONE);
-                invaildCreditCardMessageTextView.setVisibility(View.GONE);
+                zipFieldLayout.setVisibility(View.INVISIBLE);
+                zipFieldBorderVanish.setVisibility(View.INVISIBLE);
+                invaildCreditCardMessageTextView.setVisibility(View.INVISIBLE);
                 creditCardLabelTextView.setTextColor(Color.BLACK);
             }
 
