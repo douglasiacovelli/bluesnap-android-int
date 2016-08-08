@@ -18,7 +18,7 @@ import com.bluesnap.androidapi.services.BluesnapServiceCallback;
 
 public class WebViewActivity extends Activity {
 
-    static final String TAG = String.valueOf(ExpressCheckoutFragment.class.getPackage());
+    static final String TAG = ExpressCheckoutFragment.class.getSimpleName();
     private ProgressBar progressBar;
     private WebView webView;
     private TextView textView;

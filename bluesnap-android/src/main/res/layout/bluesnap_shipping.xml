@@ -448,7 +448,7 @@
                         android:id="@+id/subtotalValueTextviewShipping"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0" />
+                        android:text="@string/_0" />
                 </TableRow>
 
                 <TableRow>
@@ -464,7 +464,7 @@
                         android:id="@+id/taxValueTextviewShipping"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0" />
+                        android:text="@string/_0" />
                 </TableRow>
             </TableLayout>
         </LinearLayout>

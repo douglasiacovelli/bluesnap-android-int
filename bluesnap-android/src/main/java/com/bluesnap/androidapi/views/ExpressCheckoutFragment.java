@@ -32,7 +32,7 @@ import java.text.DecimalFormat;
  * Created by oz on 12/2/15.
  */
 public class ExpressCheckoutFragment extends Fragment implements BluesnapPaymentFragment {
-    public static final String TAG = String.valueOf(ExpressCheckoutFragment.class.getSimpleName());
+    public static final String TAG = ExpressCheckoutFragment.class.getSimpleName();
     private static PaymentRequest paymentRequest;
     private static FragmentManager fragmentManager;
     private Double paypalPurchaseAmount;
@@ -63,6 +63,7 @@ public class ExpressCheckoutFragment extends Fragment implements BluesnapPayment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.bluesnap_expresscheckout, container, false);
+        Log.e(TAG, "onCreateView");
         ImageButton paypalBtn = (ImageButton) inflate.findViewById(R.id.express_co_btn_paypal);
         progressBar = (ProgressBar) inflate.findViewById(R.id.progressBarExpressCheckout);
         totalAmount = (TextView) inflate.findViewById(R.id.express_co_total);
@@ -70,17 +71,18 @@ public class ExpressCheckoutFragment extends Fragment implements BluesnapPayment
         paypalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.e(TAG, "paypalBtn.setOnClickListener");
                 String payPalToken = BlueSnapService.getPayPalToken();
                 if ("".equals(payPalToken)) {
+                    Log.e(TAG, "create payPalToken");
                     startPayPal();
                 } else {
+                    Log.e(TAG, "startWebViewActivity");
                     startWebViewActivity(payPalToken);
                 }
 
             }
         });
-
-
         return inflate;
     }
 

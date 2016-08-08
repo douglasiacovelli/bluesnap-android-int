@@ -47,7 +47,7 @@ import java.text.DecimalFormat;
  * Created by oz on 12/2/15.
  */
 public class BluesnapFragment extends Fragment implements BluesnapPaymentFragment {
-    public static final String TAG = String.valueOf(BluesnapFragment.class.getSimpleName());
+    public static final String TAG = BluesnapFragment.class.getSimpleName();
     static int invalidNumberInputFlag = 0;
     private static FragmentManager fragmentManager;
     private static BluesnapFragment bsFragment;
@@ -313,7 +313,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
                 prefsStorage.putObject(Constants.RETURNING_SHOPPER, card);
                 prefsStorage.putBoolean(Constants.REMEMBER_SHOPPER, true);
 
-            } else if (rememberMeSwitch.isChecked() == false) {
+            } else if (!rememberMeSwitch.isChecked()) {
                 //prefsStorage.remove(Constants.RETURNING_SHOPPER);
                 prefsStorage.putBoolean(Constants.REMEMBER_SHOPPER, false);
             }

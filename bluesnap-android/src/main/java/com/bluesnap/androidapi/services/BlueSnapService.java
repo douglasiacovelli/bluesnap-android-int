@@ -89,8 +89,7 @@ public class BlueSnapService {
         bluesnapToken = new BluesnapToken(merchantToken);
         bluesnapToken.setToken(merchantToken);
         clearPayPalToken();
-        httpClient.setMaxRetriesAndTimeout(2, 2000);
-        httpClient.setConnectTimeout(5000);
+        httpClient.setMaxRetriesAndTimeout(0, 0);
         paymentResult = null;
         paymentRequest = null;
         if (!busInstance.isRegistered(this)) busInstance.register(this);

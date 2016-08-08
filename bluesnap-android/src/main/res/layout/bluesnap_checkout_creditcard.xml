@@ -185,7 +185,7 @@
                         android:layout_weight="1"
                         android:background="@android:color/white"
                         android:editable="true"
-                        android:hint="MM/YY"
+                        android:hint="@string/mm_yy"
                         android:inputType="numberDecimal"
                         android:digits="0123456789/"
                         android:maxLength="5"
@@ -354,7 +354,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:drawableLeft="@drawable/ico_field_coupon3"
-                    android:hint=" Coupon"
+                    android:hint="@string/coupon"
                     android:inputType="phone"
                     android:padding="6sp" />
 
@@ -509,7 +509,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@drawable/btn_pay"
-        android:contentDescription="BuyNowbutton"
+        android:contentDescription="@string/buynowbutton"
         android:paddingRight="5sp"
         android:textAllCaps="false"
         android:textColor="@color/colorPureWhite"

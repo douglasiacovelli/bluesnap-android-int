@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ico_search"
         android:drawablePadding="@dimen/activity_horizontal_margin"
-        android:hint="Search" />
+        android:hint="@string/search" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -40,7 +40,7 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
     public static final String AUTO_POPULATE_SHOPPER_NAME = "AUTO_POPULATE_SHOPPER_NAME";
     public static final String AUTO_POPULATE_ZIP = "AUTO_POPULATE_ZIP";
     public static final String SHIPPING_TAG = String.valueOf(ShippingFragment.class.getSimpleName());
-    static final String TAG = String.valueOf(ShippingFragment.class.getPackage());
+    static final String TAG = ShippingFragment.class.getSimpleName();
     private TextView totalAmountTextView;
     private ShippingInfo shippingInfo;
     private EditText shippingNameEditText;

@@ -86,8 +86,13 @@
     <string name="name_hint">John Doe</string>
     <string name="cc_hint">1234 5678 9012 3456</string>
     <string name="cvv_hint">123</string>
-    <string name="email_hint">JohnDoe@email.com</string>
+    <string name="email_hint">JohnDoe@Email.com</string>
     <string name="street_hint">Street</string>
     <string name="postal_code_hint">Postal Code</string>
+    <string name="mm_yy">MM/YY</string>
+    <string name="coupon"> Coupon</string>
+    <string name="merchant">Merchant</string>
+    <string name="_0">0</string>
+    <string name="webview">WebView</string>
 
 </resources>
