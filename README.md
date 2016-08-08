@@ -11,7 +11,7 @@ This SDK supports Android SDK 23 and above for development. The minimum Android 
 ## Android Studio (Gradle) instructions
 To get started, add the following line in your `build.gradle` file, in the dependencies section:
 
-    compile 'com.bluesnap:bluensap-android:+'
+    compile 'com.bluesnap:bluensap-android:1.0.0'
 
 # Usage
 
