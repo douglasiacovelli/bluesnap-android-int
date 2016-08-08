@@ -21,31 +21,31 @@ public class PaymentResult implements Parcelable {
             return new PaymentResult[size];
         }
     };
-    public String last4Digits;
-    public Double amount;
-    public String currencyNameCode;
-    public String shopperID;
-    public String cardType;
-    public String expDate;
-    public String shopperFirstName;
-    public String shopperLastName;
-    public String cardZipCode;
     public boolean rememberUser;
     public boolean returningTransaction;
+    private String last4Digits;
+    private Double amount;
+    private String currencyNameCode;
+    private String shopperID;
+    private String cardType;
+    private String expDate;
+    private String shopperFirstName;
+    private String shopperLastName;
+    private String cardZipCode;
 
     public PaymentResult() {
     }
 
     protected PaymentResult(Parcel in) {
-        shopperID = in.readString();
-        last4Digits = in.readString();
-        amount = in.readDouble();
-        currencyNameCode = in.readString();
-        cardType = in.readString();
-        expDate = in.readString();
-        shopperFirstName = in.readString();
-        shopperLastName = in.readString();
-        cardZipCode = in.readString();
+        setShopperID(in.readString());
+        setLast4Digits(in.readString());
+        setAmount(in.readDouble());
+        setCurrencyNameCode(in.readString());
+        setCardType(in.readString());
+        setExpDate(in.readString());
+        setShopperFirstName(in.readString());
+        setShopperLastName(in.readString());
+        setCardZipCode(in.readString());
         rememberUser = in.readInt() != 0;
         returningTransaction = in.readInt() != 0;
 
@@ -53,19 +53,25 @@ public class PaymentResult implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(shopperID);
-        dest.writeString(last4Digits);
-        dest.writeDouble(amount);
-        dest.writeString(currencyNameCode);
-        dest.writeString(cardType);
-        dest.writeString(expDate);
-        dest.writeString(shopperFirstName);
-        dest.writeString(shopperLastName);
-        dest.writeString(cardZipCode);
+        dest.writeString(getShopperID());
+        dest.writeString(getLast4Digits());
+        dest.writeDouble(getAmount());
+        dest.writeString(getCurrencyNameCode());
+        dest.writeString(getCardType());
+        dest.writeString(getExpDate());
+        dest.writeString(getShopperFirstName());
+        dest.writeString(getShopperLastName());
+        dest.writeString(getCardZipCode());
         dest.writeInt(rememberUser ? 1 : 0);
         dest.writeInt(returningTransaction ? 1 : 0);
     }
 
+    /**
+     * Indicates if this is a returning shopper transaction.
+     * You should decide which server call to use according to this method.
+     *
+     * @return true if this is a returning shopper.
+     */
     public boolean isReturningTransaction() {
         return returningTransaction;
     }
@@ -87,45 +93,117 @@ public class PaymentResult implements Parcelable {
 
         PaymentResult that = (PaymentResult) o;
 
-        if (!last4Digits.equals(that.last4Digits)) return false;
-        if (!amount.equals(that.amount)) return false;
-        if (!currencyNameCode.equals(that.currencyNameCode)) return false;
-        if (!shopperID.equals(that.shopperID)) return false;
-        return cardType.equals(that.cardType);
+        if (!getLast4Digits().equals(that.getLast4Digits())) return false;
+        if (!getAmount().equals(that.getAmount())) return false;
+        if (!getCurrencyNameCode().equals(that.getCurrencyNameCode())) return false;
+        if (!getShopperID().equals(that.getShopperID())) return false;
+        return getCardType().equals(that.getCardType());
 
     }
 
     @Override
     public int hashCode() {
-        int result = last4Digits.hashCode();
-        result = 31 * result + amount.hashCode();
-        result = 31 * result + currencyNameCode.hashCode();
-        result = 31 * result + shopperID.hashCode();
-        result = 31 * result + cardType.hashCode();
+        int result = getLast4Digits().hashCode();
+        result = 31 * result + getAmount().hashCode();
+        result = 31 * result + getCurrencyNameCode().hashCode();
+        result = 31 * result + getShopperID().hashCode();
+        result = 31 * result + getCardType().hashCode();
         return result;
     }
 
     public boolean validate() {
-        if (amount == null || amount.equals(0.0)) return false;
-        if (currencyNameCode == null || currencyNameCode.isEmpty()) return false;
-        if (expDate == null || expDate.isEmpty()) return false;
-        return !(last4Digits == null || Integer.valueOf(last4Digits) == 0);
+        if (getAmount() == null || getAmount().equals(0.0)) return false;
+        if (getCurrencyNameCode() == null || getCurrencyNameCode().isEmpty()) return false;
+        if (getExpDate() == null || getExpDate().isEmpty()) return false;
+        return !(getLast4Digits() == null || Integer.valueOf(getLast4Digits()) == 0);
     }
 
     @Override
     public String toString() {
         return "PaymentResult{" +
-                "last4Digits='" + last4Digits + '\'' +
-                ", amount=" + amount +
-                ", currencyNameCode='" + currencyNameCode + '\'' +
-                ", shopperID='" + shopperID + '\'' +
-                ", cardType='" + cardType + '\'' +
-                ", expDate='" + expDate + '\'' +
-                ", shopperFirstName='" + shopperFirstName + '\'' +
-                ", shopperLastName='" + shopperLastName + '\'' +
-                ", cardZipCode='" + cardZipCode + '\'' +
+                "last4Digits='" + getLast4Digits() + '\'' +
+                ", amount=" + getAmount() +
+                ", currencyNameCode='" + getCurrencyNameCode() + '\'' +
+                ", shopperID='" + getShopperID() + '\'' +
+                ", cardType='" + getCardType() + '\'' +
+                ", expDate='" + getExpDate() + '\'' +
+                ", shopperFirstName='" + getShopperFirstName() + '\'' +
+                ", shopperLastName='" + getShopperLastName() + '\'' +
+                ", cardZipCode='" + getCardZipCode() + '\'' +
                 ", rememberUser=" + rememberUser + '\'' +
                 ", returningTransaction=" + returningTransaction + '\'' +
                 '}';
+    }
+
+    public String getLast4Digits() {
+        return last4Digits;
+    }
+
+    public void setLast4Digits(String last4Digits) {
+        this.last4Digits = last4Digits;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public String getCurrencyNameCode() {
+        return currencyNameCode;
+    }
+
+    public void setCurrencyNameCode(String currencyNameCode) {
+        this.currencyNameCode = currencyNameCode;
+    }
+
+    public String getShopperID() {
+        return shopperID;
+    }
+
+    public void setShopperID(String shopperID) {
+        this.shopperID = shopperID;
+    }
+
+    public String getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
+    }
+
+    public String getExpDate() {
+        return expDate;
+    }
+
+    public void setExpDate(String expDate) {
+        this.expDate = expDate;
+    }
+
+    public String getShopperFirstName() {
+        return shopperFirstName;
+    }
+
+    public void setShopperFirstName(String shopperFirstName) {
+        this.shopperFirstName = shopperFirstName;
+    }
+
+    public String getShopperLastName() {
+        return shopperLastName;
+    }
+
+    public void setShopperLastName(String shopperLastName) {
+        this.shopperLastName = shopperLastName;
+    }
+
+    public String getCardZipCode() {
+        return cardZipCode;
+    }
+
+    public void setCardZipCode(String cardZipCode) {
+        this.cardZipCode = cardZipCode;
     }
 }

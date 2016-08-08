@@ -11,23 +11,25 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
-import static com.bluesnap.android.demoapp.DemoToken.*;
+import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_CREATE_TRANSACTION;
 import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_PASS;
+import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_URL;
 import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_USER;
 
 /**
- * Created by roy.biber on 04/08/2016.
+ * A Demo class that mocks server to server calls
+ * You shuold not do these calls on your mobile app.
  */
-public class Transactions {
+public class DemoTransactions {
 
-    private static final String TAG = Transactions.class.getSimpleName();
-    private static final Transactions INSTANCE = new Transactions();
+    private static final String TAG = DemoTransactions.class.getSimpleName();
+    private static final DemoTransactions INSTANCE = new DemoTransactions();
     private String SHOPPER_ID = "SHOPPER_ID";
     private String message;
     private String title;
     private Context context;
 
-    public static Transactions getInstance() {
+    public static DemoTransactions getInstance() {
         return INSTANCE;
     }
 
@@ -36,6 +38,7 @@ public class Transactions {
     }
 
     public void createCreditCardTransaction(String firstName, String lastName, String token, String currency, Double amount, boolean isReturningShopper, String last4Digits, String cardType, final BluesnapServiceCallback callback) {
+
 
         String bodyStart = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
                 "<card-transaction-type>AUTH_CAPTURE</card-transaction-type>" +

@@ -11,7 +11,7 @@ This SDK supports Android SDK 23 and above for development. The minimum Android 
 ## Android Studio (Gradle) instructions
 To get started, add the following line in your `build.gradle` file, in the dependencies section:
 
-    compile 'com.bluesnap:bluensap-sdk:+'
+    compile 'com.bluesnap:bluensap-android:+'
 
 # Usage
 
@@ -47,14 +47,14 @@ Optionally, you may pass a tax amount and a subtotal price:
 
     setAmountWithTax(Double subtotalAmount, Double taxAmount);
 
-You can also pass a title or a custom text to be displayed to the shopper:
+You can also pass a title or a custom title to be displayed to the shopper:
 
-    paymentRequest.setCustomDescription();
+    paymentRequest.setCustomTitle();
         
 If you would like to collect shipping information, include the setShippingRequired method in the PaymentRequest:
-
-    ShippingInfo shippingInfo = (ShippingInfo) extras.get(BluesnapCheckoutActivity.EXTRA_SHIPPING_DETAILS);
-
+    
+    paymentRequest.setShippingRequired(true);
+    
 ### Launch BluesnapCheckoutActivity 
 To start the activity, simply create an Android Intent and pass the PaymentRequest as an Intent Extra.
 
@@ -79,7 +79,8 @@ The PaymentResult is passed back to your activity as an activityResult Extra. In
             if (!data) // User aborted the checkout process
                 return;
                 
-            PaymentResult paymentResult = (PaymentResult) data.getExtras().get(BluesnapCheckoutActivity.EXTRA_PAYMENT_RESULT);
+            PaymentResult paymentResult = (PaymentResult) data.getExtras().get(BluesnapCheckoutActivity.EXTRA_PAYMENT_RESULT);                       
+            ShippingInfo shippingInfo = (ShippingInfo) extras.get(BluesnapCheckoutActivity.EXTRA_SHIPPING_DETAILS);
         }
 
 
@@ -90,8 +91,9 @@ For credit card purchases, use the [Auth Capture](http://developers.bluesnap.com
 
 For PayPal purchases, use the [Create PayPal Transaction](http://developers.bluesnap.com/v2.0/docs/create-paypal-transaction) request.
 
-# ProGuard exclude
-If you're running ProGuard as part of your build process make sure to exclude the Gson. to do this please add [this](https://github.com/google/gson/blob/master/examples/android-proguard-example/proguard.cfg) to your proguard.cfg file.
+
+## Returning shopper
+
 
 # Additional functionality
 
@@ -127,3 +129,17 @@ To get started with the demo application:
 
 #### Demo app token
 The Demo app will obtain a merchant token from BlueSnap sandbox servers using HTTP calls and demo credentials. This procedure should be replaced by your server side calls.
+
+### ProGuard exclude
+If you're running ProGuard as part of your build process make sure to exclude the Gson. to do this please add [this](https://github.com/google/gson/blob/master/examples/android-proguard-example/proguard.cfg) to your proguard.cfg file.
+
+
+## License
+The MIT License (MIT)
+Copyright (c) 2016 BlueSnap Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

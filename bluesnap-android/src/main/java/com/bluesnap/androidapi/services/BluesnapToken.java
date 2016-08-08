@@ -11,20 +11,19 @@ public class BluesnapToken {
     private String url;
     private String merchantToken;
 
-
     public BluesnapToken(String merchantToken) {
         this.merchantToken = merchantToken;
     }
 
     public String getUrl() throws IllegalStateException {
         if (AndroidUtil.isBlank(url))
-            throw new IllegalStateException("token no set must call set token");
+            throw new IllegalStateException("Token not set");
         return url;
     }
 
     public void setToken(String token) throws IllegalArgumentException {
         if (AndroidUtil.isBlank(token) && token.length() > 2)
-            throw new IllegalArgumentException("malformed token");
+            throw new IllegalArgumentException("Malformed token");
 
         String lastChar = token.substring(token.length() - 1);
         if ("_".equals(lastChar))
@@ -32,10 +31,19 @@ public class BluesnapToken {
         else if ("1".equals(lastChar) || "2".equals(lastChar))
             url = PROD_PART_1_URL + lastChar + PROD_PART_2_URL;
         else
-            throw new IllegalArgumentException("ilegal token");
+            throw new IllegalArgumentException("Illegal token");
     }
 
     public String getMerchantToken() {
         return merchantToken;
     }
+
+    @Override
+    public String toString() {
+        return "BluesnapToken{" +
+                "url='" + url + '\'' +
+                ", merchantToken='" + merchantToken.substring(10) + '\'' +
+                '}';
+    }
 }
+

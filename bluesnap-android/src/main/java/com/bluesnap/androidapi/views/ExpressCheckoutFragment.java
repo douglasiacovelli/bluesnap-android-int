@@ -63,21 +63,18 @@ public class ExpressCheckoutFragment extends Fragment implements BluesnapPayment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.bluesnap_expresscheckout, container, false);
-        Log.e(TAG, "onCreateView");
         ImageButton paypalBtn = (ImageButton) inflate.findViewById(R.id.express_co_btn_paypal);
         progressBar = (ProgressBar) inflate.findViewById(R.id.progressBarExpressCheckout);
         totalAmount = (TextView) inflate.findViewById(R.id.express_co_total);
-        DecimalFormat decimalFormat = AndroidUtil.getDecimalFormat();
         paypalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "paypalBtn.setOnClickListener");
                 String payPalToken = BlueSnapService.getPayPalToken();
                 if ("".equals(payPalToken)) {
-                    Log.e(TAG, "create payPalToken");
+                    Log.d(TAG, "create payPalToken");
                     startPayPal();
                 } else {
-                    Log.e(TAG, "startWebViewActivity");
+                    Log.d(TAG, "startWebViewActivity");
                     startWebViewActivity(payPalToken);
                 }
 
@@ -138,7 +135,7 @@ public class ExpressCheckoutFragment extends Fragment implements BluesnapPayment
                     String message;
                     String title;
                     if (errorDescription.getString("code").equals("20027")) {
-                        // ToDo change to string.xml for translations
+                        // ToDo change to string.xml for translations, use string palceholders
                         //message = errorDescription.getString("description") + " please change to a PayPal supported Currency or contact Support for additional assistance";
                         message = getString(R.string.CURRENCY_NOT_SUPPORTED_PART_1)
                                 + " "
@@ -156,10 +153,7 @@ public class ExpressCheckoutFragment extends Fragment implements BluesnapPayment
 
                         title = getString(R.string.CURRENCY_NOT_SUPPORTED_PART_TITLE);
 
-                    } /*else if (errorDescription.getString("code").equals("403")) {
-                        message = errorDescription.getString("description");
-                        title = errorDescription.getString("errorName");
-                    }*/ else {
+                    } else {
                         message = getString(R.string.SUPPORT_PLEASE)
                                 + " "
                                 + getString(R.string.SUPPORT);

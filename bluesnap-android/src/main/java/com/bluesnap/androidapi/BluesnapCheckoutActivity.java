@@ -49,6 +49,7 @@ public class BluesnapCheckoutActivity extends Activity {
     public final static String MERCHANT_TOKEN = "com.bluesnap.intent.BSNAP_CLIENT_PRIVATE_KEY";
     public static final String EXTRA_SHIPPING_DETAILS = "com.bluesnap.intent.BSNAP_SHIPPING_DETAILS";
     public static final String SDK_ERROR_MSG = "SDK_ERROR_MESSAGE";
+    public static final int REQUEST_CODE_DEFAULT = 1;
     private static final String TAG = BluesnapCheckoutActivity.class.getSimpleName();
     private static final int RESULT_SDK_FAILED = -2;
     private final BlueSnapService blueSnapService = BlueSnapService.getInstance();
@@ -137,8 +138,7 @@ public class BluesnapCheckoutActivity extends Activity {
 
     private void setMerchantCustomText() {
         TextView title = (TextView) findViewById(R.id.merchant_title);
-        title.setText(paymentRequest.getCustomText());
-
+        title.setText(paymentRequest.getCustomTitle());
     }
 
     public ShippingFragment createShippingFragment(Bundle bundle) {
@@ -178,12 +178,12 @@ public class BluesnapCheckoutActivity extends Activity {
         Log.d(TAG, "Testing if card requires server tokenization:" + card.toString());
         if (!card.isModified()) {
             PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
-            paymentResult.last4Digits = card.getLast4();
-            paymentResult.cardType = card.getType();
-            paymentResult.expDate = card.getExpDate();
-            paymentResult.cardZipCode = card.getAddressZip();
-            paymentResult.amount = paymentRequest.getAmount();
-            paymentResult.currencyNameCode = paymentRequest.getCurrencyNameCode();
+            paymentResult.setLast4Digits(card.getLast4());
+            paymentResult.setCardType(card.getType());
+            paymentResult.setExpDate(card.getExpDate());
+            paymentResult.setCardZipCode(card.getAddressZip());
+            paymentResult.setAmount(paymentRequest.getAmount());
+            paymentResult.setCurrencyNameCode(paymentRequest.getCurrencyNameCode());
             paymentResult.setReturningTransaction(true);
             prefsStorage.putObject(Constants.RETURNING_SHOPPER, card);
             prefsStorage.putBoolean(Constants.REMEMBER_SHOPPER, rememberShopper);
@@ -212,9 +212,9 @@ public class BluesnapCheckoutActivity extends Activity {
                     String ccType = response.getString("ccType");
                     PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
                     // update last4 from server result
-                    paymentResult.last4Digits = Last4;
+                    paymentResult.setLast4Digits(Last4);
                     // update card type from server result
-                    paymentResult.cardType = ccType;
+                    paymentResult.setCardType(ccType);
                     paymentResult.setReturningTransaction(false);
                     resultIntent.putExtra(EXTRA_PAYMENT_RESULT, paymentResult);
                     setResult(RESULT_OK, resultIntent);

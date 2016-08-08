@@ -14,24 +14,15 @@ import com.bluesnap.androidapi.BluesnapCheckoutActivity;
 import com.bluesnap.androidapi.models.PaymentResult;
 import com.bluesnap.androidapi.services.AndroidUtil;
 import com.bluesnap.androidapi.services.BluesnapServiceCallback;
-import com.bluesnap.androidapi.services.PrefsStorage;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.TextHttpResponseHandler;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.entity.StringEntity;
 
 
 public class PostPaymentActivity extends Activity {
 
     private static final String TAG = PostPaymentActivity.class.getSimpleName();
     private TextView continueShippingView;
-    private Transactions transactions;
+    private DemoTransactions transactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +34,16 @@ public class PostPaymentActivity extends Activity {
         continueShippingView = (TextView) findViewById(R.id.continueShippingButton);
         continueShippingView.setVisibility(View.GONE);
         DecimalFormat decimalFormat = AndroidUtil.getDecimalFormat();
-        paymentResultTextView2.setText("Your payment of  " + paymentResult.currencyNameCode + " " + decimalFormat.format(paymentResult.amount) + " has been sent.");
+        paymentResultTextView2.setText("Your payment of  " + paymentResult.getCurrencyNameCode() + " " + decimalFormat.format(paymentResult.getAmount()) + " has been sent.");
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String merchantToken = extras.getString("MERCHANT_TOKEN");
             Log.d(TAG, "Payment Result:\n " + paymentResult.toString());
 
-            transactions = Transactions.getInstance();
+            transactions = DemoTransactions.getInstance();
             transactions.setContext(this);
             if (paymentResult.isReturningTransaction()) {
-                transactions.createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount, true, paymentResult.last4Digits, paymentResult.cardType, new BluesnapServiceCallback() {
+                transactions.createCreditCardTransaction(paymentResult.getShopperFirstName(), paymentResult.getShopperLastName(), merchantToken, paymentResult.getCurrencyNameCode(), paymentResult.getAmount(), true, paymentResult.getLast4Digits(), paymentResult.getCardType(), new BluesnapServiceCallback() {
                     @Override
                     public void onSuccess() {
                         setDialog(transactions.getMessage(), transactions.getTitle());
@@ -66,7 +57,7 @@ public class PostPaymentActivity extends Activity {
                     }
                 });
             } else {
-                transactions.createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount, new BluesnapServiceCallback() {
+                transactions.createCreditCardTransaction(paymentResult.getShopperFirstName(), paymentResult.getShopperLastName(), merchantToken, paymentResult.getCurrencyNameCode(), paymentResult.getAmount(), new BluesnapServiceCallback() {
                     @Override
                     public void onSuccess() {
                         setDialog(transactions.getMessage(), transactions.getTitle());

@@ -22,11 +22,9 @@ public class PaymentRequest implements Parcelable {
             return new Object[0];
         }
     };
-    private String currencySymbol;
     private String currencyNameCode;
     private Double amount;
-    private String customDescription;
-    private String customText;
+    private String customTitle;
     private String userEmail;
     private boolean rememberUser;
     private boolean shippingRequired;
@@ -40,11 +38,9 @@ public class PaymentRequest implements Parcelable {
     private transient boolean allowRememberUser = true;
 
     public PaymentRequest(Parcel parcel) {
-        currencySymbol = parcel.readString();
         currencyNameCode = parcel.readString();
         amount = parcel.readDouble();
-        customDescription = parcel.readString();
-        customText = parcel.readString();
+        customTitle = parcel.readString();
         userEmail = parcel.readString();
         rememberUser = parcel.readInt() != 0;
         shippingRequired = parcel.readInt() != 0;
@@ -74,31 +70,17 @@ public class PaymentRequest implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(currencySymbol);
         parcel.writeString(currencyNameCode);
         parcel.writeDouble(amount);
-        parcel.writeString(customDescription);
-        parcel.writeString(customText);
+        parcel.writeString(customTitle);
         parcel.writeString(userEmail);
         parcel.writeInt(rememberUser ? 1 : 0);
         parcel.writeInt(shippingRequired ? 1 : 0);
         parcel.writeString(shopperID);
         parcel.writeDouble(subtotalAmount != null ? subtotalAmount : 0D);
         parcel.writeDouble(taxAmount != null ? taxAmount : 0D);
-
-        //parcel.writeString(baseCurrency);
-        //parcel.writeDouble(baseAmount);
-        //parcel.writeDouble(baseTaxAmount != null ? baseTaxAmount :0D);
-        //parcel.writeDouble(baseSubtotalAmount != null ? baseSubtotalAmount :0D);
     }
 
-    public String getCurrencySymbol() {
-        return currencySymbol;
-    }
-
-    public void setCurrencySymbol(String currencySymbol) {
-        this.currencySymbol = currencySymbol;
-    }
 
     public String getCurrencyNameCode() {
         return currencyNameCode;
@@ -120,20 +102,12 @@ public class PaymentRequest implements Parcelable {
         this.amount = amount;
     }
 
-    public String getCustomDescription() {
-        return customDescription;
+    public String getCustomTitle() {
+        return customTitle;
     }
 
-    public void setCustomDescription(String customDescription) {
-        this.customDescription = customDescription;
-    }
-
-    public String getCustomText() {
-        return customText;
-    }
-
-    public void setCustomText(String customText) {
-        this.customText = customText;
+    public void setCustomTitle(String customTitle) {
+        this.customTitle = customTitle;
     }
 
     public String getUserEmail() {
@@ -144,7 +118,7 @@ public class PaymentRequest implements Parcelable {
         this.userEmail = userEmail;
     }
 
-    public Boolean isRememberUSer() {
+    public Boolean isRememberUser() {
         return rememberUser;
     }
 
@@ -158,7 +132,6 @@ public class PaymentRequest implements Parcelable {
 
     public void setShippingRequired(boolean shippingRequired) {
         this.shippingRequired = shippingRequired;
-
     }
 
     public String getShopperID() {
@@ -242,13 +215,9 @@ public class PaymentRequest implements Parcelable {
         if (rememberUser != that.rememberUser) return false;
         if (shippingRequired != that.shippingRequired) return false;
         if (allowRememberUser != that.allowRememberUser) return false;
-        if (currencySymbol != null ? !currencySymbol.equals(that.currencySymbol) : that.currencySymbol != null)
-            return false;
         if (!currencyNameCode.equals(that.currencyNameCode)) return false;
         if (!amount.equals(that.amount)) return false;
-        if (customDescription != null ? !customDescription.equals(that.customDescription) : that.customDescription != null)
-            return false;
-        if (customText != null ? !customText.equals(that.customText) : that.customText != null)
+        if (customTitle != null ? !customTitle.equals(that.customTitle) : that.customTitle != null)
             return false;
         if (userEmail != null ? !userEmail.equals(that.userEmail) : that.userEmail != null)
             return false;
@@ -268,11 +237,9 @@ public class PaymentRequest implements Parcelable {
 
     @Override
     public int hashCode() {
-        int result = currencySymbol != null ? currencySymbol.hashCode() : 0;
-        result = 31 * result + currencyNameCode.hashCode();
+        int result = currencyNameCode != null ? currencyNameCode.hashCode() : 0;
         result = 31 * result + amount.hashCode();
-        result = 31 * result + (customDescription != null ? customDescription.hashCode() : 0);
-        result = 31 * result + (customText != null ? customText.hashCode() : 0);
+        result = 31 * result + (customTitle != null ? customTitle.hashCode() : 0);
         result = 31 * result + (userEmail != null ? userEmail.hashCode() : 0);
         result = 31 * result + (rememberUser ? 1 : 0);
         result = 31 * result + (shippingRequired ? 1 : 0);

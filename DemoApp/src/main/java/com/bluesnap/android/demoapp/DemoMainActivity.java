@@ -46,7 +46,6 @@ public class DemoMainActivity extends Activity {
 
     private static final String TAG = "DemoMainActivity";
     protected BlueSnapService bluesnapService;
-    int bsnapActivityRequestCode = 200;
     private Spinner ratesSpinner;
     private EditText productPriceEditText;
     private Currency currency;
@@ -56,7 +55,6 @@ public class DemoMainActivity extends Activity {
     private String displayedCurrency;
     private String currencyName;
     private PaymentRequest paymentRequest;
-    private String savedUserEmail;
     private String merchantToken;
     private Currency currencyByLocale;
     private ProgressBar progressBar;
@@ -107,11 +105,6 @@ public class DemoMainActivity extends Activity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        // generateMerchantToken();
-//        productPriceEditText.setText("");
-//        taxAmountEditText.setText("");
-//        initialPrice = null;
-
     }
 
     private void ratesAdapterSelectionListener() {
@@ -212,13 +205,13 @@ public class DemoMainActivity extends Activity {
 
         String productPriceStr = AndroidUtil.stringify(productPriceEditText.getText());
         if (TextUtils.isEmpty(productPriceStr)) {
-            Toast.makeText(getApplicationContext(), "null payment", Toast.LENGTH_LONG).show(); //TODO: handle this nicely from SDK and remove toast.
+            Toast.makeText(getApplicationContext(), "null payment", Toast.LENGTH_LONG).show();
             return;
         }
 
         Double productPrice = Double.valueOf(productPriceStr);
         if (productPrice <= 0D) {
-            Toast.makeText(getApplicationContext(), "0 payment", Toast.LENGTH_LONG).show(); //TODO: handle this nicely from SDK and remove toast.
+            Toast.makeText(getApplicationContext(), "0 payment", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -240,10 +233,8 @@ public class DemoMainActivity extends Activity {
             paymentRequest.setAmount(productPrice);
         }
 
-        paymentRequest.setCurrencySymbol(currencySymbol);
         paymentRequest.setCurrencyNameCode(currencyName);
-
-        paymentRequest.setCustomText("Demo Merchant");
+        paymentRequest.setCustomTitle("Demo Merchant");
 
         if (shippingSwitch.isChecked()) {
             paymentRequest.setShippingRequired(true);
@@ -254,7 +245,7 @@ public class DemoMainActivity extends Activity {
             finish();
         }
         intent.putExtra(BluesnapCheckoutActivity.EXTRA_PAYMENT_REQUEST, paymentRequest);
-        startActivityForResult(intent, bsnapActivityRequestCode);
+        startActivityForResult(intent, BluesnapCheckoutActivity.REQUEST_CODE_DEFAULT);
     }
 
     //TODO: Find a mock merchant service t¡o provide this
@@ -268,7 +259,6 @@ public class DemoMainActivity extends Activity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d(TAG, responseString, throwable);
-                //showDialog("Cannot obtain token from merchant server");
                 BluesnapAlertDialog.setDialog(DemoMainActivity.this, "Cannot obtain token from merchant server", "Service error", new BluesnapAlertDialog.BluesnapDialogCallback() {
                     @Override
                     public void setPositiveDialog() {
@@ -302,7 +292,7 @@ public class DemoMainActivity extends Activity {
             @Override
             public void onSuccess() {
                 Set<String> supportedRates = bluesnapService.getSupportedRates();
-                updateSpinnerAdapterFromRates(returnTreeSet(supportedRates));
+                updateSpinnerAdapterFromRates(demoSupportedRates(supportedRates));
 
                 progressBar.setVisibility(View.INVISIBLE);
                 linearLayoutForProgressBar.setVisibility(View.VISIBLE);
@@ -321,39 +311,35 @@ public class DemoMainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == bsnapActivityRequestCode) {
-            Log.d(TAG, "Activity result" + requestCode);
-        }
-
-        if (data == null) {
-            return;
-        }
-        String sdkErrorMsg = data.getStringExtra(BluesnapCheckoutActivity.SDK_ERROR_MSG);
-        if (sdkErrorMsg != null) {
-            showDialog("SDK Failed to process the request:\n " + sdkErrorMsg);
+        if (resultCode != RESULT_OK) {
+            String sdkErrorMsg = "SDK Failed to process the request:";
+            if (data != null) {
+                sdkErrorMsg += data.getStringExtra(BluesnapCheckoutActivity.SDK_ERROR_MSG);
+            }
+            showDialog(sdkErrorMsg);
             return;
         }
 
-        Intent intent = new Intent(getApplicationContext(), PostPaymentActivity.class);
-        intent.putExtra("MERCHANT_TOKEN", merchantToken);
-        // invalidate the merchant token since it has been used
-        merchantToken = null;
-
+        // Here we can access the payment result
         Bundle extras = data.getExtras();
-        ShippingInfo shippingInfo = (ShippingInfo) extras.get(BluesnapCheckoutActivity.EXTRA_SHIPPING_DETAILS);
         PaymentResult paymentResult = (PaymentResult) extras.get(BluesnapCheckoutActivity.EXTRA_PAYMENT_RESULT);
 
-        if (!paymentResult.validate()) {
-            showDialog("Payment result validation failed");
-        }
+
+        // If shipping information is available show it, Here we simply log the shipping info.
+        ShippingInfo shippingInfo = (ShippingInfo) extras.get(BluesnapCheckoutActivity.EXTRA_SHIPPING_DETAILS);
         if (shippingInfo != null) {
             Log.d(TAG, shippingInfo.toString());
         }
+
+        //Start a demo activity that shows purchase summary.
+        Intent intent = new Intent(getApplicationContext(), PostPaymentActivity.class);
+        intent.putExtra("MERCHANT_TOKEN", merchantToken);
         intent.putExtra(BluesnapCheckoutActivity.EXTRA_PAYMENT_RESULT, paymentResult);
         startActivity(intent);
-        recreate();
-        //startActivity(getIntent());
 
+        //Recreate the demo activity
+        merchantToken = null;
+        recreate();
     }
 
     public String getMerchantToken() {
@@ -364,7 +350,13 @@ public class DemoMainActivity extends Activity {
         return merchantToken;
     }
 
-    private TreeSet<String> returnTreeSet(Set<String> supportedRates) {
+    /**
+     * We only show a subset of all available rates in our demo app.
+     *
+     * @param supportedRates
+     * @return
+     */
+    private TreeSet<String> demoSupportedRates(Set<String> supportedRates) {
         TreeSet<String> treeSet = new TreeSet();
         if (supportedRates.contains("USD")) {
             treeSet.add("USD");

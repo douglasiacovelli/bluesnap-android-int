@@ -466,13 +466,13 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
             bluesnapCheckoutActivity.setCard(card);
 
             PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
-            paymentResult.last4Digits = card.getLast4();
-            paymentResult.expDate = card.getExpDate();
+            paymentResult.setLast4Digits(card.getLast4());
+            paymentResult.setExpDate(card.getExpDate());
             paymentResult.rememberUser = rememberMeSwitch.isChecked();
             String[] nameFieldParts = shopperFullNameEditText.getText().toString().trim().split(" ");
-            paymentResult.shopperFirstName = nameFieldParts[0];
+            paymentResult.setShopperFirstName(nameFieldParts[0]);
             if (nameFieldParts.length > 1)
-                paymentResult.shopperLastName = nameFieldParts[1];
+                paymentResult.setShopperLastName(nameFieldParts[1]);
 
             if (paymentRequest.isShippingRequired()) {
                 fragmentManager = getFragmentManager();

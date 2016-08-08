@@ -1,8 +1,8 @@
 package com.bluesnap.androidapi.services;
 
-import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
+import com.bluesnap.androidapi.BuildConfig;
 import com.bluesnap.androidapi.models.Card;
 import com.bluesnap.androidapi.models.Events;
 import com.bluesnap.androidapi.models.ExchangeRate;
@@ -48,8 +48,7 @@ public class BlueSnapService {
     private static JSONObject errorDescription;
     private static String transactionStatus;
     private final AsyncHttpClient httpClient = new AsyncHttpClient();
-    @VisibleForTesting
-    HashMap<String, ExchangeRate> ratesMap;
+    private HashMap<String, ExchangeRate> ratesMap;
     private ArrayList<ExchangeRate> ratesArray;
     private PaymentResult paymentResult;
     private PaymentRequest paymentRequest;
@@ -63,20 +62,20 @@ public class BlueSnapService {
         return paypalURL;
     }
 
-    public void clearPayPalToken() {
-        paypalURL = "";
-    }
-
     public static JSONObject getErrorDescription() {
         return errorDescription;
     }
 
-    public String getTransactionStatus() {
-        return transactionStatus;
-    }
-
     public static EventBus getBus() {
         return busInstance;
+    }
+
+    public void clearPayPalToken() {
+        paypalURL = "";
+    }
+
+    public String getTransactionStatus() {
+        return transactionStatus;
     }
 
     /**
@@ -89,12 +88,18 @@ public class BlueSnapService {
         bluesnapToken = new BluesnapToken(merchantToken);
         bluesnapToken.setToken(merchantToken);
         clearPayPalToken();
-        httpClient.setMaxRetriesAndTimeout(2, 2000);
-        httpClient.setResponseTimeout(60000);
+        setupHttpClient();
         paymentResult = null;
         paymentRequest = null;
         if (!busInstance.isRegistered(this)) busInstance.register(this);
         Log.d(TAG, "Service setup with token" + merchantToken.substring(merchantToken.length() - 5, merchantToken.length()));
+    }
+
+    private void setupHttpClient() {
+        httpClient.setMaxRetriesAndTimeout(2, 2000);
+        httpClient.setResponseTimeout(60000);
+        httpClient.addHeader("ANDROID_SDK_VERSION_NAME", BuildConfig.VERSION_NAME);
+        httpClient.addHeader("ANDROID_SDK_VERSION_CODE", String.valueOf(BuildConfig.VERSION_CODE));
     }
 
     /**
@@ -106,7 +111,7 @@ public class BlueSnapService {
      * @throws UnsupportedEncodingException
      */
     public void tokenizeCard(Card card, AsyncHttpResponseHandler responseHandler) throws JSONException, UnsupportedEncodingException {
-        Log.d(TAG, "Tokenizing card");
+        Log.d(TAG, "Tokenizing card on token " + bluesnapToken.toString());
         JSONObject postData = new JSONObject();
         postData.put("ccNumber", card.getNumber());
         postData.put("cvv", card.getCVC());
@@ -264,9 +269,9 @@ public class BlueSnapService {
         if (paymentResult == null) {
             paymentResult = new PaymentResult();
             // Copy vallues from request
-            paymentResult.amount = paymentRequest.getAmount();
-            paymentResult.currencyNameCode = paymentRequest.getCurrencyNameCode();
-            paymentResult.shopperID = paymentRequest.getShopperID();
+            paymentResult.setAmount(paymentRequest.getAmount());
+            paymentResult.setCurrencyNameCode(paymentRequest.getCurrencyNameCode());
+            paymentResult.setShopperID(paymentRequest.getShopperID());
         }
         return paymentResult;
     }
@@ -303,8 +308,8 @@ public class BlueSnapService {
 
             paymentRequest.setAmount(newPrice);
             paymentRequest.setCurrencyNameCode(currencySelectionEvent.newCurrencyNameCode);
-            getPaymentResult().amount = newPrice;
-            getPaymentResult().currencyNameCode = currencySelectionEvent.newCurrencyNameCode;
+            getPaymentResult().setAmount(newPrice);
+            getPaymentResult().setCurrencyNameCode(currencySelectionEvent.newCurrencyNameCode);
 
             Double newTaxValue = convertPrice(paymentRequest.getBaseTaxAmount(), baseCurrency, currencySelectionEvent.newCurrencyNameCode);
             Double newSubtotal = convertPrice(paymentRequest.getBaseSubtotalAmount(), baseCurrency, currencySelectionEvent.newCurrencyNameCode);
