@@ -50,7 +50,6 @@ public class CCormValidityTest {
         paymentRequest.setAmount(23.4);
         Intent intent = new Intent();
         intent.putExtra(BluesnapCheckoutActivity.EXTRA_PAYMENT_REQUEST, paymentRequest);
-        paymentRequest.setCurrencySymbol("$");
         paymentRequest.setCurrencyNameCode("USD");
         paymentRequest.setShippingRequired(false);
         paymentRequest.allowRememberUser(false);

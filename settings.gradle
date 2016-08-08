@@ -1,2 +1,2 @@
-include 'Bluesnap-sdk', ':DemoApp'
+include 'bluesnap-android', ':DemoApp'
 

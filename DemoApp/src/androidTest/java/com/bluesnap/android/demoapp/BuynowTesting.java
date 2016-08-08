@@ -59,7 +59,6 @@ public class BuynowTesting {
         intent.putExtra(BluesnapCheckoutActivity.MERCHANT_TOKEN, "463448920b4fd76c4c83a35fb0b22cdd6f11ebeca91a00cd7416bb7b28886975_");
         BlueSnapService blueSnapService = BlueSnapService.getInstance();
         blueSnapService.setup("463448920b4fd76c4c83a35fb0b22cdd6f11ebeca91a00cd7416bb7b28886975_");
-        paymentRequest.setCurrencySymbol("$");
         paymentRequest.setCurrencyNameCode("USD");
         paymentRequest.setShippingRequired(false);
         mActivity = mActivityRule.launchActivity(intent);

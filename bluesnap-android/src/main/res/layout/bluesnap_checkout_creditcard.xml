@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    android:tag="BluesnapFragment"
+    tools:context=".BluesnapCheckoutActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:orientation="vertical">
+
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp">
+
+                <LinearLayout
+                    android:id="@+id/nameLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/emailIconLabelTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:drawableLeft="@drawable/ico_field_name"
+                            android:drawablePadding="5dp"
+                            android:padding="6sp"
+                            android:text="@string/nameField" />
+
+                        <EditText
+                            android:id="@+id/emailEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@android:color/white"
+                            android:hint="@string/name_hint"
+                            android:inputType="textEmailAddress"
+                            android:padding="6sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/invalidEmailMessageTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/please_enter_your_name"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/holo_red_light"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/creditCardLabelTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:drawableLeft="@drawable/new_card"
+                            android:drawablePadding="5dp"
+                            android:inputType="phone"
+                            android:padding="6sp"
+                            android:text="@string/card" />
+
+                        <EditText
+                            android:id="@+id/creditCardNumberEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@android:color/white"
+                            android:inputType="numberDecimal"
+                            android:imeOptions="actionNext"
+                            android:digits="0123456789 "
+                            android:maxLength="19"
+                            android:nextFocusDown="@+id/expDateEditText"
+                            android:hint="@string/cc_hint"
+                            android:padding="6sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/invaildCreditCardMessageTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPureWhite"
+                        android:text="@string/invalid_card_number"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/holo_red_light"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
+
+                </LinearLayout>
+            </TableRow>
+
+
+        </TableLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:showDividers="beginning|middle"
+            android:stretchColumns="1,4,5">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:clickable="false">
+
+                <LinearLayout
+                    android:id="@+id/expLinearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/border"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp">
+
+                    <TextView
+                        android:id="@+id/expDateLabelTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:drawableLeft="@drawable/ico_field_calendar"
+                        android:drawablePadding="5dp"
+                        android:padding="6sp"
+                        android:text="@string/exp" />
+
+                    <EditText
+                        android:id="@+id/expDateEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="2sp"
+                        android:layout_weight="1"
+                        android:background="@android:color/white"
+                        android:editable="true"
+                        android:hint="@string/mm_yy"
+                        android:inputType="numberDecimal"
+                        android:digits="0123456789/"
+                        android:maxLength="5"
+                        android:paddingBottom="5sp"
+                        android:paddingLeft="1sp"
+                        android:paddingTop="5sp" />
+
+                    <!--<TextView
+                        android:layout_width="0.01sp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.01"
+                        android:background="#d9d9d9"
+                        android:gravity="center" />-->
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/cvvLinearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@drawable/border"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp">
+
+                    <TextView
+                        android:id="@+id/cvvLabelTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="6sp"
+                        android:layout_weight="0.05"
+                        android:drawableLeft="@drawable/new_cvv"
+                        android:paddingBottom="5sp"
+                        android:paddingLeft="0.5sp"
+                        android:paddingTop="5sp"
+                        android:text="@string/cvv" />
+
+                    <EditText
+                        android:id="@+id/cvvEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.95"
+                        android:background="@android:color/white"
+                        android:inputType="numberPassword"
+                        android:hint="@string/cvv_hint"
+                        android:maxLength="4"
+                        android:paddingBottom="5sp"
+                        android:paddingLeft="1sp"
+                        android:paddingRight="2sp"
+                        android:paddingTop="5sp" />
+
+                </LinearLayout>
+
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="1dp"
+                android:clickable="false">
+
+                <LinearLayout
+                    android:id="@+id/zipFieldLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/zipTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:drawableLeft="@drawable/ico_field_zip"
+                            android:drawablePadding="5dp"
+                            android:padding="6sp"
+                            android:text="@string/zip" />
+
+                        <EditText
+                            android:id="@+id/zipEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@android:color/white"
+                            android:hint="@string/postal_code_hint"
+                            android:inputType="textEmailAddress"
+                            android:maxLength="10"
+                            android:padding="6sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/zipFieldBorderVanish"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8333333dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/line"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF">
+
+            </TableRow>
+        </TableLayout>
+
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp" />
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_gravity="center"
+            android:background="@android:color/white"
+            android:textAlignment="center"
+            android:visibility="visible" />
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout_coupon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/ico_field_coupon3"
+                    android:hint="@string/coupon"
+                    android:inputType="phone"
+                    android:padding="6sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20sp"
+                    android:allowUndo="false"
+                    android:background="@color/colorPureWhite"
+                    android:inputType="phone"
+                    android:padding="6sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30sp"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:visibility="invisible" />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp"
+                    android:background="#d9d9d9">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="0.5dp"
+                        android:orientation="horizontal"></LinearLayout>
+                </TableRow>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="1dp"
+            android:background="#FFFFFF"></TableRow>
+
+        <TableRow
+            android:id="@+id/tableRowLineSeparator"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0.5dp"
+            android:background="#d9d9d9"
+            android:visibility="invisible">
+
+
+            <LinearLayout
+
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:orientation="horizontal"></LinearLayout>
+        </TableRow>
+
+
+        <LinearLayout
+            android:layout_width="298dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/rememberMeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:allowUndo="true"
+                android:checked="false"
+                android:clickable="true"
+                android:enabled="true"
+                android:padding="20sp"
+                android:text="@string/remember_me"
+                android:textSize="14sp" />
+
+
+            <!--<ToggleButton-->
+            <!--android:id="@+id/coupon_button"-->
+            <!--style="?android:attr/buttonStyleSmall"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/colorPureWhite"-->
+            <!--android:checked="false"-->
+            <!--android:textOff="@string/Coupon_questionmark"-->
+            <!--android:textOn="@string/Coupon_questionmark"-->
+            <!--android:textSize="12sp"-->
+            <!--android:textStyle="normal"-->
+            <!--android:visibility="hidd" />-->
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout2"
+        android:gravity="bottom|center">
+
+        <TableLayout
+            android:id="@+id/subtotal_tax_table"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10sp"
+                    android:paddingRight="20sp"
+                    android:text="@string/subtotal_label" />
+
+                <TextView
+                    android:id="@+id/subtotalValueTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10sp"
+                    android:paddingRight="20sp"
+                    android:text="@string/tax_label" />
+
+                <TextView
+                    android:id="@+id/taxValueTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buyNowButton"
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/btn_pay"
+        android:contentDescription="@string/buynowbutton"
+        android:paddingRight="5sp"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPureWhite"
+        android:textSize="25sp"
+        android:textStyle="normal" />
+
+</RelativeLayout>
+

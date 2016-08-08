@@ -26,44 +26,17 @@ allprojects {
         }
     }
 
-    apply plugin: 'io.codearte.nexus-staging'
-    nexusStaging {
-        packageGroup = "com.bluesnap"
-    }
-
-    apply plugin: 'maven'
-    def sonatypeUsername = System.properties.containsKey('sonatypeUsername') ? System.properties['sonatypeUsername'] : ''
-    def sonatypePassword = System.properties.containsKey('sonatypePassword') ? System.properties['sonatypePassword'] : ''
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                    authentication(userName: sonatypeUsername, password: sonatypePassword)
-                }
-                snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-                    authentication(userName: sonatypeUsername, password: sonatypePassword)
-                }
-
-
-            }
-        }
-    }
-
 
     apply plugin: 'signing'
-//    signing {
-//        sign configurations.archives
-//    }
+    //    signing {
+    //        sign configurations.archives
+    //    }
 
     ext {
         compileSdkVersion = 23
         buildToolsVersion = '23.0.3'
         minSdkVersion = 15
         targetSdkVersion = 23
-        versionCode = 33
-        versionName = '2.0.0-SNAPSHOT'
     }
 
     configurations.all {

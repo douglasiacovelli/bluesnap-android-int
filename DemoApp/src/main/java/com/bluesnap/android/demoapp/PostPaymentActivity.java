@@ -13,19 +13,16 @@ import android.widget.TextView;
 import com.bluesnap.androidapi.BluesnapCheckoutActivity;
 import com.bluesnap.androidapi.models.PaymentResult;
 import com.bluesnap.androidapi.services.AndroidUtil;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.TextHttpResponseHandler;
+import com.bluesnap.androidapi.services.BluesnapServiceCallback;
 
 import java.text.DecimalFormat;
-
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.entity.StringEntity;
 
 
 public class PostPaymentActivity extends Activity {
 
     private static final String TAG = PostPaymentActivity.class.getSimpleName();
     private TextView continueShippingView;
+    private DemoTransactions transactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +34,43 @@ public class PostPaymentActivity extends Activity {
         continueShippingView = (TextView) findViewById(R.id.continueShippingButton);
         continueShippingView.setVisibility(View.GONE);
         DecimalFormat decimalFormat = AndroidUtil.getDecimalFormat();
-        paymentResultTextView2.setText("Your payment of  " + paymentResult.currencyNameCode + " " + decimalFormat.format(paymentResult.amount) + " has been sent.");
+        paymentResultTextView2.setText("Your payment of  " + paymentResult.getCurrencyNameCode() + " " + decimalFormat.format(paymentResult.getAmount()) + " has been sent.");
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String merchantToken = extras.getString("MERCHANT_TOKEN");
             Log.d(TAG, "Payment Result:\n " + paymentResult.toString());
-            createCreditCardTransaction(paymentResult.shopperFirstName, paymentResult.shopperLastName, merchantToken, paymentResult.currencyNameCode, paymentResult.amount);
+
+            transactions = DemoTransactions.getInstance();
+            transactions.setContext(this);
+            if (paymentResult.isReturningTransaction()) {
+                transactions.createCreditCardTransaction(paymentResult.getShopperFirstName(), paymentResult.getShopperLastName(), merchantToken, paymentResult.getCurrencyNameCode(), paymentResult.getAmount(), true, paymentResult.getLast4Digits(), paymentResult.getCardType(), new BluesnapServiceCallback() {
+                    @Override
+                    public void onSuccess() {
+                        setDialog(transactions.getMessage(), transactions.getTitle());
+                        setContinueButton();
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        setDialog(transactions.getMessage(), transactions.getTitle());
+                        setContinueButton();
+                    }
+                });
+            } else {
+                transactions.createCreditCardTransaction(paymentResult.getShopperFirstName(), paymentResult.getShopperLastName(), merchantToken, paymentResult.getCurrencyNameCode(), paymentResult.getAmount(), new BluesnapServiceCallback() {
+                    @Override
+                    public void onSuccess() {
+                        setDialog(transactions.getMessage(), transactions.getTitle());
+                        setContinueButton();
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        setDialog(transactions.getMessage(), transactions.getTitle());
+                        setContinueButton();
+                    }
+                });
+            }
         }
     }
 
@@ -80,46 +108,7 @@ public class PostPaymentActivity extends Activity {
         onBackPressed();
     }
 
-
-    private void createCreditCardTransaction(String firstName, String lastName, String token, String currency, Double amount) {
-
-        String body = "<card-transaction xmlns=\"http://ws.plimus.com\">" +
-                "<card-transaction-type>AUTH_ONLY</card-transaction-type>" +
-                "<recurring-transaction>ECOMMERCE</recurring-transaction>" +
-                "<soft-descriptor>MobileSDK</soft-descriptor>" +
-                "<amount>" + amount + "</amount>" +
-                "<currency>" + currency + "</currency>" +
-                "<card-holder-info>" +
-                "<first-name>" + firstName + "</first-name>" +
-                "<last-name>" + lastName + "</last-name>" +
-                "</card-holder-info>" +
-                "<pf-token>" + token + "</pf-token>" +
-                "</card-transaction>";
-
-        StringEntity entity = new StringEntity(body, "UTF-8");
-        AsyncHttpClient httpClient = new AsyncHttpClient();
-        httpClient.setBasicAuth("GCpapi", "Plimus4321");
-        Log.d(TAG, "Create transaction body:\n" + body);
-        httpClient.post(getApplicationContext(), "https://us-qa-fct03.bluesnap.com/services/2/transactions", entity, "application/xml", new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.e(TAG, responseString, throwable);
-                //Disabled until server will return a reasonable error
-                // setDialog("Create Transaction Failed", "Merchant Server");
-
-                setContinueButton();
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.d(TAG, responseString);
-                setDialog("Transaction Success", "Merchant Server");
-                setContinueButton();
-            }
-        });
-    }
-
-    private void setContinueButton() {
+    public void setContinueButton() {
         continueShippingView.setVisibility(View.VISIBLE);
         continueShippingView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +118,7 @@ public class PostPaymentActivity extends Activity {
         });
     }
 
-    private void setDialog(String dialogMessage, String dialogTitle) {
+    public void setDialog(String dialogMessage, String dialogTitle) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(dialogMessage).setTitle(dialogTitle);
         builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
@@ -147,9 +136,9 @@ public class PostPaymentActivity extends Activity {
         try {
             dialog.show();
         } catch (Exception e) {
+            Log.w(TAG, "failed to show dialog");
         }
 
     }
-
 }
 

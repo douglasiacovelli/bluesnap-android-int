@@ -58,4 +58,6 @@ deploy:
   skip_cleanup: true
   script: ./gradlew bintrayUpload
   on:
-    branch: travis-release
+    branch: master
+    branch: develop
+    branch: review
