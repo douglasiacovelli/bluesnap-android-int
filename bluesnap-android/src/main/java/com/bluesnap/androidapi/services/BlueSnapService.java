@@ -89,7 +89,8 @@ public class BlueSnapService {
         bluesnapToken = new BluesnapToken(merchantToken);
         bluesnapToken.setToken(merchantToken);
         clearPayPalToken();
-        httpClient.setMaxRetriesAndTimeout(0, 0);
+        httpClient.setMaxRetriesAndTimeout(2, 2000);
+        httpClient.setResponseTimeout(60000);
         paymentResult = null;
         paymentRequest = null;
         if (!busInstance.isRegistered(this)) busInstance.register(this);
@@ -177,19 +178,6 @@ public class BlueSnapService {
                     Log.e(TAG, "json parsing exception", e);
                     callback.onFailure();
                 }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    if (errorDescription != null)
-                        errorDescription = errorResponse.getJSONArray("message").getJSONObject(0);
-
-                    Log.e(TAG, "PayPal service error", throwable);
-                } catch (Exception e) {
-                    Log.e(TAG, "Server error, json parsing exception", e);
-                }
-                callback.onFailure();
             }
 
             @Override
