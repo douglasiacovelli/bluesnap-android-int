@@ -57,3 +57,6 @@ deploy:
   provider: script
   skip_cleanup: true
   script: ./gradlew bintrayUpload
+  on:
+    tags: true
+    all_branches: true
