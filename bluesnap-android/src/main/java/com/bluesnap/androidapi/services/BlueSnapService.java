@@ -202,7 +202,6 @@ public class BlueSnapService {
     }
 
     public void retrieveTransactionStatus(final BluesnapServiceCallback callback) {
-        // ToDo check whay transaction does not work
         httpClient.addHeader("Accept", "application/json");
         httpClient.addHeader(TOKEN_AUTHENTICATION, bluesnapToken.getMerchantToken());
         httpClient.get(bluesnapToken.getUrl() + RETRIEVE_TRANSACTION_SERVICE, new JsonHttpResponseHandler() {

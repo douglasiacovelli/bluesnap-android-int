@@ -114,7 +114,6 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
 
         if (!isValidUserFullName(name)) {
             emailIconLabelTextView.setTextColor(Color.RED);
-            //shopperFullNameEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ico_invalid_cc, 0);
             invalidShopperName.setVisibility(View.VISIBLE);
             return false;
         } else {

@@ -63,14 +63,14 @@ task javadocsJar(type: Jar, dependsOn: javadocs) {
     classifier = 'javadoc'
     from javadocs.destinationDir
 }
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
-}
+//task sourcesJar(type: Jar) {
+//    classifier = 'sources'
+//    from android.sourceSets.main.java.srcDirs
+//}
 
 artifacts {
     archives javadocsJar
-    archives sourcesJar
+    //archives sourcesJar
 }
 
 androidGitVersion {
@@ -85,8 +85,6 @@ version = androidGitVersion.name()
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_APIKEY')
-    // override = true // only for plugin version 1.7 which require java8 and still has bugs
-    //  publish = true
     configurations = ['archives'] //When uploading configuration files
     pkg {
         repo = 'com.bluesnap'
@@ -101,7 +99,7 @@ bintray {
         version {
             name = androidGitVersion.name()
             released = new Date()
-            vcsTag = version
+            vcsTag = String.valueOf(System.getenv('TRAVIS_TAG'))
             attributes = [
                     'test'       : String.valueOf(System.getenv('TRAVIS_TEST_RESULT')),
                     'commit'     : String.valueOf(System.getenv('TRAVIS_COMMIT')),

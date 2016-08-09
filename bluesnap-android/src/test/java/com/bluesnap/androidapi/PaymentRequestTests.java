@@ -8,6 +8,7 @@ import com.bluesnap.androidapi.models.PaymentRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.Random;
 
@@ -19,7 +20,7 @@ import static junit.framework.Assert.assertNotNull;
  * Created by oz on 4/4/16.
  */
 @RunWith(RobolectricTestRunner.class)
-//@Config(manifest = Config.NONE)
+@Config(manifest = Config.NONE)
 public class PaymentRequestTests {
     private static final String TAG = PaymentRequestTests.class.getSimpleName();
     private static final double MINIMUM_AMOUNT = 0.00001D;
@@ -95,18 +96,17 @@ public class PaymentRequestTests {
         // assertEquals("not equals", paymentRequest, parceled);
     }
 
-    //@Test
+    @Test
     public void testPaymentRequest_TaxAndSubtotal() {
         PaymentRequest paymentRequest = new PaymentRequest("USD");
-        double randomAmount = randomAmount();
+        double subtotal = randomAmount();
         double randomTax = randomAmount();
-        paymentRequest.setAmountWithTax(randomAmount, randomTax);
+        paymentRequest.setAmountWithTax(subtotal, randomTax);
         PaymentRequest parceled = parcelizePaymentRequset(paymentRequest);
         assertEquals("tax lost", paymentRequest.getTaxAmount(), parceled.getTaxAmount());
-        assertEquals("base tax lost", paymentRequest.getBaseTaxAmount(), parceled.getTaxAmount());
         assertEquals(randomTax, parceled.getTaxAmount());
-        assertEquals(randomAmount, parceled.getAmount());
-        assertEquals("not equals", paymentRequest, parceled);
+        assertEquals(subtotal+randomTax, parceled.getAmount());
+        //assertEquals("not equals", paymentRequest, parceled);
     }
 
 }
