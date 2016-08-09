@@ -180,7 +180,18 @@ public class ExpressCheckoutFragment extends Fragment implements BluesnapPayment
         newIntent.putExtra(getString(R.string.WEBVIEW_STRING), "PayPal");
         newIntent.putExtra(getString(R.string.WEBVIEW_URL), payPalUrl);
         newIntent.putExtra(getString(R.string.SET_JAVA_SCRIPT_ENABLED), true);
-        startActivity(newIntent);
+        startActivityForResult(newIntent, WebViewActivity.PAYPAL_REQUEST_CODE);
+        //startActivity(newIntent);
         progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "got result " + resultCode);
+        Log.d(TAG, "got request " + requestCode);
+        if (requestCode == WebViewActivity.PAYPAL_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            getActivity().setResult(Activity.RESULT_OK, data);
+            getActivity().finish();
+        }
     }
 }
