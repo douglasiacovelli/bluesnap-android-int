@@ -43,15 +43,15 @@ A PaymentRequest is required to pass information about the purchase to the SDK. 
     paymentRequest.setAmount("20.5"D);
     paymentRequest.setCurrencyNameCode("USD");
 
-Optionally, you may pass a tax amount and a subtotal price:
+Optionally, you may pass a tax amount and a subtotal price, the tax amount will be added to the subtotal.:
 
     setAmountWithTax(Double subtotalAmount, Double taxAmount);
 
 You can also pass a title or a custom title to be displayed to the shopper:
 
-    paymentRequest.setCustomTitle();
+    paymentRequest.setCustomTitle("custom text");
         
-If you would like to collect shipping information, include the setShippingRequired method in the PaymentRequest:
+If you would like to collect shipping information, call the setShippingRequired method in the PaymentRequest:
     
     paymentRequest.setShippingRequired(true);
     

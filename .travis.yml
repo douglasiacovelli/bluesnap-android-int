@@ -39,16 +39,6 @@ cache:
 jdk:
   - openjdk7
 
-#before_deploy:
-#  - export BUILD_DATE=$(date '+%Y-%m-%d %H:%M:%S')
-
-#deploy:
-#  provider: bintray
-#  file: bt-deploy.json
-#  user: "snpori"
-#  key: "$BT_APIKEY"
-#  on: travis-release
-#  # dry-run:
 
 script:
   - ./gradlew build
