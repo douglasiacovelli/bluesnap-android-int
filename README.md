@@ -11,7 +11,7 @@ This SDK supports Android SDK 23 and above for development. The minimum Android 
 ## Android Studio (Gradle) instructions
 To get started, add the following line in your `build.gradle` file, in the dependencies section:
 
-    compile 'com.bluesnap:bluensap-android:+'
+    compile 'com.bluesnap:bluensap-android:1.0.0'
 
 # Usage
 
@@ -43,7 +43,7 @@ A PaymentRequest is required to pass information about the purchase to the SDK. 
     paymentRequest.setAmount("20.5"D);
     paymentRequest.setCurrencyNameCode("USD");
 
-Optionally, you may pass a tax amount and a subtotal price, the tax amount will be added to the subtotal.:
+Optionally, you may pass a tax amount and a subtotal price, the tax amount will be added to the subtotal:
 
     setAmountWithTax(Double subtotalAmount, Double taxAmount);
 

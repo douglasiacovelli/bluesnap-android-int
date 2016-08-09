@@ -37,6 +37,7 @@ configurations {
 
 }
 
+
 dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:support-v4:24.1.1'
@@ -70,6 +71,10 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives javadocsJar
     archives sourcesJar
+}
+
+androidGitVersion {
+    hideBranches = ['develop', 'master', 'review']
 }
 
 String versionName = "v-" + System.getenv('TRAVIS_BRANCH') + "-" + System.getenv('TRAVIS_TAG') + "-" + System.getenv('TRAVIS_JOB_NUMBER')
