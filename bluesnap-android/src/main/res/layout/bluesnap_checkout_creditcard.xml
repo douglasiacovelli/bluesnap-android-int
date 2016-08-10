@@ -14,7 +14,7 @@
     tools:context=".BluesnapCheckoutActivity">
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/cardFieldsLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
@@ -115,12 +115,12 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:background="@android:color/white"
-                            android:inputType="numberDecimal"
-                            android:imeOptions="actionNext"
                             android:digits="0123456789 "
+                            android:hint="@string/cc_hint"
+                            android:imeOptions="actionNext"
+                            android:inputType="numberDecimal"
                             android:maxLength="19"
                             android:nextFocusDown="@+id/expDateEditText"
-                            android:hint="@string/cc_hint"
                             android:padding="6sp" />
 
                     </LinearLayout>
@@ -182,10 +182,10 @@
                         android:layout_marginRight="2sp"
                         android:layout_weight="1"
                         android:background="@android:color/white"
+                        android:digits="0123456789/"
                         android:editable="true"
                         android:hint="@string/mm_yy"
                         android:inputType="numberDecimal"
-                        android:digits="0123456789/"
                         android:maxLength="5"
                         android:paddingBottom="5sp"
                         android:paddingLeft="1sp"
@@ -232,8 +232,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="0.95"
                         android:background="@android:color/white"
-                        android:inputType="numberPassword"
                         android:hint="@string/cvv_hint"
+                        android:inputType="numberPassword"
                         android:maxLength="4"
                         android:paddingBottom="5sp"
                         android:paddingLeft="1sp"
@@ -454,7 +454,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout2"
+        android:layout_below="@+id/cardFieldsLinearLayout"
         android:gravity="bottom|center">
 
         <TableLayout
