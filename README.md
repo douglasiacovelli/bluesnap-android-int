@@ -11,7 +11,7 @@ This SDK supports Android SDK 23 and above for development. The minimum Android 
 ## Android Studio (Gradle) instructions
 To get started, add the following line in your `build.gradle` file, in the dependencies section:
 
-    compile 'com.bluesnap:bluensap-android:1.0.0'
+    compile 'com.bluesnap:bluensap-android:1.0.+'
 
 # Usage
 
@@ -83,7 +83,12 @@ The PaymentResult is passed back to your activity as an activityResult Extra. In
             ShippingInfo shippingInfo = (ShippingInfo) extras.get(BluesnapCheckoutActivity.EXTRA_SHIPPING_DETAILS);
         }
 
+A PaymentResult instance is holding information about the transaction such as the purchase amount, the currency, and indicates if this is a returning transaction or a purchase that was completed via paypal.
 
+    paymentResult.getCurrencyNameCode(); //e.g USD
+    paymentResult.getAmount(); //20.5
+    paymentResult.getPaypalInvoiceId(); // A string with the invoice Id.
+           
 ## Complete the transaction
 To finish processing the transaction, you will need to make a server-to-server call to BlueSnap's Payment API, with the Hosted Payment Field token you used with the SDK. You should do this after the user has completed checkout and left the SDK checkout screen.
 

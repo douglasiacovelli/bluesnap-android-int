@@ -1,12 +1,12 @@
 package com.bluesnap.androidapi.services;
 
 /**
- * Created by roy.biber on 04/08/2016.
+ * A BlueSnap Token Representation that resolves URL accordint to token.
+ * This must be instantiated with a toekn before accesing URL.
  */
 public class BluesnapToken {
-    private static final String QA3_URL = "https://us-qa-fct03.bluesnap.com/services/2/";
     private static final String SANDBOX_URL = "https://sandbox.bluesnap.com/services/2/";
-    private static final String PROD_PART_1_URL = "https://www";
+    private static final String PROD_PART_1_URL = "https://ws";
     private static final String PROD_PART_2_URL = ".bluesnap.com/services/2/";
     private String url;
     private String merchantToken;

@@ -74,6 +74,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
     private ViewGroup subtotalView;
     private TextView zipTextView;
     private EditText zipEditText;
+    private LinearLayout cardFieldsLinearLayout;
 
 
     public BluesnapFragment() {
@@ -114,7 +115,6 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
 
         if (!isValidUserFullName(name)) {
             emailIconLabelTextView.setTextColor(Color.RED);
-            //shopperFullNameEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ico_invalid_cc, 0);
             invalidShopperName.setVisibility(View.VISIBLE);
             return false;
         } else {
@@ -238,6 +238,14 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         prefsStorage = new PrefsStorage(inflate.getContext());
         subtotalValueTextView = (TextView) inflate.findViewById(R.id.subtotalValueTextview);
         taxValueTextView = (TextView) inflate.findViewById(R.id.taxValueTextview);
+        cardFieldsLinearLayout = (LinearLayout) inflate.findViewById(R.id.cardFieldsLinearLayout);
+        cardFieldsLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(cardFieldsLinearLayout.getWindowToken(), 0);
+            }
+        });
         //couponButton.setOnClickListener(new couponBtnClickListener()); //TODO: coupon
         //rememberMeSwitch.setOnCheckedChangeListener(new RememberMeSwitchListener());
         return inflate;

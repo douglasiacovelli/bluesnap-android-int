@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +43,11 @@ public class PostPaymentActivity extends Activity {
 
             transactions = DemoTransactions.getInstance();
             transactions.setContext(this);
-            if (paymentResult.isReturningTransaction()) {
+
+            if (!AndroidUtil.isBlank(paymentResult.getPaypalInvoiceId())) {
+                setContinueButton();
+                setDialog("Transaction success with id:" + paymentResult.getPaypalInvoiceId(), "Paypal transaction");
+            } else if (paymentResult.isReturningTransaction()) {
                 transactions.createCreditCardTransaction(paymentResult.getShopperFirstName(), paymentResult.getShopperLastName(), merchantToken, paymentResult.getCurrencyNameCode(), paymentResult.getAmount(), true, paymentResult.getLast4Digits(), paymentResult.getCardType(), new BluesnapServiceCallback() {
                     @Override
                     public void onSuccess() {
@@ -108,6 +113,7 @@ public class PostPaymentActivity extends Activity {
         onBackPressed();
     }
 
+    @MainThread
     public void setContinueButton() {
         continueShippingView.setVisibility(View.VISIBLE);
         continueShippingView.setOnClickListener(new View.OnClickListener() {

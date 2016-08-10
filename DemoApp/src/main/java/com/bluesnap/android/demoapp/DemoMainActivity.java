@@ -312,11 +312,13 @@ public class DemoMainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) {
-            String sdkErrorMsg = "SDK Failed to process the request:";
             if (data != null) {
+                String sdkErrorMsg = "SDK Failed to process the request:";
                 sdkErrorMsg += data.getStringExtra(BluesnapCheckoutActivity.SDK_ERROR_MSG);
+                showDialog(sdkErrorMsg);
+            } else {
+                showDialog("Purchase canceled");
             }
-            showDialog(sdkErrorMsg);
             return;
         }
 

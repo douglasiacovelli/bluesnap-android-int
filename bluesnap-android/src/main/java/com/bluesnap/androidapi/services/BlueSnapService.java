@@ -98,6 +98,7 @@ public class BlueSnapService {
     private void setupHttpClient() {
         httpClient.setMaxRetriesAndTimeout(2, 2000);
         httpClient.setResponseTimeout(60000);
+        httpClient.setConnectTimeout(20000);
         httpClient.addHeader("ANDROID_SDK_VERSION_NAME", BuildConfig.VERSION_NAME);
         httpClient.addHeader("ANDROID_SDK_VERSION_CODE", String.valueOf(BuildConfig.VERSION_CODE));
     }
@@ -185,6 +186,21 @@ public class BlueSnapService {
                 }
             }
 
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                errorDescription = new JSONObject();
+                try {
+                    JSONArray errorResponseJSONArray = errorResponse.getJSONArray("message");
+                    JSONObject errorJson = errorResponseJSONArray.getJSONObject(0);
+                    errorDescription = errorJson;
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing exception", e);
+                }
+                Log.e(TAG, "PayPal service error", throwable);
+                callback.onFailure();
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 errorDescription = new JSONObject();
@@ -202,7 +218,6 @@ public class BlueSnapService {
     }
 
     public void retrieveTransactionStatus(final BluesnapServiceCallback callback) {
-        // ToDo check whay transaction does not work
         httpClient.addHeader("Accept", "application/json");
         httpClient.addHeader(TOKEN_AUTHENTICATION, bluesnapToken.getMerchantToken());
         httpClient.get(bluesnapToken.getUrl() + RETRIEVE_TRANSACTION_SERVICE, new JsonHttpResponseHandler() {

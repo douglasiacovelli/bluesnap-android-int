@@ -32,6 +32,8 @@ public class PaymentResult implements Parcelable {
     private String shopperFirstName;
     private String shopperLastName;
     private String cardZipCode;
+    private String paypalInvoiceId;
+
 
     public PaymentResult() {
     }
@@ -46,6 +48,7 @@ public class PaymentResult implements Parcelable {
         setShopperFirstName(in.readString());
         setShopperLastName(in.readString());
         setCardZipCode(in.readString());
+        setPaypalInvoiceId(in.readString());
         rememberUser = in.readInt() != 0;
         returningTransaction = in.readInt() != 0;
 
@@ -62,6 +65,7 @@ public class PaymentResult implements Parcelable {
         dest.writeString(getShopperFirstName());
         dest.writeString(getShopperLastName());
         dest.writeString(getCardZipCode());
+        dest.writeString(getPaypalInvoiceId());
         dest.writeInt(rememberUser ? 1 : 0);
         dest.writeInt(returningTransaction ? 1 : 0);
     }
@@ -132,6 +136,7 @@ public class PaymentResult implements Parcelable {
                 ", cardZipCode='" + getCardZipCode() + '\'' +
                 ", rememberUser=" + rememberUser + '\'' +
                 ", returningTransaction=" + returningTransaction + '\'' +
+                ", paypalInvoiceId=" + paypalInvoiceId + '\'' +
                 '}';
     }
 
@@ -205,5 +210,18 @@ public class PaymentResult implements Parcelable {
 
     public void setCardZipCode(String cardZipCode) {
         this.cardZipCode = cardZipCode;
+    }
+
+    /**
+     * Returns the paypal invoice ID in case of a paypal transaction.
+     *
+     * @return A string representing the invoice ID on paypal. null if not a paypal transaction.
+     */
+    public String getPaypalInvoiceId() {
+        return paypalInvoiceId;
+    }
+
+    public void setPaypalInvoiceId(String paypalInvoiceId) {
+        this.paypalInvoiceId = paypalInvoiceId;
     }
 }
