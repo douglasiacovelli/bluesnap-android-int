@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+        classpath 'org.rauschig:jarchivelib:0.6.0'
+        classpath 'commons-io:commons-io:2.4'
+        classpath files('libs/0.12.1-SNAPSHOT/gradle-plugin-0.12.1-SNAPSHOT.jar')
+        classpath 'com.github.gabrielemariotti.cards:library:1.9.1'
+
+    }
+}
+
+
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/releases/'
+        }
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+    }
+
+
+    apply plugin: 'signing'
+    //    signing {
+    //        sign configurations.archives
+    //    }
+
+    ext {
+        compileSdkVersion = 23
+        buildToolsVersion = '23.0.3'
+        minSdkVersion = 15
+        targetSdkVersion = 23
+    }
+
+    configurations.all {
+        resolutionStrategy.force 'com.android.support:support-annotations:23.4.0'
+    }
+}

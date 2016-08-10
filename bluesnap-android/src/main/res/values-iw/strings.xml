@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="emailField">דוא"ל</string>
+    <string name="remember_me">זכור אותי</string>
+    <string name="credit_debit_card">כרטיס אשראי / חיוב</string>
+    <string name="select_your_express_checkout_method">בחר שיטת תשלום</string>
+    <string name="name">שם</string>
+    <string name="please_enter_your_name">אנא הכנס שם</string>
+    <string name="address">כתובת</string>
+    <string name="invalid_address_line">כתובת אינה חוקית</string>
+    <string name="zip">מיקוד</string>
+    <string name="country">ארץ</string>
+    <string name="state">מדינה</string>
+    <string name="city">עיר</string>
+    <string name="continueShopping">המשך</string>
+    <string name="shipping_information">כתובת משלוח</string>
+    <string name="invalid_card_number">מספר כרטיס אינו חוקי</string>
+    <string name="coupon_questionmark">קופון?</string>
+    <string name="shipping">משלוח</string>
+    <string name="pay">שלם</string>
+
+    <string name="search">חיפוש</string>
+    <string name="language">שפה -</string>
+    <string name="select_language">בחר שפה</string>
+
+    <string name="currency">מטבע -</string>
+    <string name="select_currency">בחר מטבע</string>
+
+    <string name="privacy_policy">מדיניות פרטיות</string>
+    <string name="refund_policy">מדיניות החזרים</string>
+    <string name="terms_conditions">תנאי שימוש</string>
+    <!-- Language -->
+
+    <!-- Currency -->
+
+    <!-- WebView Activity -->
+    <string name="subtotal_label">משלוח:</string>
+    <string name="tax_label">מס:</string>
+
+    <!-- Alert Dialog-->
+    <string name="CURRENCY_NOT_SUPPORTED_PART_TITLE">מטבע אינו נתמך</string>
+    <string name="CURRENCY_NOT_SUPPORTED_PART_1">המטבע הנבחר</string>
+    <string name="CURRENCY_NOT_SUPPORTED_PART_2">אינו נתמך עם פייפאל</string>
+    <string name="CURRENCY_NOT_SUPPORTED_PART_3">החלף למטבע הנתמך בפייפאל</string>
+    <string name="OK">אישור</string>
+    <string name="CANCEL">ביטול</string>
+
+    <string name="SUPPORT">צור קשר עם תמיכה לקבלת סיוע נוסף</string>
+    <string name="SUPPORT_OR">או</string>
+    <string name="SUPPORT_PLEASE">אנא</string>
+    <string name="ERROR">שגיאה</string>
+    <string name="TRANSACTION_FAILED">העסקה נכשלה</string>
+    <string name="card">כרטיס</string>
+    <string name="exp">תפוגה:</string>
+    <string name="express_checkout">שיטות תשלום</string>
+
+
+</resources>

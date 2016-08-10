@@ -11,7 +11,7 @@ This SDK supports Android SDK 23 and above for development. The minimum Android 
 ## Android Studio (Gradle) instructions
 To get started, add the following line in your `build.gradle` file, in the dependencies section:
 
-    compile 'com.bluesnap:bluensap-android:1.0.1'
+    compile 'com.bluesnap:bluensap-android:1.0.+'
 
 # Usage
 
@@ -43,15 +43,15 @@ A PaymentRequest is required to pass information about the purchase to the SDK. 
     paymentRequest.setAmount("20.5"D);
     paymentRequest.setCurrencyNameCode("USD");
 
-Optionally, you may pass a tax amount and a subtotal price:
+Optionally, you may pass a tax amount and a subtotal price, the tax amount will be added to the subtotal:
 
     setAmountWithTax(Double subtotalAmount, Double taxAmount);
 
 You can also pass a title or a custom title to be displayed to the shopper:
 
-    paymentRequest.setCustomTitle();
+    paymentRequest.setCustomTitle("custom text");
         
-If you would like to collect shipping information, include the setShippingRequired method in the PaymentRequest:
+If you would like to collect shipping information, call the setShippingRequired method in the PaymentRequest:
     
     paymentRequest.setShippingRequired(true);
     
@@ -83,7 +83,12 @@ The PaymentResult is passed back to your activity as an activityResult Extra. In
             ShippingInfo shippingInfo = (ShippingInfo) extras.get(BluesnapCheckoutActivity.EXTRA_SHIPPING_DETAILS);
         }
 
+A PaymentResult instance is holding information about the transaction such as the purchase amount, the currency, and indicates if this is a returning transaction or a purchase that was completed via paypal.
 
+    paymentResult.getCurrencyNameCode(); //e.g USD
+    paymentResult.getAmount(); //20.5
+    paymentResult.getPaypalInvoiceId(); // A string with the invoice Id.
+           
 ## Complete the transaction
 To finish processing the transaction, you will need to make a server-to-server call to BlueSnap's Payment API, with the Hosted Payment Field token you used with the SDK. You should do this after the user has completed checkout and left the SDK checkout screen.
 
