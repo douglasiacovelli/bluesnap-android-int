@@ -127,11 +127,12 @@ public class ExpressCheckoutFragment extends Fragment implements BluesnapPayment
                 }
             }
 
+
             @Override
             public void onFailure() {
                 try {
                     JSONObject errorDescription = BlueSnapService.getErrorDescription();
-                    Log.e(TAG,  "description: " + errorDescription.getString("description") + " code: " + errorDescription.getString("code") + " errorName: " + errorDescription.getString("errorName"));
+                    Log.e(TAG, errorDescription.toString());
                     String message;
                     String title;
                     if (errorDescription.getString("code").equals("20027")) {

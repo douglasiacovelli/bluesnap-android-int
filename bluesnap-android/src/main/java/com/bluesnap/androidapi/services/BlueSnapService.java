@@ -185,6 +185,21 @@ public class BlueSnapService {
                 }
             }
 
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                errorDescription = new JSONObject();
+                try {
+                    JSONArray errorResponseJSONArray = errorResponse.getJSONArray("message");
+                    JSONObject errorJson = errorResponseJSONArray.getJSONObject(0);
+                    errorDescription = errorJson;
+                } catch (JSONException e) {
+                    Log.e(TAG, "json parsing exception", e);
+                }
+                Log.e(TAG, "PayPal service error", throwable);
+                callback.onFailure();
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 errorDescription = new JSONObject();
