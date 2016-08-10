@@ -212,6 +212,11 @@ public class PaymentResult implements Parcelable {
         this.cardZipCode = cardZipCode;
     }
 
+    /**
+     * Returns the paypal invoice ID in case of a paypal transaction.
+     *
+     * @return A string representing the invoice ID on paypal. null if not a paypal transaction.
+     */
     public String getPaypalInvoiceId() {
         return paypalInvoiceId;
     }
