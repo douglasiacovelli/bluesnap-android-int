@@ -162,21 +162,6 @@ public class WebViewActivity extends Activity {
         }
 
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//            if (!url.startsWith(Constants.getPaypalProdUrl())
-//                    && !url.startsWith(Constants.getPaypalSandUrl())
-//                    && !url.startsWith(Constants.getPaypalProceedUrl())
-//                    && !url.startsWith(Constants.getPaypalCancelUrl())) {
-//                progressBar.setVisibility(View.VISIBLE);
-//            } else {
-//                progressBar.setVisibility(View.GONE);
-//            }
-            //view.loadUrl(url);
-            return false;
-        }
-
-
-        @Override
         public void onPageFinished(final WebView view, final String url) {
             Log.d(TAG, "webview loaded " + url);
             if (url.startsWith(Constants.getPaypalProceedUrl())) {

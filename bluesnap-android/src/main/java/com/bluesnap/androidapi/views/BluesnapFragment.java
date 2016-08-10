@@ -74,6 +74,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
     private ViewGroup subtotalView;
     private TextView zipTextView;
     private EditText zipEditText;
+    private LinearLayout linearLayout2;
 
 
     public BluesnapFragment() {
@@ -172,6 +173,13 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
             }
         });
 
+        cvvEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) cvvValidation();
+            }
+        });
+
         expDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -237,6 +245,14 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         prefsStorage = new PrefsStorage(inflate.getContext());
         subtotalValueTextView = (TextView) inflate.findViewById(R.id.subtotalValueTextview);
         taxValueTextView = (TextView) inflate.findViewById(R.id.taxValueTextview);
+        linearLayout2 = (LinearLayout) inflate.findViewById(R.id.linearLayout2);
+        linearLayout2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(linearLayout2.getWindowToken(), 0);
+            }
+        });
         //couponButton.setOnClickListener(new couponBtnClickListener()); //TODO: coupon
         //rememberMeSwitch.setOnCheckedChangeListener(new RememberMeSwitchListener());
         return inflate;
