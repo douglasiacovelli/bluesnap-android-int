@@ -98,6 +98,7 @@ public class BlueSnapService {
     private void setupHttpClient() {
         httpClient.setMaxRetriesAndTimeout(2, 2000);
         httpClient.setResponseTimeout(60000);
+        httpClient.setConnectTimeout(20000);
         httpClient.addHeader("ANDROID_SDK_VERSION_NAME", BuildConfig.VERSION_NAME);
         httpClient.addHeader("ANDROID_SDK_VERSION_CODE", String.valueOf(BuildConfig.VERSION_CODE));
     }
