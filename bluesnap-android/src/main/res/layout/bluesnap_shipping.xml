@@ -71,10 +71,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:background="@android:color/white"
+                                android:hint="@string/name_hint"
                                 android:inputType="textPostalAddress"
                                 android:maxLength="100"
                                 android:nextFocusDown="@+id/shippingEmailEditText"
-                                android:hint="@string/name_hint"
                                 android:padding="6sp" />
                         </LinearLayout>
 
@@ -124,10 +124,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:background="@android:color/white"
+                                android:hint="@string/email_hint"
                                 android:inputType="textEmailAddress"
                                 android:maxLength="50"
                                 android:nextFocusDown="@+id/shippingAddressLine"
-                                android:hint="@string/email_hint"
                                 android:padding="6sp" />
                         </LinearLayout>
 
@@ -178,10 +178,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:background="@android:color/white"
+                                android:hint="@string/street_hint"
                                 android:inputType="textPostalAddress"
                                 android:maxLength="100"
                                 android:nextFocusDown="@+id/shippingZipEditText"
-                                android:hint="@string/street_hint"
                                 android:padding="6sp" />
 
                         </LinearLayout>
@@ -425,7 +425,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/linearLayout2"
             android:gravity="bottom|center">
 
             <TableLayout
