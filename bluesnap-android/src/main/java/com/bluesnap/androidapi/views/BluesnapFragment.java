@@ -173,6 +173,13 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
             }
         });
 
+        cvvEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) cvvValidation();
+            }
+        });
+
         expDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
