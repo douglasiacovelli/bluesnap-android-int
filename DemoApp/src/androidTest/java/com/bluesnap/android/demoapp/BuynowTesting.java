@@ -5,14 +5,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.test.rule.ActivityTestRule;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.util.Log;
 
 import com.bluesnap.androidapi.BluesnapCheckoutActivity;
 import com.bluesnap.androidapi.models.PaymentRequest;
 import com.bluesnap.androidapi.services.BlueSnapService;
-import com.bluesnap.androidapi.services.BluesnapServiceCallback;
-import com.loopj.android.http.SyncHttpClient;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import junit.framework.Assert;
 
@@ -21,9 +17,6 @@ import org.junit.Before;
 import org.junit.Rule;
 
 import java.lang.reflect.Field;
-
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.message.BufferedHeader;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -86,75 +79,6 @@ public class BuynowTesting {
         Assert.assertTrue("The result code is not ok. ", mResultCode == Activity.RESULT_OK);
 
     }
-
-    //@Test
-    public void testRatesServiceInit() {
-
-        serviceInstance = BlueSnapService.getInstance();
-        SyncHttpClient httpClient = new SyncHttpClient();
-
-        httpClient.setBasicAuth("GCpapi", "Plimus4321");
-        httpClient.post("https://us-qa-fct03.bluesnap.com/services/2/payment-fields-tokens", new TextHttpResponseHandler() {
-
-            public String merchantToken;
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d("TAG", responseString, throwable);
-                Assert.fail("No Token: " + responseString);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                for (Header hr : headers) {
-                    BufferedHeader bufferedHeader = (BufferedHeader) hr;
-                    if (bufferedHeader.getName().equals("Location")) {
-                        String path = bufferedHeader.getValue();
-                        merchantToken = path.substring(path.lastIndexOf('/') + 1);
-                    }
-                }
-                serviceInstance.setup(merchantToken);
-                serviceInstance.updateRates(new BluesnapServiceCallback() {
-                    @Override
-                    public void onSuccess() {
-                        //TODO: test
-                    }
-
-                    @Override
-                    public void onFailure() {
-                        Assert.fail("failed to get rates");
-                    }
-                });
-
-            }
-        });
-
-        while (serviceInstance.getRatesArray() == null) {
-            Log.d("TAG", "Waiting for rates");
-        }
-
-    }
-//    @Test
-//    public  void subjectActivityShouldReturnCorrectActivityResult() {
-//        runActivityResultTest(new ResultTestActivity.ActivityResultTest() {
-//            @Override
-//            public Intent getSubjectIntent() {
-//                return intent;
-//            }
-//
-//            @Override
-//            public void triggerActivityResult() {
-//                CardFormTesterCommon.fillInAllFieldsWithValidCard();
-//                onView(withId(R.id.buyNowButton)).perform(click());
-//            }
-//
-//            @Override
-//            public Matcher<ResultTestActivity> getActivityResultMatcher() {
-//                return receivedExpectedResult(is(Activity.RESULT_OK),
-//                        IntentMatchers.hasExtra("EXTRA_PAYMENT_RESULT1", "1"));
-//            }
-//        });
-//    }
 
 }
 

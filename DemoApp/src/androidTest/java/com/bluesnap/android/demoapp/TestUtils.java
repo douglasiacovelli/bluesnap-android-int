@@ -71,5 +71,4 @@ public class TestUtils {
         return withCurrentTextColor(is(color));
     }
 
-
 }
