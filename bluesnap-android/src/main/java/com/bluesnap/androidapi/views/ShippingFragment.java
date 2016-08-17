@@ -196,12 +196,12 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
             shippingStateEditText.setOnFocusChangeListener(null);
         }
 
-        SetFocusOnLayoutOfEditText(shippingNameLabelTextView, shippingNameEditText);
-        SetFocusOnLayoutOfEditText(shippingEmailLabelTextView, shippingEmailEditText);
-        SetFocusOnLayoutOfEditText(shippingAdressLabelTextView, shippingAddressLineEditText);
-        SetFocusOnLayoutOfEditText(shippingZipLabelTextView, shippingZipEditText);
-        SetFocusOnLayoutOfEditText(shippingCityLabelTextView, shippingCityEditText);
-        SetFocusOnLayoutOfEditText(shippingStateLabelTextView, shippingStateEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(shippingNameLabelTextView, shippingNameEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(shippingEmailLabelTextView, shippingEmailEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(shippingAdressLabelTextView, shippingAddressLineEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(shippingZipLabelTextView, shippingZipEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(shippingCityLabelTextView, shippingCityEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(shippingStateLabelTextView, shippingStateEditText);
     }
 
     private boolean Validation(EditText editText) {
@@ -254,17 +254,6 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
 
     private String getCountryText() {
         return AndroidUtil.stringify(addressCountryButton.getText()).trim();
-    }
-
-    private void SetFocusOnLayoutOfEditText(final TextView textView, final EditText editText) {
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editText.requestFocus();
-                final InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
     }
 
     private class ShippingSubmitClickListener implements View.OnClickListener {

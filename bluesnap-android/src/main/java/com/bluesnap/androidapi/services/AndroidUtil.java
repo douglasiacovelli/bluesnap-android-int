@@ -199,4 +199,15 @@ public class AndroidUtil {
             }
         });
     }
+
+    public static void setFocusOnLayoutOfEditText(final View baseView, final View targetView) {
+        baseView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                targetView.requestFocus();
+                final InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(targetView, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+    }
 }
