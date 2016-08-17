@@ -24,6 +24,7 @@ public class PostPaymentActivity extends Activity {
     private static final String TAG = PostPaymentActivity.class.getSimpleName();
     private TextView continueShippingView;
     private DemoTransactions transactions;
+    private TextView transactionResultTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,8 @@ public class PostPaymentActivity extends Activity {
                 = (TextView) findViewById(R.id.paymentResultTextView2);
         continueShippingView = (TextView) findViewById(R.id.continueShippingButton);
         continueShippingView.setVisibility(View.GONE);
+        transactionResultTextView = (TextView) findViewById(R.id.transactionResult);
+        transactionResultTextView.setVisibility(View.INVISIBLE);
         DecimalFormat decimalFormat = AndroidUtil.getDecimalFormat();
         paymentResultTextView2.setText("Your payment of  " + paymentResult.getCurrencyNameCode() + " " + decimalFormat.format(paymentResult.getAmount()) + " has been sent.");
         Bundle extras = getIntent().getExtras();
@@ -45,34 +48,30 @@ public class PostPaymentActivity extends Activity {
             transactions.setContext(this);
 
             if (!AndroidUtil.isBlank(paymentResult.getPaypalInvoiceId())) {
-                setContinueButton();
+                setContinueButton(transactions.getMessage(), transactions.getTitle());
                 setDialog("Transaction success with id:" + paymentResult.getPaypalInvoiceId(), "Paypal transaction");
             } else if (paymentResult.isReturningTransaction()) {
                 transactions.createCreditCardTransaction(paymentResult.getShopperFirstName(), paymentResult.getShopperLastName(), merchantToken, paymentResult.getCurrencyNameCode(), paymentResult.getAmount(), true, paymentResult.getLast4Digits(), paymentResult.getCardType(), new BluesnapServiceCallback() {
                     @Override
                     public void onSuccess() {
-                        setDialog(transactions.getMessage(), transactions.getTitle());
-                        setContinueButton();
+                        setContinueButton(transactions.getMessage(), transactions.getTitle());
                     }
 
                     @Override
                     public void onFailure() {
-                        setDialog(transactions.getMessage(), transactions.getTitle());
-                        setContinueButton();
+                        setContinueButton(transactions.getMessage(), transactions.getTitle());
                     }
                 });
             } else {
                 transactions.createCreditCardTransaction(paymentResult.getShopperFirstName(), paymentResult.getShopperLastName(), merchantToken, paymentResult.getCurrencyNameCode(), paymentResult.getAmount(), new BluesnapServiceCallback() {
                     @Override
                     public void onSuccess() {
-                        setDialog(transactions.getMessage(), transactions.getTitle());
-                        setContinueButton();
+                        setContinueButton(transactions.getMessage(), transactions.getTitle());
                     }
 
                     @Override
                     public void onFailure() {
-                        setDialog(transactions.getMessage(), transactions.getTitle());
-                        setContinueButton();
+                        setContinueButton(transactions.getMessage(), transactions.getTitle());
                     }
                 });
             }
@@ -114,7 +113,9 @@ public class PostPaymentActivity extends Activity {
     }
 
     @MainThread
-    public void setContinueButton() {
+    public void setContinueButton(String message, String title) {
+        transactionResultTextView.setText(String.format("%s \n %s", title,message));
+        transactionResultTextView.setVisibility(View.VISIBLE);
         continueShippingView.setVisibility(View.VISIBLE);
         continueShippingView.setOnClickListener(new View.OnClickListener() {
             @Override

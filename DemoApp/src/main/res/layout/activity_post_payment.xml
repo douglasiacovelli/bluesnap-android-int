@@ -27,11 +27,21 @@
         android:id="@+id/paymentResultTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView4"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:padding="10dp"
         android:text="your payment of __ has been sent"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/transactionResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/paymentResultTextView2"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
     <ImageView
         android:id="@+id/imageView4"
