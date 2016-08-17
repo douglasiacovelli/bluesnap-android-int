@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bluesnap.androidapi.BluesnapCheckoutActivity;
@@ -64,6 +65,7 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
     private ViewGroup subtotalView;
     private TextView subtotalValueTextView;
     private TextView taxValueTextView;
+    private LinearLayout shippingFieldsLinearLayout;
 
     public static String getUserCountry(Context context) {
         try {
@@ -108,6 +110,8 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
         subtotalView = (ViewGroup) inflate.findViewById(R.id.subtotal_tax_table_shipping);
         subtotalValueTextView = (TextView) inflate.findViewById(R.id.subtotalValueTextviewShipping);
         taxValueTextView = (TextView) inflate.findViewById(R.id.taxValueTextviewShipping);
+        shippingFieldsLinearLayout = (LinearLayout) inflate.findViewById(R.id.shippingFieldsLinearLayout);
+        AndroidUtil.hideKeyboardOnLayoutPress(shippingFieldsLinearLayout);
 
         addressCountryButton.setOnClickListener(new View.OnClickListener() {
             @Override
