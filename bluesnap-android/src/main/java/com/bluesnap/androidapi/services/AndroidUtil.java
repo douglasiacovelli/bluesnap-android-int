@@ -190,12 +190,12 @@ public class AndroidUtil {
         public static final AndroidUtil INSTANCE = new AndroidUtil();
     }
 
-    public static void hideKeyboardOnLayoutPress(final LinearLayout linearLayout) {
-        linearLayout.setOnClickListener(new View.OnClickListener() {
+    public static void hideKeyboardOnLayoutPress(final View view) {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(linearLayout.getWindowToken(), 0);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
     }
