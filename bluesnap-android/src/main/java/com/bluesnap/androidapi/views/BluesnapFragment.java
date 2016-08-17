@@ -196,11 +196,11 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
             }
         });
 
-        SetFocusOnLayoutOfEditText(cvvLabelTextView, cvvEditText);
-        SetFocusOnLayoutOfEditText(expDateLabelTextView, expDateEditText);
-        SetFocusOnLayoutOfEditText(emailIconLabelTextView, shopperFullNameEditText);
-        SetFocusOnLayoutOfEditText(zipTextView, zipEditText);
-        SetFocusOnLayoutOfEditText(creditCardLabelTextView, creditCardNumberEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(cvvLabelTextView, cvvEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(expDateLabelTextView, expDateEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(emailIconLabelTextView, shopperFullNameEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(zipTextView, zipEditText);
+        AndroidUtil.setFocusOnLayoutOfEditText(creditCardLabelTextView, creditCardNumberEditText);
 
     }
 
@@ -446,16 +446,6 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
             changeCardEditTextDrawable(CardType.UNKNOWN);
     }
 
-    private void SetFocusOnLayoutOfEditText(final TextView textView, final EditText editText) {
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editText.requestFocus();
-                final InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-    }
 
     private class buyButtonClickListener implements View.OnClickListener {
 
