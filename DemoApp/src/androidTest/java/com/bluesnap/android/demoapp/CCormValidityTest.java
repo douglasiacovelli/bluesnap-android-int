@@ -113,5 +113,26 @@ public class CCormValidityTest {
         onView(withId(R.id.buyNowButton)).perform(click());
         onView(withId(R.id.expDateLabelTextView)).check(matches(not(TestUtils.withCurrentTextColor(Color.RED))));
     }
+
+    /**
+     * Test that when entering valid data and then modifying it eventually invalidates the form.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    public void test_validate_invalidate() throws InterruptedException {
+        CardFormTesterCommon.fillInAllFieldsWithValidCard();
+
+        onView(withId(R.id.creditCardNumberEditText))
+                .perform(ViewActions.closeSoftKeyboard())
+                //.perform(pressKey(KeyEvent.KEYCODE_DEL))
+                .perform(clearText())
+                .perform(typeText("1"), ViewActions.closeSoftKeyboard());
+
+        onView(withId(R.id.buyNowButton)).perform(click());
+        onView(withId(R.id.invaildCreditCardMessageTextView)).check(matches(ViewMatchers.isDisplayed()));
+    }
+
+
 }
 
