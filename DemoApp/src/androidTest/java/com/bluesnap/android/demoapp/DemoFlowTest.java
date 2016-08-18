@@ -9,6 +9,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
+import com.bluesnap.androidapi.services.AndroidUtil;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -26,6 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasToString;
 
 
 /**
@@ -39,8 +43,9 @@ public class DemoFlowTest {
             DemoMainActivity.class);
 
 
-    private DemoMainActivity mActivity;
-    private RandomTestValuesGeneretor randomTestValuesGeneretor;
+    private RandomTestValuesGenerator randomTestValuesGeneretor;
+    private IdlingResource tokenProgressBarIR;
+    private IdlingResource transactionMessageIR;
 
     @After
     public void keepRunning() throws InterruptedException {
@@ -49,17 +54,15 @@ public class DemoFlowTest {
 
     @Before
     public void setup() {
-        randomTestValuesGeneretor = new RandomTestValuesGeneretor();
+        randomTestValuesGeneretor = new RandomTestValuesGenerator();
         IdlingPolicies.setMasterPolicyTimeout(120, TimeUnit.SECONDS);
         IdlingPolicies.setIdlingResourceTimeout(100, TimeUnit.SECONDS);
     }
 
-    @Test
-    public void valid_CC_without_Shipping_Transaction_Test() throws InterruptedException {
-
+    public Double startDemoPurchase() {
         Double demoPurchaseAmount = randomTestValuesGeneretor.randomDemoAppPrice();
-        IdlingResource tokenProgressBarIR = new VisibleViewIdlingResource(R.id.progressBarMerchant, View.INVISIBLE);
-        IdlingResource transactionMessageIR = new VisibleViewIdlingResource(R.id.transactionResult, View.VISIBLE);
+        tokenProgressBarIR = new VisibleViewIdlingResource(R.id.progressBarMerchant, View.INVISIBLE);
+        transactionMessageIR = new VisibleViewIdlingResource(R.id.transactionResult, View.VISIBLE);
 
         Espresso.registerIdlingResources(tokenProgressBarIR);
 
@@ -68,15 +71,56 @@ public class DemoFlowTest {
         onView(withId(R.id.productPriceEditText))
                 .perform(typeText(demoPurchaseAmount.toString()), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.merchantAppSubmitButton)).perform(click());
+        return demoPurchaseAmount;
+    }
+
+    @Test
+    public void valid_CC_without_Shipping_Transaction_Test() throws InterruptedException {
+        startDemoPurchase();
+        Espresso.unregisterIdlingResources(tokenProgressBarIR);
         CardFormTesterCommon.fillInAllFieldsWithValidCard();
         onView(withId(R.id.buyNowButton)).perform(click());
+        finishDemoPurchase();
+    }
 
-        Espresso.unregisterIdlingResources(tokenProgressBarIR);
+    public void finishDemoPurchase() {
         Espresso.registerIdlingResources(transactionMessageIR);
-        onView(withId(R.id.transactionResult)).check(matches(withText(containsString("Transaction Success"))));
+        onView(withId(R.id.transactionResult))
+                .check(matches(withText(containsString("Transaction Success"))));
         Espresso.unregisterIdlingResources(transactionMessageIR);
     }
 
+    @Test
+    public void changeCurrencyOnceCheck() throws InterruptedException {
+        Double startDemoPurchaseAmount = startDemoPurchase();
+        Espresso.unregisterIdlingResources(tokenProgressBarIR);
+        onView(withId(R.id.buyNowButton)).check(matches(withText(containsString(AndroidUtil.getCurrencySymbol("USD")))));
+        CardFormTesterCommon.fillInAllFieldsWithValidCard();
+        onView(withId(R.id.hamburger_button)).perform(click());
+        onView(withText(containsString("Currency"))).perform(click());
+        onData(hasToString(containsString("CAD"))).inAdapterView(withId(R.id.currency_list_view)).perform(click());
+        onView(withId(R.id.buyNowButton))
+                .check(matches(withText(containsString(AndroidUtil.getCurrencySymbol("CAD")))));
 
+        onView(withId(R.id.hamburger_button)).perform(click());
+        onView(withText(containsString("Currency"))).perform(click());
+        onData(hasToString(containsString("ILS"))).inAdapterView(withId(R.id.currency_list_view)).perform(click());
+        onView(withId(R.id.buyNowButton))
+                .check(matches(withText(containsString(AndroidUtil.getCurrencySymbol("ILS")))));
+
+        onView(withId(R.id.hamburger_button)).perform(click());
+        onView(withText(containsString("Currency"))).perform(click());
+        onData(hasToString(containsString("USD"))).inAdapterView(withId(R.id.currency_list_view)).perform(click());
+        onView(withId(R.id.buyNowButton))
+                .check(matches(withText(containsString(AndroidUtil.getCurrencySymbol("USD")))));
+
+        onView(withId(R.id.buyNowButton))
+                .check(matches(withText(containsString(AndroidUtil.getDecimalFormat().format(startDemoPurchaseAmount.toString())))));
+
+
+        onView(withId(R.id.buyNowButton)).perform(click());
+        finishDemoPurchase();
+
+    }
 }
 
