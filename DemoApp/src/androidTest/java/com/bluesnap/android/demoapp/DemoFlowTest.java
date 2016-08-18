@@ -78,7 +78,7 @@ public class DemoFlowTest {
     }
 
     @Test
-    public void valid_CC_without_Shipping_Transaction_Test() throws InterruptedException {
+    public void A_valid_CC_without_Shipping_Transaction_Test() throws InterruptedException {
         startDemoPurchase();
         Espresso.unregisterIdlingResources(tokenProgressBarIR);
         CardFormTesterCommon.fillInAllFieldsWithValidCard();

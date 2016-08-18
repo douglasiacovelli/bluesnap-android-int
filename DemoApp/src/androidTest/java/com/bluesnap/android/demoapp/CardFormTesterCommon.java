@@ -12,7 +12,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class CardFormTesterCommon {
 
     public static void fillInAllFieldsWithValidCard() {
-        onView(withId(R.id.emailEditText)).perform(typeText("John Doe"));
+        onView(withId(R.id.cardHolderNameEditText)).perform(typeText("John Doe"));
         onView(withId(R.id.creditCardNumberEditText))
                 .perform(typeText(cardNumberGeneratorTest()), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.expDateEditText)).perform(typeText("11"));

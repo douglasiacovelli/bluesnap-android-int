@@ -9,14 +9,10 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
 
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
 import cz.msebera.android.httpclient.HttpResponse;
@@ -28,8 +24,8 @@ import static junit.framework.Assert.fail;
 /**
  * Created by oz on 4/4/16.
  */
-@RunWith(RobolectricTestRunner.class)
-@Config(manifest = Config.DEFAULT_MANIFEST, sdk = 23)
+//@RunWith(RobolectricTestRunner.class)
+//@Config(manifest = Config.DEFAULT_MANIFEST, sdk = 23)
 public class BluesnapServiceTest {
 
 
@@ -62,7 +58,7 @@ public class BluesnapServiceTest {
 
     }
 
-    @Test
+    //@Test
     public void testUpdateRatesParsing() throws InterruptedException {
         //blueSnapService = new BlueSnapService();
         //blueSnapService.setup("token-not-mocked_");
