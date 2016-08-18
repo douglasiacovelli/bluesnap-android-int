@@ -323,14 +323,14 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
     }
 
     private enum CreditCardFields {
-        EMAILEDITTEXT, CREDITCARDNUMBEREDITTEXT, EXPDATEEDITTEXT, CVVEDITTEXT, ZIPEDITTEXT
+        EMAILEDITTEXT, CREDITCARDNUMBEREDITTEXT, EXPDATEEDITTEXT, CVVEDITTEXT, ZIPEDITTEXT, DEFAULT
     }
 
-    private void setFocusOnEditText(final int checkWhichFieldIsInValid) {
-        switch (CreditCardFields.values()[checkWhichFieldIsInValid]) {
+    private void setFocusOnCCFragmentEditText(final CreditCardFields checkWhichFieldIsInValid) {
+        switch (checkWhichFieldIsInValid) {
             case EMAILEDITTEXT:
                 AndroidUtil.setFocusOnFirstErrorInput(shopperFullNameEditText);
-                return;
+                break;
             case CREDITCARDNUMBEREDITTEXT:
                 AndroidUtil.setFocusOnFirstErrorInput(creditCardNumberEditText);
                 break;
@@ -343,26 +343,28 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
             case ZIPEDITTEXT:
                 AndroidUtil.setFocusOnFirstErrorInput(zipEditText);
                 break;
+            default:
+                break;
         }
     }
 
     private boolean ProcessCardFields() {
         boolean validInput = true;
-        int checkWhichFieldIsInValid = -1;
+        CreditCardFields checkWhichFieldIsInValid = CreditCardFields.DEFAULT;
 
         validInput &= shopperNameValidaion();
-        if (!validInput) checkWhichFieldIsInValid = 0;
+        if (!validInput) checkWhichFieldIsInValid = CreditCardFields.EMAILEDITTEXT;
         validInput &= cardNumberValidation();
-        if (!validInput && checkWhichFieldIsInValid == -1) checkWhichFieldIsInValid = 1;
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.CREDITCARDNUMBEREDITTEXT;
         validInput &= expiryDateValidation();
-        if (!validInput && checkWhichFieldIsInValid == -1) checkWhichFieldIsInValid = 2;
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.EXPDATEEDITTEXT;
         validInput &= cvvValidation();
-        if (!validInput && checkWhichFieldIsInValid == -1) checkWhichFieldIsInValid = 3;
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.CVVEDITTEXT;
         validInput &= zipFieldValidation();
-        if (!validInput && checkWhichFieldIsInValid == -1) checkWhichFieldIsInValid = 4;
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.ZIPEDITTEXT;
 
-        if (checkWhichFieldIsInValid > -1)
-            setFocusOnEditText(checkWhichFieldIsInValid);
+        if (!checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+            setFocusOnCCFragmentEditText(checkWhichFieldIsInValid);
 
         if (card.validateAll())
             validInput &= true;
