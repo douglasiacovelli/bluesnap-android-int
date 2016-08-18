@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -239,13 +237,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         subtotalValueTextView = (TextView) inflate.findViewById(R.id.subtotalValueTextview);
         taxValueTextView = (TextView) inflate.findViewById(R.id.taxValueTextview);
         cardFieldsLinearLayout = (LinearLayout) inflate.findViewById(R.id.cardFieldsLinearLayout);
-        cardFieldsLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(cardFieldsLinearLayout.getWindowToken(), 0);
-            }
-        });
+        AndroidUtil.hideKeyboardOnLayoutOfEditText(cardFieldsLinearLayout);
         //couponButton.setOnClickListener(new couponBtnClickListener()); //TODO: coupon
         //rememberMeSwitch.setOnCheckedChangeListener(new RememberMeSwitchListener());
         return inflate;
@@ -330,14 +322,49 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         }
     }
 
+    private enum CreditCardFields {
+        EMAILEDITTEXT, CREDITCARDNUMBEREDITTEXT, EXPDATEEDITTEXT, CVVEDITTEXT, ZIPEDITTEXT, DEFAULT
+    }
+
+    private void setFocusOnCCFragmentEditText(final CreditCardFields checkWhichFieldIsInValid) {
+        switch (checkWhichFieldIsInValid) {
+            case EMAILEDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(shopperFullNameEditText);
+                break;
+            case CREDITCARDNUMBEREDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(creditCardNumberEditText);
+                break;
+            case EXPDATEEDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(expDateEditText);
+                break;
+            case CVVEDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(cvvEditText);
+                break;
+            case ZIPEDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(zipEditText);
+                break;
+            default:
+                break;
+        }
+    }
 
     private boolean ProcessCardFields() {
         boolean validInput = true;
+        CreditCardFields checkWhichFieldIsInValid = CreditCardFields.DEFAULT;
 
+        validInput &= shopperNameValidaion();
+        if (!validInput) checkWhichFieldIsInValid = CreditCardFields.EMAILEDITTEXT;
         validInput &= cardNumberValidation();
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.CREDITCARDNUMBEREDITTEXT;
         validInput &= expiryDateValidation();
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.EXPDATEEDITTEXT;
         validInput &= cvvValidation();
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.CVVEDITTEXT;
         validInput &= zipFieldValidation();
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.ZIPEDITTEXT;
+
+        if (!checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+            setFocusOnCCFragmentEditText(checkWhichFieldIsInValid);
 
         if (card.validateAll())
             validInput &= true;
