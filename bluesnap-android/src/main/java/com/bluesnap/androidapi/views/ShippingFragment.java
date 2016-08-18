@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -35,7 +34,7 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 
 /**
- * Created by oz on 12/2/15.
+ * Fragment to collect shipping information.
  */
 public class ShippingFragment extends Fragment implements BluesnapPaymentFragment {
     public static final String AUTO_POPULATE_SHOPPER_NAME = "AUTO_POPULATE_SHOPPER_NAME";
@@ -43,7 +42,6 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
     public static final String SHIPPING_TAG = String.valueOf(ShippingFragment.class.getSimpleName());
     static final String TAG = ShippingFragment.class.getSimpleName();
     private TextView totalAmountTextView;
-    private ShippingInfo shippingInfo;
     private EditText shippingNameEditText;
     private TextView invalidNameMessageTextView;
     private TextView shippingNameLabelTextView;
@@ -129,9 +127,6 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
             if (resultCode == Activity.RESULT_OK) {
                 addressCountryButton.setText(data.getStringExtra("result"));
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
         }
         if (AndroidUtil.checkCountryForState(getCountryText())) {
             ActivateOnFocusValidation(shippingStateEditText);
@@ -165,7 +160,6 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
         totalAmountTextView.setOnClickListener(new ShippingSubmitClickListener());
 
         ShippingInfo shippingInfo = (ShippingInfo) prefsStorage.getObject(Constants.SHIPPING_INFO, ShippingInfo.class);
-        //Card shopper = (Card) prefsStorage.getObject(Constants.RETURNING_SHOPPER, Card.class);
         if (shippingInfo != null) {
             shippingNameEditText.setText(shippingInfo.getName());
             shippingAddressLineEditText.setText(shippingInfo.getAddressLine());
@@ -203,17 +197,17 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
     }
 
     private boolean Validation(EditText editText) {
-        if (editText == shippingAddressLineEditText) {
+        if (editText.equals(shippingAddressLineEditText)) {
             return AndroidUtil.validateEditTextString(shippingAddressLineEditText, shippingAdressLabelTextView, invalidAddressMessageTextView);
-        } else if (editText == shippingCityEditText) {
+        } else if (editText.equals(shippingCityEditText)) {
             return AndroidUtil.validateEditTextString(shippingCityEditText, shippingCityLabelTextView);
-        } else if (editText == shippingStateEditText) {
+        } else if (editText.equals(shippingStateEditText)) {
             return AndroidUtil.validateEditTextString(shippingStateEditText, shippingStateLabelTextView);
-        } else if (editText == shippingZipEditText) {
+        } else if (editText.equals(shippingZipEditText)) {
             return AndroidUtil.validateEditTextString(shippingZipEditText, shippingZipLabelTextView, AndroidUtil.ZIP_FIELD);
-        } else if (editText == shippingNameEditText) {
+        } else if (editText.equals(shippingNameEditText)) {
             return AndroidUtil.validateEditTextString(shippingNameEditText, shippingNameLabelTextView, invalidNameMessageTextView, AndroidUtil.NAME_FIELD);
-        } else if (editText == shippingEmailEditText) {
+        } else if (editText.equals(shippingEmailEditText)) {
             return AndroidUtil.validateEditTextString(shippingEmailEditText, shippingEmailLabelTextView, invalidEmailMessageTextView, AndroidUtil.EMAIL_FIELD);
         }
         return false;
@@ -254,10 +248,6 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
         return AndroidUtil.stringify(addressCountryButton.getText()).trim();
     }
 
-    private enum CreditCardFields {
-        SHIPPINGNAMEEDITTEXT, SHIPPINGEMAILEDITTEXT, SHIPPINGADDRESSLINEEDITTEXT, SHIPPINGZIPEDITTEXT, SHIPPINGCITYEDITTEXT, SHIPPINGSTATEEDITTEXT, DEFAULT
-    }
-
     private void setFocusOnShippingFragmentEditText(final CreditCardFields checkWhichFieldIsInValid) {
         switch (checkWhichFieldIsInValid) {
             case SHIPPINGNAMEEDITTEXT:
@@ -283,6 +273,10 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
         }
     }
 
+    private enum CreditCardFields {
+        SHIPPINGNAMEEDITTEXT, SHIPPINGEMAILEDITTEXT, SHIPPINGADDRESSLINEEDITTEXT, SHIPPINGZIPEDITTEXT, SHIPPINGCITYEDITTEXT, SHIPPINGSTATEEDITTEXT, DEFAULT
+    }
+
     private class ShippingSubmitClickListener implements View.OnClickListener {
 
         @Override
@@ -292,15 +286,20 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
             boolean validInput = Validation(shippingNameEditText);
             if (!validInput) checkWhichFieldIsInValid = CreditCardFields.SHIPPINGNAMEEDITTEXT;
             validInput &= Validation(shippingEmailEditText);
-            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.SHIPPINGEMAILEDITTEXT;
+            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+                checkWhichFieldIsInValid = CreditCardFields.SHIPPINGEMAILEDITTEXT;
             validInput &= Validation(shippingAddressLineEditText);
-            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.SHIPPINGADDRESSLINEEDITTEXT;
+            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+                checkWhichFieldIsInValid = CreditCardFields.SHIPPINGADDRESSLINEEDITTEXT;
             validInput &= Validation(shippingZipEditText);
-            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.SHIPPINGZIPEDITTEXT;
+            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+                checkWhichFieldIsInValid = CreditCardFields.SHIPPINGZIPEDITTEXT;
             validInput &= Validation(shippingCityEditText);
-            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.SHIPPINGCITYEDITTEXT;
+            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+                checkWhichFieldIsInValid = CreditCardFields.SHIPPINGCITYEDITTEXT;
             validInput &= checkStateValidation();
-            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.SHIPPINGSTATEEDITTEXT;
+            if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+                checkWhichFieldIsInValid = CreditCardFields.SHIPPINGSTATEEDITTEXT;
 
             if (!checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
                 setFocusOnShippingFragmentEditText(checkWhichFieldIsInValid);

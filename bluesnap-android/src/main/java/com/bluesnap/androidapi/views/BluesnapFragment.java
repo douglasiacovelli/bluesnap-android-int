@@ -314,16 +314,11 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
                 prefsStorage.putBoolean(Constants.REMEMBER_SHOPPER, true);
 
             } else if (!rememberMeSwitch.isChecked()) {
-                //prefsStorage.remove(Constants.RETURNING_SHOPPER);
                 prefsStorage.putBoolean(Constants.REMEMBER_SHOPPER, false);
             }
         } catch (Exception e) {
             Log.e(TAG, "Exception on saving sharedprefs", e);
         }
-    }
-
-    private enum CreditCardFields {
-        EMAILEDITTEXT, CREDITCARDNUMBEREDITTEXT, EXPDATEEDITTEXT, CVVEDITTEXT, ZIPEDITTEXT, DEFAULT
     }
 
     private void setFocusOnCCFragmentEditText(final CreditCardFields checkWhichFieldIsInValid) {
@@ -355,13 +350,17 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         validInput &= shopperNameValidaion();
         if (!validInput) checkWhichFieldIsInValid = CreditCardFields.EMAILEDITTEXT;
         validInput &= cardNumberValidation();
-        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.CREDITCARDNUMBEREDITTEXT;
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+            checkWhichFieldIsInValid = CreditCardFields.CREDITCARDNUMBEREDITTEXT;
         validInput &= expiryDateValidation();
-        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.EXPDATEEDITTEXT;
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+            checkWhichFieldIsInValid = CreditCardFields.EXPDATEEDITTEXT;
         validInput &= cvvValidation();
-        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.CVVEDITTEXT;
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+            checkWhichFieldIsInValid = CreditCardFields.CVVEDITTEXT;
         validInput &= zipFieldValidation();
-        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT)) checkWhichFieldIsInValid = CreditCardFields.ZIPEDITTEXT;
+        if (!validInput && checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
+            checkWhichFieldIsInValid = CreditCardFields.ZIPEDITTEXT;
 
         if (!checkWhichFieldIsInValid.equals(CreditCardFields.DEFAULT))
             setFocusOnCCFragmentEditText(checkWhichFieldIsInValid);
@@ -463,7 +462,6 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         outState.putString("shopperFullNameEditText", shopperFullNameEditText.getText().toString());
     }
 
-
     private void cardModified() {
         card.setModified();
         cvvEditText.setVisibility(View.VISIBLE);
@@ -473,6 +471,10 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
             changeCardEditTextDrawable(CardType.UNKNOWN);
     }
 
+
+    private enum CreditCardFields {
+        EMAILEDITTEXT, CREDITCARDNUMBEREDITTEXT, EXPDATEEDITTEXT, CVVEDITTEXT, ZIPEDITTEXT, DEFAULT
+    }
 
     private class buyButtonClickListener implements View.OnClickListener {
 
@@ -541,7 +543,6 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             if (invalidNumberInputFlag == 1) {
                 creditCardLabelTextView.setTextColor(Color.RED);
-                //creditCardNumberEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ico_invalid_cc, 0);
                 invaildCreditCardMessageTextView.setVisibility(View.VISIBLE);
 
             } else {
