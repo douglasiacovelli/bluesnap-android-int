@@ -58,8 +58,6 @@ public class BluesnapCheckoutActivity extends Activity {
     private FragmentManager fragmentManager;
     private PaymentRequest paymentRequest;
     private ExpressCheckoutFragment expressCheckoutFragment;
-    private PopupMenu popupMenu;
-    private String currentCurrency;
     private String sharedCurrency;
     private ShippingInfo shippingInfo;
     private Card card;
@@ -301,7 +299,7 @@ public class BluesnapCheckoutActivity extends Activity {
             sharedCurrency = paymentRequest.getCurrencyNameCode();
             invalidateOptionsMenu();
             hamburgerMenuButton.setImageResource(R.drawable.ic_close_white_36dp);
-            popupMenu = new PopupMenu(getApplicationContext(), v);
+            PopupMenu popupMenu = new PopupMenu(getApplicationContext(), v);
             popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
                 @Override
                 public void onDismiss(PopupMenu popupMenu) {
@@ -319,7 +317,7 @@ public class BluesnapCheckoutActivity extends Activity {
             });
 
             popupMenu.inflate(R.menu.menu_main);
-            currentCurrency = getString(R.string.currency) + " " + sharedCurrency;
+            String currentCurrency = getString(R.string.currency) + " " + sharedCurrency;
             popupMenu.getMenu().add(1, R.id.id_currency, 1, currentCurrency);
             popupMenu.show();
         }

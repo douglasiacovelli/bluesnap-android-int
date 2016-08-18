@@ -96,15 +96,10 @@ public class DemoMainActivity extends Activity {
         try {
             int versionCode = BuildConfig.VERSION_CODE;
             String versionName = BuildConfig.VERSION_NAME;
-            demoVersionTextView.setText(String.format("V:%s[%d]", versionName, versionCode));
+            demoVersionTextView.setText(String.format(Locale.ENGLISH, "V:%s[%d]", versionName, versionCode));
         } catch (Exception e) {
             Log.e(TAG, "cannot exctract verison");
         }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
     }
 
     private void ratesAdapterSelectionListener() {

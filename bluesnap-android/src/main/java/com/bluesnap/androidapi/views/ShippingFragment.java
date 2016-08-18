@@ -62,7 +62,6 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
     private ViewGroup subtotalView;
     private TextView subtotalValueTextView;
     private TextView taxValueTextView;
-    private LinearLayout shippingFieldsLinearLayout;
 
     public static String getUserCountry(Context context) {
         try {
@@ -91,7 +90,7 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
         invalidNameMessageTextView = (TextView) inflate.findViewById(R.id.invalidNameMessageTextView);
         shippingEmailEditText = (EditText) inflate.findViewById(R.id.shippingEmailEditText);
         shippingEmailLabelTextView = (TextView) inflate.findViewById(R.id.shippingEmailLabelTextView);
-        invalidEmailMessageTextView = (TextView) inflate.findViewById(R.id.invalidEmailMessageTextView);
+        invalidEmailMessageTextView = (TextView) inflate.findViewById(R.id.invalidShopperNameMessageTextView);
         shippingAddressLineEditText = (EditText) inflate.findViewById(R.id.shippingAddressLine);
         shippingAdressLabelTextView = (TextView) inflate.findViewById(R.id.addressLineLabelTextView);
         invalidAddressMessageTextView = (TextView) inflate.findViewById(R.id.invaildAddressMessageTextView);
@@ -107,7 +106,7 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
         subtotalView = (ViewGroup) inflate.findViewById(R.id.subtotal_tax_table_shipping);
         subtotalValueTextView = (TextView) inflate.findViewById(R.id.subtotalValueTextviewShipping);
         taxValueTextView = (TextView) inflate.findViewById(R.id.taxValueTextviewShipping);
-        shippingFieldsLinearLayout = (LinearLayout) inflate.findViewById(R.id.shippingFieldsLinearLayout);
+        LinearLayout shippingFieldsLinearLayout = (LinearLayout) inflate.findViewById(R.id.shippingFieldsLinearLayout);
         AndroidUtil.hideKeyboardOnLayoutOfEditText(shippingFieldsLinearLayout);
 
         addressCountryButton.setOnClickListener(new View.OnClickListener() {

@@ -81,7 +81,6 @@ public class CustomListAdapter extends BaseAdapter implements Filterable {
         return filter;
     }
 
-    //INNER CLASS
     class CustomFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -114,6 +113,7 @@ public class CustomListAdapter extends BaseAdapter implements Filterable {
 
             return results;
         }
+
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
