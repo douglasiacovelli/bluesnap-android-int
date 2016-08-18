@@ -76,7 +76,8 @@ The PaymentResult is passed back to your activity as an activityResult Extra. In
         
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (!data) // User aborted the checkout process
+            if (resultCode != RESULT_OK) {
+                // User aborted the checkout process
                 return;
                 
             PaymentResult paymentResult = (PaymentResult) data.getExtras().get(BluesnapCheckoutActivity.EXTRA_PAYMENT_RESULT);                       
@@ -94,11 +95,16 @@ To finish processing the transaction, you will need to make a server-to-server c
 
 For credit card purchases, use the [Auth Capture](http://developers.bluesnap.com/v2.0/docs/auth-capture) or [Auth Only](http://developers.bluesnap.com/v2.0/docs/auth-only) request.
 
-For PayPal purchases, use the [Create PayPal Transaction](http://developers.bluesnap.com/v2.0/docs/create-paypal-transaction) request.
-
 
 ## Returning shopper
+The shopper can choose if he wish to be remembered by the SDK. the paymentResult includes a property that indicates if the last transaction is a returning shopper transaction.
+       
+    paymentResult.isReturningTransaction()
 
+To utilize the returning shopper functionality, you need to save the shopper-id  on your server. the shopper id is sent in the response of create transaction.
+You can then update the shopper's information or credit-cards using [Update Vaulted Shopper API](http://developers.bluesnap.com/v2.0/docs/update-vaulted-shopper).
+To charge the vaulted shopper use the same Auth-Capture/Auth-Only services that are mentioned above, and remember to supply a shopper ID (examples exists in out API documentation.
+ 
 
 # Additional functionality
 
