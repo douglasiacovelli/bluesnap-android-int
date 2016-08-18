@@ -111,7 +111,7 @@ public class ShippingFragment extends Fragment implements BluesnapPaymentFragmen
         subtotalValueTextView = (TextView) inflate.findViewById(R.id.subtotalValueTextviewShipping);
         taxValueTextView = (TextView) inflate.findViewById(R.id.taxValueTextviewShipping);
         shippingFieldsLinearLayout = (LinearLayout) inflate.findViewById(R.id.shippingFieldsLinearLayout);
-        AndroidUtil.hideKeyboardOnLayoutPress(shippingFieldsLinearLayout);
+        AndroidUtil.hideKeyboardOnLayoutOfEditText(shippingFieldsLinearLayout);
 
         addressCountryButton.setOnClickListener(new View.OnClickListener() {
             @Override

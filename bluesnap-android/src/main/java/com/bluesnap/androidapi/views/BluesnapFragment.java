@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -239,7 +237,7 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         subtotalValueTextView = (TextView) inflate.findViewById(R.id.subtotalValueTextview);
         taxValueTextView = (TextView) inflate.findViewById(R.id.taxValueTextview);
         cardFieldsLinearLayout = (LinearLayout) inflate.findViewById(R.id.cardFieldsLinearLayout);
-        AndroidUtil.hideKeyboardOnLayoutPress(cardFieldsLinearLayout);
+        AndroidUtil.hideKeyboardOnLayoutOfEditText(cardFieldsLinearLayout);
         //couponButton.setOnClickListener(new couponBtnClickListener()); //TODO: coupon
         //rememberMeSwitch.setOnCheckedChangeListener(new RememberMeSwitchListener());
         return inflate;
@@ -324,14 +322,47 @@ public class BluesnapFragment extends Fragment implements BluesnapPaymentFragmen
         }
     }
 
+    private enum CreditCardFields {
+        EMAILEDITTEXT, CREDITCARDNUMBEREDITTEXT, EXPDATEEDITTEXT, CVVEDITTEXT, ZIPEDITTEXT
+    }
+
+    private void setFocusOnEditText(final int checkWhichFieldIsInValid) {
+        switch (CreditCardFields.values()[checkWhichFieldIsInValid]) {
+            case EMAILEDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(shopperFullNameEditText);
+                return;
+            case CREDITCARDNUMBEREDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(creditCardNumberEditText);
+                break;
+            case EXPDATEEDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(expDateEditText);
+                break;
+            case CVVEDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(cvvEditText);
+                break;
+            case ZIPEDITTEXT:
+                AndroidUtil.setFocusOnFirstErrorInput(zipEditText);
+                break;
+        }
+    }
 
     private boolean ProcessCardFields() {
         boolean validInput = true;
+        int checkWhichFieldIsInValid = -1;
 
+        validInput &= shopperNameValidaion();
+        if (!validInput) checkWhichFieldIsInValid = 0;
         validInput &= cardNumberValidation();
+        if (!validInput && checkWhichFieldIsInValid == -1) checkWhichFieldIsInValid = 1;
         validInput &= expiryDateValidation();
+        if (!validInput && checkWhichFieldIsInValid == -1) checkWhichFieldIsInValid = 2;
         validInput &= cvvValidation();
+        if (!validInput && checkWhichFieldIsInValid == -1) checkWhichFieldIsInValid = 3;
         validInput &= zipFieldValidation();
+        if (!validInput && checkWhichFieldIsInValid == -1) checkWhichFieldIsInValid = 4;
+
+        if (checkWhichFieldIsInValid > -1)
+            setFocusOnEditText(checkWhichFieldIsInValid);
 
         if (card.validateAll())
             validInput &= true;
