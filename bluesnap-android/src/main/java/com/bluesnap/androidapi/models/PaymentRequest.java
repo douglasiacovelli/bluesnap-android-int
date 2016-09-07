@@ -47,12 +47,7 @@ public class PaymentRequest implements Parcelable {
         shopperID = parcel.readString();
         subtotalAmount = parcel.readDouble();
         taxAmount = parcel.readDouble();
-
-        //Set these values once to remember the base currency values
-        baseCurrency = currencyNameCode;
-        baseAmount = amount;
-        baseTaxAmount = taxAmount;
-        baseSubtotalAmount = subtotalAmount;
+        setBase();
     }
 
     public PaymentRequest() {
@@ -252,5 +247,13 @@ public class PaymentRequest implements Parcelable {
         result = 31 * result + (baseSubtotalAmount != null ? baseSubtotalAmount.hashCode() : 0);
         result = 31 * result + (allowRememberUser ? 1 : 0);
         return result;
+    }
+
+    public void setBase() {
+        //Set these values once to remember the base currency values
+        baseCurrency = currencyNameCode;
+        baseAmount = amount;
+        baseTaxAmount = taxAmount;
+        baseSubtotalAmount = subtotalAmount;
     }
 }

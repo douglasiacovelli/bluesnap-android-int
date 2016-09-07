@@ -34,7 +34,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.message.BufferedHeader;
 import cz.msebera.android.httpclient.util.TextUtils;
 
 import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_PASS;
@@ -98,7 +97,7 @@ public class DemoMainActivity extends Activity {
             String versionName = BuildConfig.VERSION_NAME;
             demoVersionTextView.setText(String.format(Locale.ENGLISH, "V:%s[%d]", versionName, versionCode));
         } catch (Exception e) {
-            Log.e(TAG, "cannot exctract verison");
+            Log.e(TAG, "cannot extract version");
         }
     }
 
@@ -269,15 +268,10 @@ public class DemoMainActivity extends Activity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                for (Header hr : headers) {
-                    BufferedHeader bufferedHeader = (BufferedHeader) hr;
-                    if (bufferedHeader.getName().equals("Location")) {
-                        String path = bufferedHeader.getValue();
-                        merchantToken = path.substring(path.lastIndexOf('/') + 1);
-                    }
-                }
+                merchantToken = DemoTransactions.extractTokenFromHeaders(headers);
                 initControlsAfterToken();
             }
+
         });
     }
 
@@ -353,6 +347,7 @@ public class DemoMainActivity extends Activity {
      * @param supportedRates
      * @return
      */
+
     private TreeSet<String> demoSupportedRates(Set<String> supportedRates) {
         TreeSet<String> treeSet = new TreeSet();
         if (supportedRates.contains("USD")) {

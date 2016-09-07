@@ -334,6 +334,10 @@ public class BlueSnapService {
             }
             busInstance.post(new Events.CurrencyUpdatedEvent(newPrice, currencySelectionEvent.newCurrencyNameCode, newTaxValue, newSubtotal));
         }
+        paymentResult.setAmount(paymentRequest.getAmount());
+        paymentResult.setCurrencyNameCode(paymentRequest.getCurrencyNameCode());
+        paymentResult.setShopperID(paymentRequest.getShopperID());
+
 
     }
 }
