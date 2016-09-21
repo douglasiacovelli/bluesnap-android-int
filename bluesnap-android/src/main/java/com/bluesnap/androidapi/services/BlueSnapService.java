@@ -140,12 +140,11 @@ public class BlueSnapService {
                     }.getType());
                     ratesMap = new HashMap<>(ratesArray.size() + 1);
                     ExchangeRate usdExchangeRate = new ExchangeRate();
-                    usdExchangeRate.conversionRate = 1.0;
-                    usdExchangeRate.quoteCurrency = "USD";
-                    usdExchangeRate.inverseConversionRate = 1.0;
+                    usdExchangeRate.setConversionRate(1.0);
+                    usdExchangeRate.setQuoteCurrency("USD");
                     ratesMap.put("USD", usdExchangeRate);
                     for (ExchangeRate r : ratesArray) {
-                        ratesMap.put(r.quoteCurrency, r);
+                        ratesMap.put(r.getQuoteCurrency(), r);
                     }
                     callback.onSuccess();
                 } catch (JSONException e) {
@@ -262,7 +261,7 @@ public class BlueSnapService {
             return "0";
 
         ExchangeRate rate = ratesMap.get(convertTo);
-        Double result = Double.valueOf(usdPrice) * rate.conversionRate;
+        Double result = Double.valueOf(usdPrice) * rate.getConversionRate();
         return String.valueOf(AndroidUtil.getDecimalFormat().format(result));
     }
 
@@ -275,8 +274,8 @@ public class BlueSnapService {
      * @return
      */
     public Double convertPrice(Double basePrice, String currentCurrencyNameCode, String newCurrencyNameCode) {
-        Double usdPRice = basePrice / ratesMap.get(currentCurrencyNameCode).inverseConversionRate;
-        Double newPrice = ratesMap.get(newCurrencyNameCode).conversionRate * usdPRice;
+        Double usdPRice = basePrice / ratesMap.get(currentCurrencyNameCode).getInverseConversionRate();
+        Double newPrice = ratesMap.get(newCurrencyNameCode).getConversionRate() * usdPRice;
         return newPrice;
     }
 
