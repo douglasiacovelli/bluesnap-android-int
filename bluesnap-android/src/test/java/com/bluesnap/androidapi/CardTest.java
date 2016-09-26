@@ -187,10 +187,7 @@ public class CardTest extends TestCase {
         Card card = new Card();
         card.setNumber("abcdef");
         assertFalse(card.validateNumber());
-    }
-
-    public void testValidNumberWithSpaces() {
-        //TODO: test with space before/after/between number
+        assertFalse(card.validateAll());
     }
 
     @Test
@@ -205,10 +202,12 @@ public class CardTest extends TestCase {
         assertFalse("Date should not be in future:" + card.getExpDate(),
                 AndroidUtil.isDateInFuture(card.getExpMonth(), card.getExpYear()));
         assertFalse(card.validateExpiryDate());
+        assertFalse(card.validateAll());
 
         card.setExpMonth(00);
         card.setExpYear(25);
         assertFalse("0 month is invalid", card.validateExpiryDate());
+        assertFalse(card.validateAll());
 
         card.setExpMonth(01);
         card.setExpYear(22);
@@ -232,6 +231,7 @@ public class CardTest extends TestCase {
         card.setExpMonth(month);
         card.setExpYear(year);
         assertFalse("card should be invalid if expired last month", card.validateExpiryDate());
+        assertFalse(card.validateAll());
 
     }
 
@@ -267,7 +267,29 @@ public class CardTest extends TestCase {
 
     @Test
     public void testValidateAll() throws Exception {
-        //TODO, test that validateAll fails if some other validations are failing
+        Card card = new Card();
+        card.update(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE, "11/50", "123", "13MAAA", "Homer Ssn");
+        assertTrue("this should be a valid luhn", Card.isValidLuhnNumber(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE));
+        assertTrue(card.validateNumber());
+        assertTrue(card.validateAll());
     }
 
+    @Test
+    public void cardToStringTest() {
+        Card card = new Card();
+        String number = CARD_NUMBER_VALID_LUHN_MASTERCARD_FAKED;
+        card.update(number, "11/50", "123", "13MAAA", "Homer Ssn");
+        assertTrue("this should be a valid luhn", Card.isValidLuhnNumber(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE));
+        assertTrue(card.validateNumber());
+        assertTrue(card.validateAll());
+        assertFalse(card.getType().isEmpty());
+
+        String cardToString = card.toString();
+        assertFalse("the tostring should not expose number", cardToString.contains(number));
+        String last4 = number.substring(number.length() - 4, number.length());
+        assertEquals("Last 4 contains too many digits", card.getLast4().length(), 4);
+        assertEquals("Last 4 contains too many digits: " + last4, last4.length(), 4);
+        assertTrue("the tostring should containg last4", cardToString.contains(last4));
+        assertFalse("card tostring should not expose name", cardToString.contains(card.getHolderName()));
+    }
 }
