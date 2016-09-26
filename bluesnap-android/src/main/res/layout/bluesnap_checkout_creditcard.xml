@@ -105,7 +105,6 @@
                             android:layout_gravity="center_vertical"
                             android:drawableLeft="@drawable/new_card"
                             android:drawablePadding="5dp"
-                            android:inputType="phone"
                             android:padding="6sp"
                             android:text="@string/card" />
 
@@ -351,7 +350,6 @@
                     android:layout_height="match_parent"
                     android:drawableLeft="@drawable/ico_field_coupon3"
                     android:hint="@string/coupon"
-                    android:inputType="phone"
                     android:padding="6sp" />
 
                 <EditText

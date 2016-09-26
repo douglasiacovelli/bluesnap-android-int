@@ -1,8 +1,6 @@
 package com.bluesnap.android.demoapp;
 
 import android.support.test.espresso.Espresso;
-import android.support.test.espresso.IdlingPolicies;
-import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,12 +10,11 @@ import android.view.View;
 import com.bluesnap.androidapi.services.AndroidUtil;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
+import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -28,8 +25,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDis
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.core.Is.is;
 
 
 /**
@@ -37,40 +37,40 @@ import static org.hamcrest.Matchers.hasToString;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class DemoFlowTest {
+public class DemoFlowTest extends EspressoBasedTest {
     @Rule
     public ActivityTestRule<DemoMainActivity> mActivityRule = new ActivityTestRule<>(
             DemoMainActivity.class);
+    private Double demoPurchaseAmount;
 
-
-    private RandomTestValuesGenerator randomTestValuesGeneretor;
-    private IdlingResource tokenProgressBarIR;
-    private IdlingResource transactionMessageIR;
 
     @After
     public void keepRunning() throws InterruptedException {
         Thread.sleep(1000);
     }
 
-    @Before
-    public void setup() {
-        randomTestValuesGeneretor = new RandomTestValuesGenerator();
-        IdlingPolicies.setMasterPolicyTimeout(120, TimeUnit.SECONDS);
-        IdlingPolicies.setIdlingResourceTimeout(100, TimeUnit.SECONDS);
+
+    @Override
+    public void setup() throws IOException {
+        super.setup();
+        clearPrefs(mActivityRule.getActivity().getApplicationContext());
     }
 
     public Double startDemoPurchase() {
-        Double demoPurchaseAmount = randomTestValuesGeneretor.randomDemoAppPrice();
+        demoPurchaseAmount = randomTestValuesGeneretor.randomDemoAppPrice();
         //Double demoTaxPrecent = randomTestValuesGeneretor.randomTaxPrecentage();
         tokenProgressBarIR = new VisibleViewIdlingResource(R.id.progressBarMerchant, View.INVISIBLE, "merchant token progress bar");
         transactionMessageIR = new VisibleViewIdlingResource(R.id.transactionResult, View.VISIBLE, "merchant transaction completed text");
 
         Espresso.registerIdlingResources(tokenProgressBarIR);
-
+        checkToken();
         onView(withId(R.id.productPriceEditText)).check(matches(isCompletelyDisplayed()));
         onView(withId(R.id.productPriceEditText)).check(matches((isDisplayed())));
         //TODO: To test the tax we should calculate the subtotal
         //        onView(withId(R.id.demoTaxEditText)).perform(typeText(demoTaxPrecent.toString()));
+        onView(withId(R.id.rateSpinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), containsString("USD")))
+                .perform(click());
         onView(withId(R.id.productPriceEditText))
                 .perform(typeText(demoPurchaseAmount.toString()), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.merchantAppSubmitButton)).perform(click());
@@ -83,13 +83,18 @@ public class DemoFlowTest {
         Espresso.unregisterIdlingResources(tokenProgressBarIR);
         CardFormTesterCommon.fillInAllFieldsWithValidCard();
         onView(withId(R.id.buyNowButton)).perform(click());
-        finishDemoPurchase();
+        finishDemoPurchase("USD", demoPurchaseAmount.toString());
     }
 
-    public void finishDemoPurchase() {
+    public void finishDemoPurchase(String currencySymbol, String amount) {
         Espresso.registerIdlingResources(transactionMessageIR);
         onView(withId(R.id.transactionResult))
                 .check(matches(withText(containsString("Transaction Success"))));
+        onView(withId(R.id.paymentResultTextView2))
+                .check(matches(withText(containsString(currencySymbol))))
+                .check(matches(withText(containsString(AndroidUtil.getDecimalFormat().format(demoPurchaseAmount)))))
+        ;
+
         Espresso.unregisterIdlingResources(transactionMessageIR);
     }
 
@@ -117,7 +122,7 @@ public class DemoFlowTest {
 
 
         onView(withId(R.id.buyNowButton)).perform(click());
-        finishDemoPurchase();
+        finishDemoPurchase("USD", startDemoPurchaseAmount.toString());
     }
 
     @Test
@@ -149,7 +154,7 @@ public class DemoFlowTest {
 
 
         onView(withId(R.id.buyNowButton)).perform(click());
-        finishDemoPurchase();
+        finishDemoPurchase("USD", startDemoPurchaseAmount.toString());
     }
 }
 

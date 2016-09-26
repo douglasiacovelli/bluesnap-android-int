@@ -10,7 +10,7 @@ import java.util.Random;
 public class RandomTestValuesGenerator {
     final double MINIMUM_AMOUNT = 0.01D;
     final double MINIMUM_TAX_PRECENT_AMOUNT = 0;
-    double MAXIMUM_AMOUNT = 9999;
+    double MAXIMUM_AMOUNT = 1000;
     Random random = new Random();
 
     public Double randomDemoAppPrice() {
