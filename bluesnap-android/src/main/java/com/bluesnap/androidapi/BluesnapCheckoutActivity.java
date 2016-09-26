@@ -60,9 +60,6 @@ public class BluesnapCheckoutActivity extends Activity {
     private Card card;
     private ShippingFragment shippingFragment;
 
-    public BluesnapCheckoutActivity() {
-        BlueSnapService.getBus().register(this);
-    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
