@@ -18,13 +18,13 @@ android {
         //setProperty("archivesBaseName", "DemoApp-$versionName")
     }
     buildTypes {
-//        release {
-//            //runProguard false
-//            proguardFile getDefaultProguardFile('proguard-android.txt')
-//        }
+        release {
+            //runProguard false
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
     }
     lintOptions {
-        abortOnError true
+        abortOnError false
     }
 
 

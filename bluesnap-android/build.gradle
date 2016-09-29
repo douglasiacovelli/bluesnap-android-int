@@ -67,8 +67,9 @@ task javadocsJar(type: Jar, dependsOn: javadocs) {
 //    from android.sourceSets.main.java.srcDirs
 //}
 
+// the javadocs task requires explicit locale settings. disabled for now.
 artifacts {
-    archives javadocsJar
+    //archives javadocsJar
     //archives sourcesJar
 }
 
