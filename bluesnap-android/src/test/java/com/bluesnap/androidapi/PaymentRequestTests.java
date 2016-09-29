@@ -105,7 +105,7 @@ public class PaymentRequestTests {
         PaymentRequest parceled = parcelizePaymentRequset(paymentRequest);
         assertEquals("tax lost", paymentRequest.getTaxAmount(), parceled.getTaxAmount());
         assertEquals(randomTax, parceled.getTaxAmount());
-        assertEquals(subtotal + randomTax, parceled.getAmount());
+        assertEquals(subtotal+randomTax, parceled.getAmount());
         //assertEquals("not equals", paymentRequest, parceled);
     }
 

@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.math.RoundingMode;
@@ -186,5 +188,34 @@ public class AndroidUtil {
 
     private static class AndroidUtilHOLDER {
         public static final AndroidUtil INSTANCE = new AndroidUtil();
+    }
+
+    public static void hideKeyboardOnLayoutOfEditText(final View baseView) {
+        setFocusOnLayoutOfEditText(baseView, null);
+    }
+    public static void setFocusOnLayoutOfEditText(final View baseView, final View targetView) {
+        baseView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (targetView != null)
+                    setFocusOnFirstErrorInput(targetView);
+                else
+                    setKeyboardStatus(baseView, false);
+            }
+        });
+    }
+
+    public static void setFocusOnFirstErrorInput (final View view) {
+        view.requestFocus();
+        setKeyboardStatus(view, true);
+    }
+
+    private static void setKeyboardStatus (final View view, final boolean showKey) {
+        final InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (showKey)
+            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        else
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
     }
 }

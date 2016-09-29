@@ -10,6 +10,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.message.BufferedHeader;
 
 import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_CREATE_TRANSACTION;
 import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_PASS;
@@ -18,7 +19,7 @@ import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_USER;
 
 /**
  * A Demo class that mocks server to server calls
- * You shuold not do these calls on your mobile app.
+ * You should not do these calls on your mobile app.
  */
 public class DemoTransactions {
 
@@ -31,6 +32,18 @@ public class DemoTransactions {
 
     public static DemoTransactions getInstance() {
         return INSTANCE;
+    }
+
+    public static String extractTokenFromHeaders(Header[] headers) {
+        String token = null;
+        for (Header hr : headers) {
+            BufferedHeader bufferedHeader = (BufferedHeader) hr;
+            if (bufferedHeader.getName().equals("Location")) {
+                String path = bufferedHeader.getValue();
+                token = path.substring(path.lastIndexOf('/') + 1);
+            }
+        }
+        return token;
     }
 
     public void createCreditCardTransaction(String firstName, String lastName, String token, String currency, Double amount, final BluesnapServiceCallback callback) {
@@ -71,7 +84,7 @@ public class DemoTransactions {
         AsyncHttpClient httpClient = new AsyncHttpClient();
         httpClient.setBasicAuth(SANDBOX_USER, SANDBOX_PASS);
         Log.d(TAG, "Create transaction body:\n" + body);
-        httpClient.post(getContext(), SANDBOX_URL + SANDBOX_CREATE_TRANSACTION, entity, "application/xml", new TextHttpResponseHandler() {
+        httpClient.post(getContext(), SANDBOX_URL+ SANDBOX_CREATE_TRANSACTION, entity, "application/xml", new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.e(TAG, responseString, throwable);

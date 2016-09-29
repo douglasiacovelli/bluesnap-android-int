@@ -13,6 +13,7 @@
     tools:context=".BluesnapCheckoutActivity">
 
     <LinearLayout
+        android:id="@+id/shippingFieldsLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center|bottom"
@@ -132,7 +133,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/invalidEmailMessageTextView"
+                            android:id="@+id/invalidShopperNameMessageTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

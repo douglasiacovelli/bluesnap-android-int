@@ -8,10 +8,8 @@ import java.util.ArrayList;
 class CustomListObject {
 
     private String name;
-    private int img;
 
     public CustomListObject(String name) {
-
         this.name = name;
     }
 
@@ -31,6 +29,13 @@ class CustomListObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomListObject{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }
 

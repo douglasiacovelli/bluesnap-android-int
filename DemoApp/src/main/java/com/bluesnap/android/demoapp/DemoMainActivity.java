@@ -34,7 +34,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.message.BufferedHeader;
 import cz.msebera.android.httpclient.util.TextUtils;
 
 import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_PASS;
@@ -96,15 +95,10 @@ public class DemoMainActivity extends Activity {
         try {
             int versionCode = BuildConfig.VERSION_CODE;
             String versionName = BuildConfig.VERSION_NAME;
-            demoVersionTextView.setText(String.format("V:%s[%d]", versionName, versionCode));
+            demoVersionTextView.setText(String.format(Locale.ENGLISH, "V:%s[%d]", versionName, versionCode));
         } catch (Exception e) {
-            Log.e(TAG, "cannot exctract verison");
+            Log.e(TAG, "cannot extract version");
         }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
     }
 
     private void ratesAdapterSelectionListener() {
@@ -254,7 +248,7 @@ public class DemoMainActivity extends Activity {
 
         final AsyncHttpClient httpClient = new AsyncHttpClient();
         httpClient.setBasicAuth(SANDBOX_USER, SANDBOX_PASS);
-        httpClient.post(SANDBOX_URL + SANDBOX_TOKEN_CREATION, new TextHttpResponseHandler() {
+        httpClient.post(SANDBOX_URL+ SANDBOX_TOKEN_CREATION, new TextHttpResponseHandler() {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -274,15 +268,10 @@ public class DemoMainActivity extends Activity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                for (Header hr : headers) {
-                    BufferedHeader bufferedHeader = (BufferedHeader) hr;
-                    if (bufferedHeader.getName().equals("Location")) {
-                        String path = bufferedHeader.getValue();
-                        merchantToken = path.substring(path.lastIndexOf('/') + 1);
-                    }
-                }
+                merchantToken = DemoTransactions.extractTokenFromHeaders(headers);
                 initControlsAfterToken();
             }
+
         });
     }
 
@@ -358,6 +347,7 @@ public class DemoMainActivity extends Activity {
      * @param supportedRates
      * @return
      */
+
     private TreeSet<String> demoSupportedRates(Set<String> supportedRates) {
         TreeSet<String> treeSet = new TreeSet();
         if (supportedRates.contains("USD")) {

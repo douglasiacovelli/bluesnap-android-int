@@ -3,6 +3,7 @@ package com.bluesnap.android.demoapp;
 import android.support.test.espresso.action.ViewActions;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
@@ -12,9 +13,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class CardFormTesterCommon {
 
     public static void fillInAllFieldsWithValidCard() {
+        onView(withId(R.id.cardHolderNameEditText)).perform(clearText(), typeText("John Doe"));
         onView(withId(R.id.creditCardNumberEditText))
                 .perform(typeText(cardNumberGeneratorTest()), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.emailEditText)).perform(typeText("John Doe"));
         onView(withId(R.id.expDateEditText)).perform(typeText("11"));
         onView(withId(R.id.expDateEditText)).perform(typeText("2011"));
         onView(withId(R.id.cvvEditText)).perform(typeText("123")).perform(ViewActions.closeSoftKeyboard());
@@ -22,10 +23,10 @@ public class CardFormTesterCommon {
     }
 
     public static void fillInShippingDetails() {
-        onView(withId(R.id.shippingNameEditText)).perform(typeText("John Doe"));
-        onView(withId(R.id.shippingAddressLine)).perform(typeText("9 Baker street"));
-        onView(withId(R.id.shippingCityEditText)).perform(typeText("London"));
-        onView(withId(R.id.shippingStateEditText)).perform(typeText("UK")).perform(ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.shippingNameEditText)).perform(clearText(), typeText("John Doe"));
+        onView(withId(R.id.shippingAddressLine)).perform(clearText(), typeText("9 Baker street"));
+        onView(withId(R.id.shippingCityEditText)).perform(clearText(), typeText("London"));
+        onView(withId(R.id.shippingStateEditText)).perform(clearText(), typeText("UK")).perform(ViewActions.closeSoftKeyboard());
 
     }
 

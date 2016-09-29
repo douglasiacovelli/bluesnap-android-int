@@ -48,7 +48,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/emailIconLabelTextView"
+                            android:id="@+id/carHolderNameLabelTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -58,7 +58,7 @@
                             android:text="@string/nameField" />
 
                         <EditText
-                            android:id="@+id/emailEditText"
+                            android:id="@+id/cardHolderNameEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -69,7 +69,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/invalidEmailMessageTextView"
+                        android:id="@+id/invalidShopperNameMessageTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -105,7 +105,6 @@
                             android:layout_gravity="center_vertical"
                             android:drawableLeft="@drawable/new_card"
                             android:drawablePadding="5dp"
-                            android:inputType="phone"
                             android:padding="6sp"
                             android:text="@string/card" />
 
@@ -183,7 +182,6 @@
                         android:layout_weight="1"
                         android:background="@android:color/white"
                         android:digits="0123456789/"
-                        android:editable="true"
                         android:hint="@string/mm_yy"
                         android:inputType="numberDecimal"
                         android:maxLength="5"
@@ -352,7 +350,6 @@
                     android:layout_height="match_parent"
                     android:drawableLeft="@drawable/ico_field_coupon3"
                     android:hint="@string/coupon"
-                    android:inputType="phone"
                     android:padding="6sp" />
 
                 <EditText

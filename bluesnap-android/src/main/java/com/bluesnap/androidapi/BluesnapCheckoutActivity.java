@@ -16,7 +16,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bluesnap.androidapi.models.Card;
-import com.bluesnap.androidapi.models.Events;
 import com.bluesnap.androidapi.models.PaymentRequest;
 import com.bluesnap.androidapi.models.PaymentResult;
 import com.bluesnap.androidapi.models.ShippingInfo;
@@ -29,8 +28,6 @@ import com.bluesnap.androidapi.views.ShippingFragment;
 import com.bluesnap.androidapi.views.WebViewActivity;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,16 +55,11 @@ public class BluesnapCheckoutActivity extends Activity {
     private FragmentManager fragmentManager;
     private PaymentRequest paymentRequest;
     private ExpressCheckoutFragment expressCheckoutFragment;
-    private PopupMenu popupMenu;
-    private String currentCurrency;
     private String sharedCurrency;
     private ShippingInfo shippingInfo;
     private Card card;
     private ShippingFragment shippingFragment;
 
-    public BluesnapCheckoutActivity() {
-        BlueSnapService.getBus().register(this);
-    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,13 +142,6 @@ public class BluesnapCheckoutActivity extends Activity {
         }
         return shippingFragment;
     }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLanguageChange(Events.LanguageChangeEvent languageChangeEvent) {
-        Log.d(TAG, "new language");
-        recreate();
-    }
-
 
     public void finishFromShippingFragment(ShippingInfo shippingInfo) {
         this.shippingInfo = shippingInfo;
@@ -301,7 +286,7 @@ public class BluesnapCheckoutActivity extends Activity {
             sharedCurrency = paymentRequest.getCurrencyNameCode();
             invalidateOptionsMenu();
             hamburgerMenuButton.setImageResource(R.drawable.ic_close_white_36dp);
-            popupMenu = new PopupMenu(getApplicationContext(), v);
+            PopupMenu popupMenu = new PopupMenu(getApplicationContext(), v);
             popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
                 @Override
                 public void onDismiss(PopupMenu popupMenu) {
@@ -319,7 +304,7 @@ public class BluesnapCheckoutActivity extends Activity {
             });
 
             popupMenu.inflate(R.menu.menu_main);
-            currentCurrency = getString(R.string.currency) + " " + sharedCurrency;
+            String currentCurrency = getString(R.string.currency) + " " + sharedCurrency;
             popupMenu.getMenu().add(1, R.id.id_currency, 1, currentCurrency);
             popupMenu.show();
         }

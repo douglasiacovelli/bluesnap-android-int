@@ -5,7 +5,7 @@ import com.bluesnap.androidapi.services.BluesnapToken;
 /**
  * Created by roy.biber on 04/08/2016.
  */
-public class DemoToken extends BluesnapToken {
+public class DemoToken extends BluesnapToken{
     public static final String SANDBOX_URL = "https://sandbox.bluesnap.com/services/2/";
     public static final String SANDBOX_TOKEN_CREATION = "payment-fields-tokens";
     public static final String SANDBOX_CREATE_TRANSACTION = "transactions";

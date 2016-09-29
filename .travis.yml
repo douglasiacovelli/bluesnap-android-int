@@ -4,14 +4,13 @@ branches:
   - develop
   - review
 
-
+sudo: false
 language: android
 android:
   components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
+    - tools # to get the new `repository-11.xml`
+    - tools # to install Android SDK tools
     - platform-tools
-    - tools
 
     # The BuildTools version used by your project
     - build-tools-23.0.3
@@ -24,11 +23,12 @@ android:
     # - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
+    - extra-android-support
     # - addon-google_apis-google-19
 
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
-    - sys-img-armeabi-v7a-android-22
+    - sys-img-armeabi-v7a-android-23
     # - sys-img-x86-android-17
 
 cache:
@@ -37,7 +37,7 @@ cache:
   - $HOME/.gradle
 
 jdk:
-  - openjdk7
+  - oraclejdk8
 
 
 script:
