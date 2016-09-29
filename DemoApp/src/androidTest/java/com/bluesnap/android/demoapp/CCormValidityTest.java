@@ -60,6 +60,7 @@ public class CCormValidityTest extends EspressoBasedTest {
         mActivityRule.launchActivity(intent);
         mActivity = mActivityRule.getActivity();
         clearPrefs(mActivity.getApplicationContext());
+
     }
 
     @Test

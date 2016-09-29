@@ -198,18 +198,18 @@ public class CardTest extends TestCase {
         card.setExpYear(33);
         assertFalse("more than 12 month a year?", card.validateExpiryDate());
         card.setExpMonth(21);
-        card.setExpYear(05);
+        card.setExpYear(5);
         assertFalse("Date should not be in future:" + card.getExpDate(),
                 AndroidUtil.isDateInFuture(card.getExpMonth(), card.getExpYear()));
         assertFalse(card.validateExpiryDate());
         assertFalse(card.validateAll());
 
-        card.setExpMonth(00);
+        card.setExpMonth(0);
         card.setExpYear(25);
         assertFalse("0 month is invalid", card.validateExpiryDate());
         assertFalse(card.validateAll());
 
-        card.setExpMonth(01);
+        card.setExpMonth(1);
         card.setExpYear(22);
         assertTrue("have we past the year 2022? ", AndroidUtil.isDateInFuture(card.getExpMonth(), card.getExpYear()));
         assertTrue(card.validateExpiryDate());
