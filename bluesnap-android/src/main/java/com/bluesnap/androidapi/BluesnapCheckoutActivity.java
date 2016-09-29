@@ -16,7 +16,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bluesnap.androidapi.models.Card;
-import com.bluesnap.androidapi.models.Events;
 import com.bluesnap.androidapi.models.PaymentRequest;
 import com.bluesnap.androidapi.models.PaymentResult;
 import com.bluesnap.androidapi.models.ShippingInfo;
@@ -29,8 +28,6 @@ import com.bluesnap.androidapi.views.ShippingFragment;
 import com.bluesnap.androidapi.views.WebViewActivity;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -148,13 +145,6 @@ public class BluesnapCheckoutActivity extends Activity {
         }
         return shippingFragment;
     }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLanguageChange(Events.LanguageChangeEvent languageChangeEvent) {
-        Log.d(TAG, "new language");
-        recreate();
-    }
-
 
     public void finishFromShippingFragment(ShippingInfo shippingInfo) {
         this.shippingInfo = shippingInfo;
