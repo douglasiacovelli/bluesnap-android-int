@@ -8,10 +8,8 @@ sudo: false
 language: android
 android:
   components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
     - tools # to get the new `repository-11.xml`
-    - tools # to install Android SDK tools 25.1.x (x = 6 right now)
+    - tools # to install Android SDK tools
     - platform-tools
 
     # The BuildTools version used by your project
@@ -39,7 +37,7 @@ cache:
   - $HOME/.gradle
 
 jdk:
-  - openjdk7
+  - oraclejdk8
 
 
 script:
