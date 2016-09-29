@@ -1,4 +1,5 @@
 ## bluesnap-android
+[ ![Latest](https://api.bintray.com/packages/bluesnap/com.bluesnap/bluesnap-android/images/download.svg) ](https://bintray.com/bluesnap/com.bluesnap/bluesnap-android/_latestVersion)
 
 #About
 BlueSnap's Android SDK enables you to easily accept credit card and PayPal payments directly from your Android app and then process the payments via BlueSnap's Payment API. When you use this library, BlueSnap handles most of the PCI compliance burden for you, as the shopper's payment data is tokenized and sent directly to BlueSnap's servers.

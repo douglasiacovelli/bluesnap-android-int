@@ -24,6 +24,7 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/white"
             android:stretchColumns="*">
 
             <TableRow
@@ -175,7 +176,7 @@
 
                     <EditText
                         android:id="@+id/expDateEditText"
-                        android:layout_width="0dp"
+                        android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="2sp"
@@ -225,7 +226,7 @@
 
                     <EditText
                         android:id="@+id/cvvEditText"
-                        android:layout_width="0dp"
+                        android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="0.95"

@@ -19,6 +19,7 @@ import java.io.IOException;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
@@ -68,7 +69,7 @@ public class DemoFlowTest extends EspressoBasedTest {
         onView(withId(R.id.productPriceEditText)).check(matches((isDisplayed())));
         //TODO: To test the tax we should calculate the subtotal
         //        onView(withId(R.id.demoTaxEditText)).perform(typeText(demoTaxPrecent.toString()));
-        onView(withId(R.id.rateSpinner)).perform(click());
+        onView(withId(R.id.rateSpinner)).perform(closeSoftKeyboard()).perform(click());
         onData(allOf(is(instanceOf(String.class)), containsString("USD")))
                 .perform(click());
         onView(withId(R.id.productPriceEditText))
