@@ -1,24 +1,16 @@
 package com.bluesnap.androidapi;
 
-import android.util.Log;
-
 import com.bluesnap.androidapi.models.ExchangeRate;
 import com.bluesnap.androidapi.services.BlueSnapService;
 import com.bluesnap.androidapi.services.BluesnapServiceCallback;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowLog;
 
 import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.message.BufferedHeader;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
@@ -39,46 +31,6 @@ public class CurrencyConverterTests {
         System.setProperty("robolectric.logging", "stdout");
     }
 
-    @Before
-    public void testServiceRatesArray() throws InterruptedException {
-        ShadowLog.stream = System.out;
-        System.setProperty("robolectric.logging", "stdout");
-
-        AsyncHttpClient httpClient = new AsyncHttpClient();
-
-        httpClient.setBasicAuth("GCpapi", "Plimus4321");
-        httpClient.post("https://us-qa-fct03.bluesnap.com/services/2/payment-fields-tokens", new TextHttpResponseHandler() {
-
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBytes, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseBytes, throwable);
-                fail("no token");
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d(TAG, responseString, throwable);
-                fail("no token");
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                for (Header hr : headers) {
-                    BufferedHeader bufferedHeader = (BufferedHeader) hr;
-                    if (bufferedHeader.getName().equals("Location")) {
-                        String path = bufferedHeader.getValue();
-                        merchantToken = path.substring(path.lastIndexOf('/') + 1);
-
-                    }
-                }
-            }
-        });
-
-        ShadowApplication.runBackgroundTasks();
-
-
-    }
 
     //@Test(timeout = 12000)
     public void TestConversionService() throws InterruptedException {
