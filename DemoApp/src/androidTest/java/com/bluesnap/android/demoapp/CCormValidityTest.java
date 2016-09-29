@@ -60,7 +60,6 @@ public class CCormValidityTest extends EspressoBasedTest {
         mActivityRule.launchActivity(intent);
         mActivity = mActivityRule.getActivity();
         clearPrefs(mActivity.getApplicationContext());
-
     }
 
     @Test
@@ -126,7 +125,7 @@ public class CCormValidityTest extends EspressoBasedTest {
      *
      * @throws InterruptedException
      */
-    //@Test
+    @Test
     public void test_validate_invalidate() throws InterruptedException {
         CardFormTesterCommon.fillInAllFieldsWithValidCard();
 
