@@ -2,6 +2,7 @@ package com.bluesnap.android.demoapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ import static com.bluesnap.android.demoapp.DemoToken.SANDBOX_USER;
 public class DemoMainActivity extends Activity {
 
     private static final String TAG = "DemoMainActivity";
+    private static Context context;
     protected BlueSnapService bluesnapService;
     private Spinner ratesSpinner;
     private EditText productPriceEditText;
@@ -86,6 +88,7 @@ public class DemoMainActivity extends Activity {
         } catch (Exception e) {
             currencyByLocale = Currency.getInstance(Locale.getDefault());
         }
+        context = getBaseContext();
         bluesnapService = BlueSnapService.getInstance();
         generateMerchantToken();
     }
@@ -239,6 +242,10 @@ public class DemoMainActivity extends Activity {
             finish();
         }
         intent.putExtra(BluesnapCheckoutActivity.EXTRA_PAYMENT_REQUEST, paymentRequest);
+
+        // Put KOUNT merchant ID
+        intent.putExtra(BluesnapCheckoutActivity.EXTRA_KOUNT_MERCHANTID, 123);
+
         startActivityForResult(intent, BluesnapCheckoutActivity.REQUEST_CODE_DEFAULT);
     }
 
@@ -276,16 +283,14 @@ public class DemoMainActivity extends Activity {
     }
 
     private void initControlsAfterToken() {
-        bluesnapService.setup(merchantToken);
+        bluesnapService.setup(merchantToken, context);
         bluesnapService.updateRates(new BluesnapServiceCallback() {
             @Override
             public void onSuccess() {
                 Set<String> supportedRates = bluesnapService.getSupportedRates();
                 updateSpinnerAdapterFromRates(demoSupportedRates(supportedRates));
-
                 progressBar.setVisibility(View.INVISIBLE);
                 linearLayoutForProgressBar.setVisibility(View.VISIBLE);
-
                 productPriceEditText.setVisibility(View.VISIBLE);
                 productPriceEditText.requestFocus();
             }

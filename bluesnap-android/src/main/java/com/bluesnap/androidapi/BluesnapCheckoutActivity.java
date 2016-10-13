@@ -1,10 +1,18 @@
 package com.bluesnap.androidapi;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
@@ -26,12 +34,14 @@ import com.bluesnap.androidapi.views.CurrencyActivity;
 import com.bluesnap.androidapi.views.ExpressCheckoutFragment;
 import com.bluesnap.androidapi.views.ShippingFragment;
 import com.bluesnap.androidapi.views.WebViewActivity;
+import com.kount.api.DataCollector;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -45,10 +55,15 @@ public class BluesnapCheckoutActivity extends Activity {
     public static final String EXTRA_PAYMENT_RESULT = "com.bluesnap.intent.BSNAP_PAYMENT_RESULT";
     public final static String MERCHANT_TOKEN = "com.bluesnap.intent.BSNAP_CLIENT_PRIVATE_KEY";
     public static final String EXTRA_SHIPPING_DETAILS = "com.bluesnap.intent.BSNAP_SHIPPING_DETAILS";
+    public static final String EXTRA_KOUNT_MERCHANTID = "com.bluesnap.intent.KOUNT_MERCHANTID";
     public static final String SDK_ERROR_MSG = "SDK_ERROR_MESSAGE";
     public static final int REQUEST_CODE_DEFAULT = 1;
     private static final String TAG = BluesnapCheckoutActivity.class.getSimpleName();
     private static final int RESULT_SDK_FAILED = -2;
+    private static final int KOUNT_REQUST_ID = 3;
+    private static Context context;
+    private static DataCollector kount;
+    private static ContextWrapper cw;
     private final BlueSnapService blueSnapService = BlueSnapService.getInstance();
     private BluesnapFragment bluesnapFragment;
     private PrefsStorage prefsStorage;
@@ -59,7 +74,6 @@ public class BluesnapCheckoutActivity extends Activity {
     private ShippingInfo shippingInfo;
     private Card card;
     private ShippingFragment shippingFragment;
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +89,77 @@ public class BluesnapCheckoutActivity extends Activity {
         sharedCurrency = paymentRequest.getCurrencyNameCode();
         setFragmentButtonsListeners();
         hamburgerMenuButton.setOnClickListener(new hamburgerMenuListener(hamburgerMenuButton));
+        Integer kountMerchantID = getIntent().getIntExtra(EXTRA_KOUNT_MERCHANTID, 0);
+        context = getApplicationContext();
+        kount = DataCollector.getInstance();
+        //kount.setContext(context);
+        try {
+            setupKount(kountMerchantID);
+        } catch (Exception e) {
+            Log.e(TAG, "Kount SDK initialization error");
+        }
     }
+
+    private void setupKount(Integer kountMerchantID) {
+
+        //TODO: what should we do if no kount merchantid?
+        if (kountMerchantID == null || kountMerchantID == 0) {
+            Log.w(TAG, "No kount merchant ID");
+            return;
+        }
+
+
+        kount.setDebug(true);
+        kount.setMerchantID(7000);
+        Log.d(TAG, "Data context: " + context);
+        kount.setContext(context);
+        kount.setLocationCollectorConfig(DataCollector.LocationConfig.COLLECT);
+//
+//        //TODO: decide environment based on BS token
+        kount.setEnvironment(DataCollector.ENVIRONMENT_TEST);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, KOUNT_REQUST_ID);
+                    Log.d(TAG, "Cannot grant location permission for Kount ");
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, KOUNT_REQUST_ID);
+                }
+            }
+        }
+
+
+        //Run this inside it's on thread.
+        (new Handler(Looper.getMainLooper()))
+                .post(new Runnable() {
+                    public void run() {
+
+                        String sessionID = UUID.randomUUID().toString();
+                        sessionID = sessionID.replace("-", "");
+
+                        kount.collectForSession(sessionID, new DataCollector.CompletionHandler() {
+                            /* Add handler code here if desired. The handler is optional. */
+                            @Override
+                            public void completed(String sessionID) {
+                                Log.d(TAG, "Kount DataCollector completed");
+                                Log.d(TAG, "Data context: " + context);
+                            }
+
+                            @Override
+                            public void failed(String sessionID, final DataCollector.Error error) {
+                                Log.e(TAG, "Kount DataCollector failed: " + error);
+                                Log.d(TAG, "Data context: " + context);
+                            }
+                        });
+
+
+                    }
+                });
+
+
+    }
+
 
     @Override
     protected void onStart() {
@@ -86,6 +170,16 @@ public class BluesnapCheckoutActivity extends Activity {
             setResult(RESULT_SDK_FAILED, new Intent().putExtra(SDK_ERROR_MSG, errorMsg));
             finish();
         }
+
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        //final Context context = this.getApplicationContext();
+
+
+
     }
 
     private void setFragmentButtonsListeners() {

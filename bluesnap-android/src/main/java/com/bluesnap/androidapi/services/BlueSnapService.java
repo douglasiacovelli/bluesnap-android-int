@@ -1,5 +1,6 @@
 package com.bluesnap.androidapi.services;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.bluesnap.androidapi.BuildConfig;
@@ -83,12 +84,14 @@ public class BlueSnapService {
      * This will reset the previous payment request
      *
      * @param merchantToken A Merchant SDK token, obtained from the merchant.
+     * @param context
      */
-    public void setup(String merchantToken) {
+    public void setup(String merchantToken, Context context) {
         bluesnapToken = new BluesnapToken(merchantToken);
         bluesnapToken.setToken(merchantToken);
         clearPayPalToken();
         setupHttpClient();
+
         paymentResult = null;
         paymentRequest = null;
         if (!busInstance.isRegistered(this)) busInstance.register(this);

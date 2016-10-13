@@ -43,7 +43,7 @@ public class CurrencyConverterTests {
 
         }
         blueSnapService = BlueSnapService.getInstance();
-        blueSnapService.setup(merchantToken);
+        blueSnapService.setup(merchantToken, getApplicationContext());
         blueSnapService.updateRates(new BluesnapServiceCallback() {
             @Override
             public void onSuccess() {
