@@ -58,7 +58,7 @@ public class BuynowTesting {
         intent.putExtra(BluesnapCheckoutActivity.EXTRA_PAYMENT_REQUEST, paymentRequest);
         intent.putExtra(BluesnapCheckoutActivity.MERCHANT_TOKEN, "463448920b4fd76c4c83a35fb0b22cdd6f11ebeca91a00cd7416bb7b28886975_");
         BlueSnapService blueSnapService = BlueSnapService.getInstance();
-        blueSnapService.setup("463448920b4fd76c4c83a35fb0b22cdd6f11ebeca91a00cd7416bb7b28886975_", getApplicationContext());
+        blueSnapService.setup("463448920b4fd76c4c83a35fb0b22cdd6f11ebeca91a00cd7416bb7b28886975_");
         paymentRequest.setCurrencyNameCode("USD");
         paymentRequest.setShippingRequired(false);
         mActivity = mActivityRule.launchActivity(intent);
@@ -113,7 +113,7 @@ public class BuynowTesting {
                         merchantToken = path.substring(path.lastIndexOf('/') + 1);
                     }
                 }
-                serviceInstance.setup(merchantToken, getApplicationContext());
+                serviceInstance.setup(merchantToken);
                 serviceInstance.updateRates(new BluesnapServiceCallback() {
                     @Override
                     public void onSuccess() {

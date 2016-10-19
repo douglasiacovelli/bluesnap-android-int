@@ -52,7 +52,7 @@ public class CurrencyChangeTest extends EspressoBasedTest {
     @Before
     public void setup() throws IOException {
         super.setup();
-        BlueSnapService.getInstance().setup(merchantToken, getApplicationContext());
+        BlueSnapService.getInstance().setup(merchantToken);
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setAmount(AMOUNT);
         Intent intent = new Intent();

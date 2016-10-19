@@ -1,6 +1,5 @@
 package com.bluesnap.androidapi.services;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.bluesnap.androidapi.BuildConfig;
@@ -86,7 +85,7 @@ public class BlueSnapService {
      * @param merchantToken A Merchant SDK token, obtained from the merchant.
      * @param context
      */
-    public void setup(String merchantToken, Context context) {
+    public void setup(String merchantToken) {
         bluesnapToken = new BluesnapToken(merchantToken);
         bluesnapToken.setToken(merchantToken);
         clearPayPalToken();
