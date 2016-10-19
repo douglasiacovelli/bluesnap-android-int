@@ -10,9 +10,10 @@ public class BluesnapToken {
     private static final String PROD_PART_2_URL = ".bluesnap.com/services/2/";
     private String url;
     private String merchantToken;
+    private boolean production = false;
 
     public BluesnapToken(String merchantToken) {
-        this.merchantToken = merchantToken;
+        setToken(merchantToken);
     }
 
     public String getUrl() throws IllegalStateException {
@@ -22,20 +23,28 @@ public class BluesnapToken {
     }
 
     public void setToken(String token) throws IllegalArgumentException {
-        if (AndroidUtil.isBlank(token) && token.length() > 2)
+        if (AndroidUtil.isBlank(token) || token.length() < 10)
             throw new IllegalArgumentException("Malformed token");
 
         String lastChar = token.substring(token.length() - 1);
         if ("_".equals(lastChar))
             url = SANDBOX_URL;
-        else if ("1".equals(lastChar) || "2".equals(lastChar))
+        else if ("1".equals(lastChar) || "2".equals(lastChar)) {
             url = PROD_PART_1_URL + lastChar + PROD_PART_2_URL;
+            production = true;
+        }
         else
             throw new IllegalArgumentException("Illegal token");
+
+        this.merchantToken = token;
     }
 
     public String getMerchantToken() {
         return merchantToken;
+    }
+
+    public boolean isProduction() {
+        return production;
     }
 
     @Override

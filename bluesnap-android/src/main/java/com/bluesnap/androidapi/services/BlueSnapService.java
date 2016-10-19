@@ -87,7 +87,6 @@ public class BlueSnapService {
      */
     public void setup(String merchantToken) {
         bluesnapToken = new BluesnapToken(merchantToken);
-        bluesnapToken.setToken(merchantToken);
         clearPayPalToken();
         setupHttpClient();
 
@@ -340,5 +339,9 @@ public class BlueSnapService {
         paymentResult.setShopperID(paymentRequest.getShopperID());
 
 
+    }
+
+    public BluesnapToken getBlueSnapToken() {
+        return bluesnapToken;
     }
 }

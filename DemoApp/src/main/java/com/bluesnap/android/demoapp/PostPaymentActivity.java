@@ -61,7 +61,7 @@ public class PostPaymentActivity extends Activity {
                     public void onFailure() {
                         setContinueButton(transactions.getMessage(), transactions.getTitle());
                     }
-                });
+                }, paymentResult.getKountSessionId());
             } else {
                 transactions.createCreditCardTransaction(paymentResult.getShopperFirstName(), paymentResult.getShopperLastName(), merchantToken, paymentResult.getCurrencyNameCode(), paymentResult.getAmount(), new BluesnapServiceCallback() {
                     @Override
@@ -73,7 +73,7 @@ public class PostPaymentActivity extends Activity {
                     public void onFailure() {
                         setContinueButton(transactions.getMessage(), transactions.getTitle());
                     }
-                });
+                }, paymentResult.getKountSessionId());
             }
         }
     }

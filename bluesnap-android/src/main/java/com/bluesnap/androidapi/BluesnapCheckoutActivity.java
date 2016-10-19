@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -58,13 +57,13 @@ public class BluesnapCheckoutActivity extends Activity {
     public static final String EXTRA_KOUNT_MERCHANTID = "com.bluesnap.intent.KOUNT_MERCHANTID";
     public static final String SDK_ERROR_MSG = "SDK_ERROR_MESSAGE";
     public static final int REQUEST_CODE_DEFAULT = 1;
+    public static final int KOUNT_MERCHANT_ID = 700000;
     private static final String TAG = BluesnapCheckoutActivity.class.getSimpleName();
     private static final int RESULT_SDK_FAILED = -2;
     private static final int KOUNT_REQUST_ID = 3;
-    private static Context context;
-    private static DataCollector kount;
-    private static ContextWrapper cw;
     private final BlueSnapService blueSnapService = BlueSnapService.getInstance();
+    private Context context;
+    private DataCollector kount;
     private BluesnapFragment bluesnapFragment;
     private PrefsStorage prefsStorage;
     private FragmentManager fragmentManager;
@@ -74,6 +73,7 @@ public class BluesnapCheckoutActivity extends Activity {
     private ShippingInfo shippingInfo;
     private Card card;
     private ShippingFragment shippingFragment;
+    private String kountSessionId;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +89,7 @@ public class BluesnapCheckoutActivity extends Activity {
         sharedCurrency = paymentRequest.getCurrencyNameCode();
         setFragmentButtonsListeners();
         hamburgerMenuButton.setOnClickListener(new hamburgerMenuListener(hamburgerMenuButton));
-        Integer kountMerchantID = getIntent().getIntExtra(EXTRA_KOUNT_MERCHANTID, 0);
+        Integer kountMerchantID = getIntent().getIntExtra(EXTRA_KOUNT_MERCHANTID, KOUNT_MERCHANT_ID);
         context = getApplicationContext();
         kount = DataCollector.getInstance();
         //kount.setContext(context);
@@ -101,22 +101,25 @@ public class BluesnapCheckoutActivity extends Activity {
     }
 
     private void setupKount(Integer kountMerchantID) {
-
-        //TODO: what should we do if no kount merchantid?
         if (kountMerchantID == null || kountMerchantID == 0) {
-            Log.w(TAG, "No kount merchant ID");
-            return;
+            kount.setMerchantID(KOUNT_MERCHANT_ID);
+        } else {
+            kount.setMerchantID(kountMerchantID);
         }
 
 
         kount.setDebug(true);
-        kount.setMerchantID(7000);
         Log.d(TAG, "Data context: " + context);
         kount.setContext(context);
         kount.setLocationCollectorConfig(DataCollector.LocationConfig.COLLECT);
-//
-//        //TODO: decide environment based on BS token
-        kount.setEnvironment(DataCollector.ENVIRONMENT_TEST);
+
+        //TODO: decide environment based on BS token
+        if (blueSnapService.getBlueSnapToken().isProduction()) {
+            kount.setEnvironment(DataCollector.ENVIRONMENT_PRODUCTION);
+        } else {
+            kount.setEnvironment(DataCollector.ENVIRONMENT_TEST);
+
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -135,10 +138,10 @@ public class BluesnapCheckoutActivity extends Activity {
                 .post(new Runnable() {
                     public void run() {
 
-                        String sessionID = UUID.randomUUID().toString();
-                        sessionID = sessionID.replace("-", "");
+                        kountSessionId = UUID.randomUUID().toString();
+                        kountSessionId = kountSessionId.replace("-", "");
 
-                        kount.collectForSession(sessionID, new DataCollector.CompletionHandler() {
+                        kount.collectForSession(kountSessionId, new DataCollector.CompletionHandler() {
                             /* Add handler code here if desired. The handler is optional. */
                             @Override
                             public void completed(String sessionID) {
@@ -257,6 +260,7 @@ public class BluesnapCheckoutActivity extends Activity {
         Log.d(TAG, "Testing if card requires server tokenization:" + card.toString());
         if (!card.isModified()) {
             PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
+            paymentResult.setKountSessionId(kountSessionId);
             paymentResult.setLast4Digits(card.getLast4());
             paymentResult.setCardType(card.getType());
             paymentResult.setExpDate(card.getExpDate());
@@ -290,6 +294,7 @@ public class BluesnapCheckoutActivity extends Activity {
                     String Last4 = response.getString("last4Digits");
                     String ccType = response.getString("ccType");
                     PaymentResult paymentResult = BlueSnapService.getInstance().getPaymentResult();
+                    paymentResult.setKountSessionId(kountSessionId);
                     // update last4 from server result
                     paymentResult.setLast4Digits(Last4);
                     // update card type from server result
