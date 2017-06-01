@@ -62,10 +62,11 @@ public class DemoTransactions {
         String bodyMiddle = "<card-holder-info>" +
                 "<first-name>" + firstName + "</first-name>" +
                 "<last-name>" + lastName + "</last-name>" +
+                "</card-holder-info>" +
                 "<transaction-fraud-info>" +
                 "<fraud-session-id>" + fraudSessionId + "</fraud-session-id>" +
-                "</transaction-fraud-info>" +
-                "</card-holder-info>";
+                "</transaction-fraud-info>"
+                ;
         String bodyEnd = "</card-transaction>";
         String body = bodyStart;
 
