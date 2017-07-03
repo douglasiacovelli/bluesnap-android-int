@@ -54,7 +54,7 @@ public class BluesnapCheckoutActivity extends Activity {
     public static final String EXTRA_PAYMENT_RESULT = "com.bluesnap.intent.BSNAP_PAYMENT_RESULT";
     public final static String MERCHANT_TOKEN = "com.bluesnap.intent.BSNAP_CLIENT_PRIVATE_KEY";
     public static final String EXTRA_SHIPPING_DETAILS = "com.bluesnap.intent.BSNAP_SHIPPING_DETAILS";
-    public static final String EXTRA_KOUNT_MERCHANTID = "com.bluesnap.intent.KOUNT_MERCHANTID";
+    public static final String EXTRA_KOUNT_MERCHANT_ID = "com.bluesnap.intent.KOUNT_MERCHANT_ID";
     public static final String SDK_ERROR_MSG = "SDK_ERROR_MESSAGE";
     public static final int REQUEST_CODE_DEFAULT = 1;
     public static final int KOUNT_MERCHANT_ID = 700000;
@@ -89,7 +89,7 @@ public class BluesnapCheckoutActivity extends Activity {
         sharedCurrency = paymentRequest.getCurrencyNameCode();
         setFragmentButtonsListeners();
         hamburgerMenuButton.setOnClickListener(new hamburgerMenuListener(hamburgerMenuButton));
-        Integer kountMerchantID = getIntent().getIntExtra(EXTRA_KOUNT_MERCHANTID, KOUNT_MERCHANT_ID);
+        Integer kountMerchantID = getIntent().getIntExtra(EXTRA_KOUNT_MERCHANT_ID, KOUNT_MERCHANT_ID);
         context = getApplicationContext();
         kount = DataCollector.getInstance();
         //kount.setContext(context);

@@ -244,7 +244,7 @@ public class DemoMainActivity extends Activity {
         intent.putExtra(BluesnapCheckoutActivity.EXTRA_PAYMENT_REQUEST, paymentRequest);
 
         // Put KOUNT merchant ID
-        intent.putExtra(BluesnapCheckoutActivity.EXTRA_KOUNT_MERCHANTID, 123);
+        //intent.putExtra(BluesnapCheckoutActivity.EXTRA_KOUNT_MERCHANT_ID, 123);
 
         startActivityForResult(intent, BluesnapCheckoutActivity.REQUEST_CODE_DEFAULT);
     }
