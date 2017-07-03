@@ -11,7 +11,7 @@ This SDK supports Android SDK 23 and above for development. The minimum Android 
 ## Android Studio (Gradle) instructions
 To get started, add the following line in your `build.gradle` file, in the dependencies section:
 
-    compile 'com.bluesnap:bluensap-android:1.0.+'
+    compile 'com.bluesnap:bluesnap-android:1.0.+'
 
 # Usage
 
@@ -31,7 +31,7 @@ Initialize the SDK by passing the token to the setup method of the BlueSnapServi
 
 The setup() method will initiate the SDK, prepare it for rate conversion and initialize the required objects for the user interface. No UI interaction will happen at this stage.
 
-Since the token is valid for 12 hours, only initialize the SDK with the token close to the purchase time.
+Since the token is valid for 60 minutes, only initialize the SDK with the token close to the purchase time.
 
 ## Launch the checkout page and collect shopper payment info 
 The SDK includes a pre-built checkout form that enables easy collection of the required information for checkout without having to deal with validation of the card number and expiration date, or storage of sensitive information. To launch this form, you need to create a PaymentRequest with the purchase amount and currency, and then start the BluesnapCheckoutActivity by creating an Android Intent and passing the PaymentRequest as an Intent Extra.
